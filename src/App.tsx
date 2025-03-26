@@ -20,42 +20,45 @@ import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import { AuthProvider } from './contexts/AuthContext';
 import FAQ from './pages/FAQ';
+import { TrackingProvider } from './contexts/TrackingContext';
 
 const App: React.FC = () => {
   return (
     <AuthProvider>
       <ThemeProvider>
-        <Router>
-          <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
-            <ToastContainer position="top-right" />
-            <Navbar />
-            <main className="flex-grow">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/services" element={<Services />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/track" element={<Track />} />
-                <Route path="/track/:trackingNumber" element={<Track />} />
-                <Route path="/administration_and_development/login" element={<Login />} />
-                <Route
-                  path="/administration_and_development"
-                  element={
-                    <PrivateRoute>
-                      <AdministrationAndDevelopment />
-                    </PrivateRoute>
-                  }
-                />
-                <Route path="/privacy" element={<Privacy />} />
-                <Route path="/terms" element={<Terms />} />
-                <Route path="/faq" element={<FAQ />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </main>
-            <ThemeToggle />
-            <Footer />
-          </div>
-        </Router>
+        <TrackingProvider>
+          <Router>
+            <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
+              <ToastContainer position="top-right" />
+              <Navbar />
+              <main className="flex-grow">
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/services" element={<Services />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/track" element={<Track />} />
+                  <Route path="/track/:trackingNumber" element={<Track />} />
+                  <Route path="/administration_and_development/login" element={<Login />} />
+                  <Route
+                    path="/administration_and_development"
+                    element={
+                      <PrivateRoute>
+                        <AdministrationAndDevelopment />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route path="/privacy" element={<Privacy />} />
+                  <Route path="/terms" element={<Terms />} />
+                  <Route path="/faq" element={<FAQ />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </main>
+              <ThemeToggle />
+              <Footer />
+            </div>
+          </Router>
+        </TrackingProvider>
       </ThemeProvider>
     </AuthProvider>
   );

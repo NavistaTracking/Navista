@@ -3,47 +3,31 @@ import { getShipmentByTracking, Shipment } from '../services/shipmentService';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { toast } from 'react-toastify';
-import {
-  FaSearch,
-  FaBox,
-  FaTruck,
-  FaWarehouse,
-  FaShippingFast,
-  FaMapMarkerAlt,
-  FaCalendarAlt,
-  FaUser,
-  FaPhone,
-  FaEnvelope,
-  FaBoxOpen,
-  FaWeightHanging,
-  FaRuler,
-  FaClock,
-  FaCheckCircle,
-  FaExclamationTriangle,
-  FaPauseCircle,
-  FaGlobe,
-  FaUsers,
-  FaChartLine,
-  FaShieldAlt,
-  FaPlane,
-  FaShip,
-  FaTruckLoading,
-  FaHandshake,
-  FaHeadset,
-  FaSpinner,
-  FaFileAlt,
-  FaCreditCard,
-  FaDollarSign,
-} from 'react-icons/fa';
-import Icon from '../components/icons/Icon';
+import { FaMapMarkerAlt, FaBox, FaCalendar, FaBarcode, FaPhone, FaHome, FaPaw, FaMoneyBillWave, FaCheckCircle, FaTruck, FaExclamationTriangle, FaPauseCircle, FaSpinner, FaUser, FaEnvelope, FaPlane, FaShip, FaCreditCard, FaDollarSign, FaClock, FaWeightHanging, FaRuler } from 'react-icons/fa';
+import { Icon } from '@iconify/react';
 import AnimatedCard from '../components/animations/AnimatedCard';
+
+interface Package {
+  weight: number;
+  description: string;
+  quantity: number;
+  pieceType: string;
+}
+
+interface ShipmentHistory {
+  status: string;
+  date: string;
+  time: string;
+  location: string;
+}
 
 const Track: React.FC = () => {
   const { isDarkMode } = useTheme();
   const [trackingNumber, setTrackingNumber] = useState('');
   const [shipment, setShipment] = useState<Shipment | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showTrackingForm, setShowTrackingForm] = useState(true);
   const resultsRef = useRef<HTMLDivElement>(null);
 
   const formatText = (text: string) => {
@@ -53,29 +37,24 @@ const Track: React.FC = () => {
       .join(' ');
   };
 
-  const handleTrack = async (e: React.FormEvent) => {
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!trackingNumber.trim()) {
       toast.error('Please enter a tracking number');
       return;
     }
-
-    setLoading(true);
+    setIsLoading(true);
     setError(null);
     setShipment(null);
 
     try {
-      const data = await getShipmentByTracking(trackingNumber);
-      setShipment(data);
-      // Scroll to results after a short delay to ensure the content is rendered
-      setTimeout(() => {
-        resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 100);
+      const shipmentData = await getShipmentByTracking(trackingNumber);
+      setShipment(shipmentData);
+      setShowTrackingForm(false);
     } catch (err) {
       setError('Shipment not found. Please check your tracking number and try again.');
-      toast.error('Shipment not found');
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -139,7 +118,7 @@ const Track: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
       {/* Hero Section */}
       <div className="relative bg-[#351c15] dark:bg-gray-800 py-16">
         <div className="absolute inset-0">
@@ -163,7 +142,7 @@ const Track: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Tracking Form */}
         <div className="max-w-2xl mx-auto mb-12">
-          <form onSubmit={handleTrack} className="space-y-6">
+          <form onSubmit={handleSearch} className="space-y-6">
             <div>
               <label htmlFor="tracking" className="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Enter Tracking Number
@@ -185,15 +164,17 @@ const Track: React.FC = () => {
                 </div>
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={isLoading}
                   className={`px-8 py-4 text-lg rounded-lg font-medium ${
                     isDarkMode 
                       ? 'text-gray-900 bg-[#ffbe03] hover:bg-[#e6a902] disabled:bg-gray-600' 
                       : 'text-white bg-[#351c15] hover:bg-[#4a2a1f] disabled:bg-gray-400'
                   }`}
                 >
-                  {loading ? (
-                    <FaSpinner className="animate-spin" />
+                  {isLoading ? (
+                    <div className="flex justify-center items-center">
+                      <FaSpinner className="animate-spin h-8 w-8 text-[#351c15] dark:text-[#ffbe03]" />
+                    </div>
                   ) : (
                     'Track'
                   )}
@@ -236,14 +217,14 @@ const Track: React.FC = () => {
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                      <Icon icon={FaMapMarkerAlt} size={24} className="text-[#351c15] dark:text-[#ffbe03] mr-4" />
+                      <FaMapMarkerAlt size={24} className="text-[#351c15] dark:text-[#ffbe03] mr-4" />
                       <div>
                         <p className="text-base text-gray-500 dark:text-gray-400">Current Location</p>
                         <p className="text-lg font-medium text-gray-900 dark:text-white">{shipment.currentLocation}</p>
                       </div>
                     </div>
                     <div className="flex items-center">
-                      <Icon icon={FaCalendarAlt} size={24} className="text-[#351c15] dark:text-[#ffbe03] mr-4" />
+                      <FaCalendar className="text-[#351c15] dark:text-[#ffbe03] mr-4" size={24} />
                       <div className="text-right">
                         <p className="text-base text-gray-500 dark:text-gray-400">Expected Delivery</p>
                         <p className="text-lg font-medium text-gray-900 dark:text-white">{shipment.expectedDeliveryDate}</p>
@@ -267,19 +248,19 @@ const Track: React.FC = () => {
                     </h3>
                     <div className="space-y-4">
                       <div className="flex items-center">
-                        <Icon icon={FaUser} size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
+                        <FaUser size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
                         <span className="text-base text-gray-900 dark:text-gray-100">{shipment.shipperName}</span>
                       </div>
                       <div className="flex items-center">
-                        <Icon icon={FaMapMarkerAlt} size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
+                        <FaMapMarkerAlt size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
                         <span className="text-base text-gray-900 dark:text-gray-100">{shipment.shipperAddress}</span>
                       </div>
                       <div className="flex items-center">
-                        <Icon icon={FaPhone} size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
+                        <FaPhone size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
                         <span className="text-base text-gray-900 dark:text-gray-100">{shipment.shipperPhone}</span>
                       </div>
                       <div className="flex items-center">
-                        <Icon icon={FaEnvelope} size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
+                        <FaEnvelope size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
                         <span className="text-base text-gray-900 dark:text-gray-100">{shipment.shipperEmail}</span>
                       </div>
                     </div>
@@ -298,19 +279,19 @@ const Track: React.FC = () => {
                     </h3>
                     <div className="space-y-4">
                       <div className="flex items-center">
-                        <Icon icon={FaUser} size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
+                        <FaUser size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
                         <span className="text-base text-gray-900 dark:text-gray-100">{shipment.receiverName}</span>
                       </div>
                       <div className="flex items-center">
-                        <Icon icon={FaMapMarkerAlt} size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
+                        <FaMapMarkerAlt size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
                         <span className="text-base text-gray-900 dark:text-gray-100">{shipment.receiverAddress}</span>
                       </div>
                       <div className="flex items-center">
-                        <Icon icon={FaPhone} size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
+                        <FaPhone size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
                         <span className="text-base text-gray-900 dark:text-gray-100">{shipment.receiverPhone}</span>
                       </div>
                       <div className="flex items-center">
-                        <Icon icon={FaEnvelope} size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
+                        <FaEnvelope size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
                         <span className="text-base text-gray-900 dark:text-gray-100">{shipment.receiverEmail}</span>
                       </div>
                     </div>
@@ -331,51 +312,49 @@ const Track: React.FC = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     {/* Origin and Destination */}
                     <div className="flex items-center">
-                      <Icon icon={FaMapMarkerAlt} size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
+                      <FaMapMarkerAlt size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
                       <span className="text-base text-gray-900 dark:text-gray-100">From: {shipment.origin} → To: {shipment.destination}</span>
                     </div>
-                    
+
                     {/* Carrier and Type */}
                     <div className="flex items-center">
-                      <Icon icon={FaTruck} size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
+                      <FaTruck size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
                       <span className="text-base text-gray-900 dark:text-gray-100">Carrier: {shipment.carrier}</span>
                     </div>
                     <div className="flex items-center">
-                      <Icon icon={FaBox} size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
+                      <FaBox size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
                       <span className="text-base text-gray-900 dark:text-gray-100">Type: {formatText(shipment.typeOfShipment)}</span>
                     </div>
 
                     {/* Shipment Mode */}
                     <div className="flex items-center">
-                      <Icon 
-                        icon={
-                          shipment.shipmentMode.toLowerCase().includes('air') ? FaPlane :
-                          shipment.shipmentMode.toLowerCase().includes('sea') ? FaShip :
-                          FaTruck
-                        } 
-                        size={20} 
-                        className="text-[#351c15] dark:text-[#ffbe03] mr-3" 
-                      />
+                      {shipment.shipmentMode.toLowerCase().includes('air') ? (
+                        <FaPlane size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
+                      ) : shipment.shipmentMode.toLowerCase().includes('sea') ? (
+                        <FaShip size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
+                      ) : (
+                        <FaTruck size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
+                      )}
                       <span className="text-base text-gray-900 dark:text-gray-100">{shipment.shipmentMode}</span>
                     </div>
 
                     {/* Payment and Freight */}
                     <div className="flex items-center">
-                      <Icon icon={FaCreditCard} size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
+                      <FaCreditCard size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
                       <span className="text-base text-gray-900 dark:text-gray-100">Payment: {formatText(shipment.paymentMode)}</span>
                     </div>
                     <div className="flex items-center">
-                      <Icon icon={FaDollarSign} size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
+                      <FaDollarSign size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
                       <span className="text-base text-gray-900 dark:text-gray-100">Total Freight: ${shipment.totalFreight}</span>
                     </div>
 
                     {/* Dates and Times */}
                     <div className="flex items-center">
-                      <Icon icon={FaCalendarAlt} size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
+                      <FaCalendar size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
                       <span className="text-base text-gray-900 dark:text-gray-100">Pickup: {shipment.pickupDate} {shipment.pickupTime}</span>
                     </div>
                     <div className="flex items-center">
-                      <Icon icon={FaClock} size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
+                      <FaClock size={20} className="text-[#351c15] dark:text-[#ffbe03] mr-3" />
                       <span className="text-base text-gray-900 dark:text-gray-100">Departure: {shipment.departureTime}</span>
                     </div>
                   </div>
@@ -388,32 +367,23 @@ const Track: React.FC = () => {
                       Package Details
                     </h4>
                     <div className="space-y-6">
-                      {shipment.packages && shipment.packages.map((pkg, index) => (
+                      {shipment.packages && shipment.packages.map((pkg: Package, index: number) => (
                         <div key={index} className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
                           <div className="flex items-center justify-between mb-3">
-                            <span className="text-base font-medium text-gray-900 dark:text-white">Package {index + 1}</span>
-                            <span className="text-sm text-gray-500 dark:text-gray-400">Quantity: {pkg.quantity}</span>
-                          </div>
-                          <div className="space-y-2">
-                            <div className="flex items-center">
-                              <Icon icon={FaBox} size={16} className="text-[#351c15] dark:text-[#ffbe03] mr-2" />
-                              <span className="text-sm text-gray-900 dark:text-gray-100">Type: {pkg.pieceType}</span>
+                            <div className="flex items-center space-x-2">
+                              <FaBox className="text-[#351c15] dark:text-[#ffbe03]" />
+                              <span className="text-sm font-medium text-gray-900 dark:text-white">
+                                Package {index + 1} ({pkg.quantity} {pkg.pieceType})
+                              </span>
                             </div>
-                            <div className="flex items-center">
-                              <Icon icon={FaWeightHanging} size={16} className="text-[#351c15] dark:text-[#ffbe03] mr-2" />
-                              <span className="text-sm text-gray-900 dark:text-gray-100">Weight: {pkg.weight} kg</span>
-                            </div>
-                            <div className="flex items-center">
-                              <Icon icon={FaRuler} size={16} className="text-[#351c15] dark:text-[#ffbe03] mr-2" />
-                              <span className="text-sm text-gray-900 dark:text-gray-100">Dimensions: {pkg.length}cm x {pkg.width}cm x {pkg.height}cm</span>
-                            </div>
-                            {pkg.description && (
-                              <div className="flex items-start">
-                                <Icon icon={FaFileAlt} size={16} className="text-[#351c15] dark:text-[#ffbe03] mr-2 mt-1" />
-                                <span className="text-sm text-gray-900 dark:text-gray-100 whitespace-pre-line">{pkg.description}</span>
+                            <div className="flex items-center space-x-4">
+                              <div className="flex items-center space-x-2">
+                                <FaWeightHanging className="text-[#351c15] dark:text-[#ffbe03]" />
+                                <span className="text-sm text-gray-600 dark:text-gray-300">{pkg.weight} kg</span>
                               </div>
-                            )}
+                            </div>
                           </div>
+                          <p className="text-sm text-gray-600 dark:text-gray-300">{pkg.description}</p>
                         </div>
                       ))}
                     </div>
@@ -434,7 +404,7 @@ const Track: React.FC = () => {
                   <div className="relative">
                     <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200 dark:bg-gray-700"></div>
                     <div className="space-y-8">
-                      {shipment.shipmentHistory.map((history, index) => (
+                      {shipment.shipmentHistory.map((history: ShipmentHistory, index: number) => (
                         <div key={index} className="relative pl-12">
                           <div className={`absolute left-0 w-10 h-10 rounded-full flex items-center justify-center ${
                             isDarkMode ? 'bg-gray-800' : 'bg-white'
@@ -491,7 +461,7 @@ const Track: React.FC = () => {
             <AnimatedCard animation="slide" delay="0ms">
               <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
                 <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
-                  <Icon icon={FaMapMarkerAlt} size={32} />
+                  <FaMapMarkerAlt size={32} />
                 </div>
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white">Real-Time Location</h3>
                 <p className="mt-2 text-base text-gray-500 dark:text-gray-400">
@@ -503,7 +473,7 @@ const Track: React.FC = () => {
             <AnimatedCard animation="slide" delay="200ms">
               <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
                 <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
-                  <Icon icon={FaBox} size={32} />
+                  <FaBox size={32} />
                 </div>
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white">Status Updates</h3>
                 <p className="mt-2 text-base text-gray-500 dark:text-gray-400">
@@ -515,7 +485,7 @@ const Track: React.FC = () => {
             <AnimatedCard animation="slide" delay="400ms">
               <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
                 <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
-                  <Icon icon={FaTruck} size={32} />
+                  <FaTruck size={32} />
                 </div>
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white">Delivery Estimates</h3>
                 <p className="mt-2 text-base text-gray-500 dark:text-gray-400">
