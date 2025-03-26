@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { getShipmentByTracking, Shipment } from '../services/shipmentService';
-import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { toast } from 'react-toastify';
-import { FaMapMarkerAlt, FaBox, FaCalendar, FaBarcode, FaPhone, FaHome, FaPaw, FaMoneyBillWave, FaCheckCircle, FaTruck, FaExclamationTriangle, FaPauseCircle, FaSpinner, FaUser, FaEnvelope, FaPlane, FaShip, FaCreditCard, FaDollarSign, FaClock, FaWeightHanging, FaRuler } from 'react-icons/fa';
-import { Icon } from '@iconify/react';
+import { FaMapMarkerAlt, FaBox, FaCalendar, FaPhone, FaCheckCircle, FaTruck, FaExclamationTriangle, FaPauseCircle, FaSpinner, FaUser, FaEnvelope, FaPlane, FaShip, FaCreditCard, FaDollarSign, FaClock, FaWeightHanging } from 'react-icons/fa';
 import AnimatedCard from '../components/animations/AnimatedCard';
 
 interface Package {

@@ -14,7 +14,8 @@ import {
   orderBy,
   Timestamp,
   enableIndexedDbPersistence,
-  enableMultiTabIndexedDbPersistence
+  enableMultiTabIndexedDbPersistence,
+  limit
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
 
