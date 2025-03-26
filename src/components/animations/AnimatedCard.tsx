@@ -1,13 +1,20 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, TargetAndTransition } from 'framer-motion';
 
 interface AnimatedCardProps {
   children: React.ReactNode;
-  animation?: 'fade' | 'slide' | 'scale';
+  animation?: 'fade' | 'slide' | 'scale' | 'hover';
   delay?: string;
 }
 
-const animations = {
+interface AnimationVariant {
+  initial: TargetAndTransition;
+  animate: TargetAndTransition;
+  exit: TargetAndTransition;
+  whileHover?: TargetAndTransition;
+}
+
+const animations: Record<string, AnimationVariant> = {
   fade: {
     initial: { opacity: 0 },
     animate: { opacity: 1 },
@@ -22,6 +29,12 @@ const animations = {
     initial: { scale: 0.95, opacity: 0 },
     animate: { scale: 1, opacity: 1 },
     exit: { scale: 0.95, opacity: 0 }
+  },
+  hover: {
+    initial: { scale: 1 },
+    animate: { scale: 1 },
+    exit: { scale: 1 },
+    whileHover: { scale: 1.05 }
   }
 };
 
@@ -35,6 +48,7 @@ const AnimatedCard: React.FC<AnimatedCardProps> = ({
       initial={animations[animation].initial}
       animate={animations[animation].animate}
       exit={animations[animation].exit}
+      whileHover={animations[animation].whileHover}
       transition={{ duration: 0.3, delay: parseFloat(delay) / 1000 }}
     >
       {children}
