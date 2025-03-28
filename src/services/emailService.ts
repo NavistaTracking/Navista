@@ -1,5 +1,7 @@
 import emailjs from '@emailjs/browser';
 
+const isTest = process.env.NODE_ENV === 'test';
+
 const COMPANY_NAME = 'Global Track';
 const FROM_EMAIL = 'mishaelsema@gmail.com'; // Your Gmail address
 
@@ -76,115 +78,103 @@ const formatDate = (date: string) => {
 
 // Remove unused createShipperEmailHtml and createReceiverEmailHtml functions
 
-export const sendShipperEmail = async (data: EmailData): Promise<void> => {
-  try {
-    const { serviceId, templateId, userId } = validateEmailJSConfig('shipper');
-    
-    // Format packages for the template
-    const formattedPackages = data.packages?.map((pkg, index) => {
-      const dimensions = pkg.length && pkg.width && pkg.height ? 
-        `${pkg.length}cm x ${pkg.width}cm x ${pkg.height}cm` : '';
-      return `Package ${index + 1}:
-Type: ${pkg.pieceType}
-Quantity: ${pkg.quantity}
-Weight: ${pkg.weight} kg${dimensions ? `\nDimensions: ${dimensions}` : ''}${pkg.description ? `\nDescription: ${pkg.description}` : ''}`;
-    }).join('\n\n') || '';
-    
-    const templateParams = {
-      company: COMPANY_NAME,
-      to_name: data.shipperName,
-      tracking: data.trackingNumber,
-      status: data.status || 'Pending',
-      location: data.currentLocation || 'Not yet in transit',
-      origin: data.origin,
-      destination: data.destination,
-      delivery: formatDate(data.expectedDeliveryDate),
-      receiver: data.receiverName,
-      receiver_email: data.receiverEmail,
-      packages: formattedPackages,
-      url: `${window.location.origin}/track`,
-      to_email: data.shipperEmail,
-      email: data.shipperEmail,
-      from_email: FROM_EMAIL
-    };
+const checkEmailConfig = (templateType: string) => {
+  const prefix = isTest ? 'TEST_' : '';
+  const requiredVars = [
+    `${prefix}_SERVICE_ID`,
+    `${prefix}_${templateType.toUpperCase()}_TEMPLATE_ID`,
+    `${prefix}_USER_ID`
+  ];
 
-    console.log('Sending shipper email with params:', templateParams);
-    const response = await emailjs.send(serviceId, templateId, templateParams, userId);
-    console.log('Shipper email sent successfully:', response);
-  } catch (error) {
-    console.error('Failed to send shipper email:', error);
-    // Don't throw the error, just log it
+  const missingVars = requiredVars.filter(varName => !process.env[varName]);
+  if (missingVars.length > 0) {
+    throw new Error(`Missing required environment variables: ${missingVars.join(', ')}`);
   }
 };
 
-export const sendReceiverEmail = async (data: EmailData): Promise<void> => {
+export const sendShipperEmail = async (templateParams: any) => {
   try {
-    // Force use the working template ID
-    const serviceId = "service_sajeown";
-    const templateId = "template_7pxhrkj";
-    const userId = process.env.REACT_APP_EMAILJS_USER_ID;
+    checkEmailConfig('SHIPPER');
+    const prefix = isTest ? 'TEST_' : '';
+    
+    const response = await emailjs.send(
+      process.env[`${prefix}_SERVICE_ID`] || '',
+      process.env[`${prefix}_SHIPPER_TEMPLATE_ID`] || '',
+      templateParams,
+      process.env[`${prefix}_USER_ID`] || ''
+    );
 
-    if (!userId) {
-      console.error('Missing REACT_APP_EMAILJS_USER_ID');
-      return;
+    if (response.status !== 200) {
+      throw new Error('Failed to send shipper email');
     }
 
-    console.log('Using EmailJS config:', {
-      serviceId,
-      templateId,
-      userId: userId ? 'present' : 'missing'
-    });
-    
-    const templateParams = {
-      company: COMPANY_NAME,
-      to_name: data.receiverName,
-      tracking_number: data.trackingNumber,
-      origin: data.origin,
-      destination: data.destination,
-      expected_delivery_date: formatDate(data.expectedDeliveryDate),
-      tracking_url: `${window.location.origin}/track`,
-      email: data.receiverEmail,
-      to_email: data.receiverEmail
-    };
-
-    console.log('Sending receiver email with params:', templateParams);
-    const response = await emailjs.send(serviceId, templateId, templateParams, userId);
-    console.log('Receiver email sent successfully:', response);
-  } catch (err: any) {
-    console.error('Failed to send receiver email:', err);
-    console.error('Error details:', {
-      message: err.message,
-      code: err.code,
-      status: err.status
-    });
+    return response;
+  } catch (error) {
+    throw new Error('Failed to send shipper email');
   }
 };
 
-export const sendContactFormEmail = async (data: ContactFormData) => {
+export const sendReceiverEmail = async (templateParams: any) => {
   try {
-    const config = validateEmailJSConfig('contact');
-    console.log('Using EmailJS config:', {
-      service_id: config.serviceId,
-      template_id: config.templateId,
-      user_id: config.userId
+    checkEmailConfig('RECEIVER');
+    const prefix = isTest ? 'TEST_' : '';
+    
+    const response = await emailjs.send(
+      process.env[`${prefix}_SERVICE_ID`] || '',
+      process.env[`${prefix}_RECEIVER_TEMPLATE_ID`] || '',
+      templateParams,
+      process.env[`${prefix}_USER_ID`] || ''
+    );
+
+    if (response.status !== 200) {
+      throw new Error('Failed to send receiver email');
+    }
+
+    return response;
+  } catch (error) {
+    throw new Error('Failed to send receiver email');
+  }
+};
+
+export const sendContactFormEmail = async (templateParams: any) => {
+  try {
+    checkEmailConfig('CONTACT');
+    const prefix = isTest ? 'TEST_' : '';
+    
+    const response = await emailjs.send(
+      process.env[`${prefix}_SERVICE_ID`] || '',
+      process.env[`${prefix}_CONTACT_TEMPLATE_ID`] || '',
+      templateParams,
+      process.env[`${prefix}_USER_ID`] || ''
+    );
+
+    if (response.status !== 200) {
+      throw new Error('Failed to send contact form email');
+    }
+
+    return response;
+  } catch (error) {
+    throw new Error('Failed to send contact form email');
+  }
+};
+
+export const sendTestEmails = async () => {
+  try {
+    await sendShipperEmail({
+      to_name: 'Test Shipper',
+      tracking_number: 'TEST123456',
+      status: 'Test Status'
     });
 
-    const templateParams = {
-      company: COMPANY_NAME,
-      from_name: data.name,
-      from_email: data.email,
-      from_phone: data.phone,
-      subject: data.subject,
-      message: data.message,
-      reply_to: data.email
-    };
+    await sendReceiverEmail({
+      to_name: 'Test Receiver',
+      tracking_number: 'TEST123456',
+      status: 'Test Status'
+    });
 
-    console.log('Sending contact form email with params:', templateParams);
-    const response = await emailjs.send(config.serviceId, config.templateId, templateParams, config.userId);
-    console.log('Contact form email sent successfully:', response);
+    return true;
   } catch (error) {
-    console.error('Failed to send contact form email:', error);
-    throw error;
+    throw new Error('Failed to send test emails');
   }
 };
 

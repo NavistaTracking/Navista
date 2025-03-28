@@ -291,13 +291,10 @@ export const updateTracking = async (id: string, data: UpdateTrackingData): Prom
 };
 
 // Delete tracking
-export const deleteTracking = async (id: string): Promise<void> => {
+export const deleteTracking = async (trackingNumber: string): Promise<void> => {
   try {
-    const trackingRef = doc(db, 'trackings', id);
-    await deleteDoc(trackingRef);
-    console.log('Tracking deleted successfully');
+    await deleteDoc(doc(db, 'trackings', trackingNumber));
   } catch (error) {
-    console.error('Error deleting tracking:', error);
-    throw error;
+    throw new Error('Failed to delete tracking');
   }
 }; 

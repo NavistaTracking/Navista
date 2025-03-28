@@ -8,14 +8,10 @@ import {
   getDocs,
   updateDoc,
   deleteDoc,
-  serverTimestamp,
   query,
   where,
-  orderBy,
-  Timestamp,
   enableIndexedDbPersistence,
-  enableMultiTabIndexedDbPersistence,
-  limit
+  enableMultiTabIndexedDbPersistence
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
 

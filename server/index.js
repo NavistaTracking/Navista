@@ -4,7 +4,7 @@ const { Resend } = require('resend');
 require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT || 3002;
+const port = process.env.PORT || 3001;
 
 // Initialize Resend
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -15,23 +15,21 @@ app.use(express.json());
 
 // Email sending endpoint
 app.post('/api/send-email', async (req, res) => {
-  console.log('Received email request:', req.body);
   try {
-    const { from, to, subject, html } = req.body;
-    
-    console.log('Sending email with Resend...');
+    if (!process.env.RESEND_API_KEY) {
+      throw new Error('Missing Resend API key');
+    }
+
     const data = await resend.emails.send({
-      from,
-      to,
-      subject,
-      html
+      from: 'Global Track <noreply@globaltrack.com>',
+      to: req.body.to,
+      subject: req.body.subject,
+      html: req.body.html
     });
 
-    console.log('Email sent successfully:', data);
-    res.json(data);
+    res.json({ success: true, data });
   } catch (error) {
-    console.error('Error sending email:', error);
-    res.status(500).json({ error: 'Failed to send email', details: error.message });
+    res.status(500).json({ success: false, error: 'Failed to send email' });
   }
 });
 
@@ -42,5 +40,4 @@ app.get('/api/test', (req, res) => {
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
-  console.log(`Resend API Key: ${process.env.RESEND_API_KEY ? 'Present' : 'Missing'}`);
 }); 

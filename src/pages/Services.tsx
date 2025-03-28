@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaPlane, FaShip, FaTruck, FaGlobe, FaShippingFast, FaAward, FaChartLine, FaHandshake } from 'react-icons/fa';
+import { FaTruck, FaPlane, FaShip, FaBox, FaGlobe, FaShieldAlt, FaClock, FaMapMarkerAlt, FaShippingFast } from 'react-icons/fa';
 import Icon from '../components/icons/Icon';
 import AnimatedCard from '../components/animations/AnimatedCard';
 
