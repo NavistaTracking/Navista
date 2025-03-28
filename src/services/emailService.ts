@@ -1,6 +1,7 @@
 import emailjs from '@emailjs/browser';
 
 const isTest = process.env.NODE_ENV === 'test';
+const DOMAIN = 'https://tracking-9agbmnqug-mishusema237s-projects.vercel.app';
 
 const checkEmailConfig = (templateType: string) => {
   const prefix = isTest ? 'TEST_' : '';
@@ -46,10 +47,22 @@ export interface ContactFormData {
   message: string;
 }
 
-export const sendShipperEmail = async (templateParams: any) => {
+export const sendShipperEmail = async (data: EmailData) => {
   try {
     checkEmailConfig('SHIPPER');
     const prefix = isTest ? 'TEST_' : '';
+    
+    const templateParams = {
+      to_name: data.shipperName,
+      tracking_number: data.trackingNumber,
+      status: data.status || 'Pending',
+      origin: data.origin,
+      destination: data.destination,
+      expected_delivery_date: data.expectedDeliveryDate,
+      current_location: data.currentLocation || data.origin,
+      tracking_url: `${DOMAIN}/track/${data.trackingNumber}`,
+      to_email: data.shipperEmail
+    };
     
     const response = await emailjs.send(
       process.env[`${prefix}_SERVICE_ID`] || '',
@@ -68,10 +81,22 @@ export const sendShipperEmail = async (templateParams: any) => {
   }
 };
 
-export const sendReceiverEmail = async (templateParams: any) => {
+export const sendReceiverEmail = async (data: EmailData) => {
   try {
     checkEmailConfig('RECEIVER');
     const prefix = isTest ? 'TEST_' : '';
+    
+    const templateParams = {
+      to_name: data.receiverName,
+      tracking_number: data.trackingNumber,
+      status: data.status || 'Pending',
+      origin: data.origin,
+      destination: data.destination,
+      expected_delivery_date: data.expectedDeliveryDate,
+      current_location: data.currentLocation || data.origin,
+      tracking_url: `${DOMAIN}/track/${data.trackingNumber}`,
+      to_email: data.receiverEmail
+    };
     
     const response = await emailjs.send(
       process.env[`${prefix}_SERVICE_ID`] || '',
@@ -90,10 +115,19 @@ export const sendReceiverEmail = async (templateParams: any) => {
   }
 };
 
-export const sendContactFormEmail = async (templateParams: any) => {
+export const sendContactFormEmail = async (data: ContactFormData) => {
   try {
     checkEmailConfig('CONTACT');
     const prefix = isTest ? 'TEST_' : '';
+    
+    const templateParams = {
+      from_name: data.name,
+      from_email: data.email,
+      phone: data.phone,
+      subject: data.subject,
+      message: data.message,
+      reply_to: data.email
+    };
     
     const response = await emailjs.send(
       process.env[`${prefix}_SERVICE_ID`] || '',
@@ -114,17 +148,23 @@ export const sendContactFormEmail = async (templateParams: any) => {
 
 export const sendTestEmails = async () => {
   try {
-    await sendShipperEmail({
-      to_name: 'Test Shipper',
-      tracking_number: 'TEST123456',
-      status: 'Test Status'
-    });
+    const testData: EmailData = {
+      trackingNumber: 'TEST123456',
+      shipperName: 'Test Shipper',
+      shipperEmail: 'test@example.com',
+      receiverName: 'Test Receiver',
+      receiverEmail: 'test@example.com',
+      origin: 'Test Origin',
+      destination: 'Test Destination',
+      expectedDeliveryDate: new Date().toISOString().split('T')[0],
+      status: 'Test Status',
+      currentLocation: 'Test Location'
+    };
 
-    await sendReceiverEmail({
-      to_name: 'Test Receiver',
-      tracking_number: 'TEST123456',
-      status: 'Test Status'
-    });
+    await Promise.all([
+      sendShipperEmail(testData),
+      sendReceiverEmail(testData)
+    ]);
 
     return true;
   } catch (error) {
