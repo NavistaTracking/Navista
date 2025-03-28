@@ -4,7 +4,7 @@ const isTest = process.env.NODE_ENV === 'test';
 const DOMAIN = 'https://tracking-9agbmnqug-mishusema237s-projects.vercel.app';
 
 const checkEmailConfig = (templateType: string) => {
-  const prefix = isTest ? 'TEST_' : '';
+  const prefix = isTest ? 'TEST_' : 'REACT_APP_EMAILJS';
   const requiredVars = [
     `${prefix}_SERVICE_ID`,
     `${prefix}_${templateType.toUpperCase()}_TEMPLATE_ID`,
@@ -50,7 +50,7 @@ export interface ContactFormData {
 export const sendShipperEmail = async (data: EmailData) => {
   try {
     checkEmailConfig('SHIPPER');
-    const prefix = isTest ? 'TEST_' : '';
+    const prefix = isTest ? 'TEST_' : 'REACT_APP_EMAILJS';
     
     const templateParams = {
       to_name: data.shipperName,
@@ -84,7 +84,7 @@ export const sendShipperEmail = async (data: EmailData) => {
 export const sendReceiverEmail = async (data: EmailData) => {
   try {
     checkEmailConfig('RECEIVER');
-    const prefix = isTest ? 'TEST_' : '';
+    const prefix = isTest ? 'TEST_' : 'REACT_APP_EMAILJS';
     
     const templateParams = {
       to_name: data.receiverName,
@@ -117,8 +117,8 @@ export const sendReceiverEmail = async (data: EmailData) => {
 
 export const sendContactFormEmail = async (data: ContactFormData) => {
   try {
-    checkEmailConfig('CONTACT');
-    const prefix = isTest ? 'TEST_' : '';
+    const prefix = isTest ? 'TEST_' : 'REACT_APP_EMAILJS';
+    const secondaryPrefix = isTest ? 'TEST_' : 'REACT_APP_EMAILJS_SECONDARY';
     
     const templateParams = {
       from_name: data.name,
@@ -130,10 +130,10 @@ export const sendContactFormEmail = async (data: ContactFormData) => {
     };
     
     const response = await emailjs.send(
-      process.env[`${prefix}_SERVICE_ID`] || '',
-      process.env[`${prefix}_CONTACT_TEMPLATE_ID`] || '',
+      process.env[`${secondaryPrefix}_SERVICE_ID`] || '',
+      process.env[`${secondaryPrefix}_CONTACT_TEMPLATE_ID`] || '',
       templateParams,
-      process.env[`${prefix}_USER_ID`] || ''
+      process.env[`${secondaryPrefix}_USER_ID`] || ''
     );
 
     if (response.status !== 200) {
