@@ -1,7 +1,7 @@
 import emailjs from '@emailjs/browser';
 
 const isTest = process.env.NODE_ENV === 'test';
-const DOMAIN = 'https://tracking-9agbmnqug-mishusema237s-projects.vercel.app';
+const DOMAIN = 'https://tracking-blond.vercel.app';
 
 const checkEmailConfig = (templateType: string) => {
   const prefix = isTest ? 'TEST_' : 'REACT_APP_EMAILJS';
