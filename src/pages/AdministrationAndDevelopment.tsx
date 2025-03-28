@@ -1,15 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
+import { useAuth } from '../contexts/AuthContext';
+import { getAllShipments, createShipment, updateShipment, deleteShipment, updateTrackingInfo, Shipment } from '../services/shipmentService';
 import {
-  Shipment,
-  getAllShipments,
-  createShipment,
-  updateShipment,
-  deleteShipment,
-  updateTrackingInfo
-} from '../services/shipmentService';
+  FaPlus,
+  FaTrash,
+  FaTruck,
+  FaPlane,
+  FaShip,
+  FaBox,
+  FaBolt,
+  FaWineGlass,
+  FaWeightHanging,
+  FaCreditCard,
+  FaDollarSign,
+  FaUniversity,
+  FaPaypal,
+  FaEnvelope,
+  FaShieldAlt,
+  FaSpinner,
+  FaSync,
+  FaMapMarkerAlt
+} from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import {
   User,
   getAllUsers,
@@ -18,11 +31,10 @@ import {
   deleteUser,
   updateUserPermissions
 } from '../services/userService';
-import { FaPlus, FaEdit, FaTrash, FaMapMarkerAlt, FaSearch, FaFilter, FaSync, FaSpinner, FaEnvelope, FaChartLine, FaUsers, FaCog, FaShieldAlt } from 'react-icons/fa';
 import Icon from '../components/icons/Icon';
 import AnimatedCard from '../components/animations/AnimatedCard';
 import { toast } from 'react-toastify';
-import { testEmailService } from '../services/emailService';
+import { sendTestEmails } from '../services/emailService';
 
 type ShipmentFormData = {
   // Shipper Information
@@ -162,7 +174,7 @@ const AdministrationAndDevelopment: React.FC = () => {
 
   const handleTestEmail = async () => {
     try {
-      const success = await testEmailService();
+      const success = await sendTestEmails();
       if (success) {
         toast.success('Test emails sent successfully!');
       } else {

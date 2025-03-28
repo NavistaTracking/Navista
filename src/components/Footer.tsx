@@ -20,18 +20,18 @@ const Footer: React.FC = () => {
             <p className="text-gray-300 mb-6 text-sm sm:text-base">
               Your trusted partner in global logistics and transportation services. Delivering excellence in shipping solutions since 2004.
             </p>
-            <div className="flex justify-center sm:justify-start space-x-6">
-              <a href="#" className="text-gray-300 hover:text-[#ffbe03] transition-colors">
-                <Icon icon={FaFacebook} size={24} />
+            <div className="flex space-x-6">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#ffbe03]">
+                <FaFacebook size={24} />
               </a>
-              <a href="#" className="text-gray-300 hover:text-[#ffbe03] transition-colors">
-                <Icon icon={FaTwitter} size={24} />
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#ffbe03]">
+                <FaTwitter size={24} />
               </a>
-              <a href="#" className="text-gray-300 hover:text-[#ffbe03] transition-colors">
-                <Icon icon={FaInstagram} size={24} />
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#ffbe03]">
+                <FaInstagram size={24} />
               </a>
-              <a href="#" className="text-gray-300 hover:text-[#ffbe03] transition-colors">
-                <Icon icon={FaLinkedin} size={24} />
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#ffbe03]">
+                <FaLinkedin size={24} />
               </a>
             </div>
           </div>

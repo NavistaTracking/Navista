@@ -1,35 +1,23 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { getShipmentByTracking, Shipment } from '../services/shipmentService';
-import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { toast } from 'react-toastify';
 import {
   FaSearch,
   FaBox,
   FaTruck,
-  FaWarehouse,
-  FaShippingFast,
   FaMapMarkerAlt,
   FaCalendarAlt,
   FaUser,
   FaPhone,
   FaEnvelope,
-  FaBoxOpen,
   FaWeightHanging,
-  FaRuler,
   FaClock,
   FaCheckCircle,
   FaExclamationTriangle,
   FaPauseCircle,
-  FaGlobe,
-  FaUsers,
-  FaChartLine,
-  FaShieldAlt,
   FaPlane,
   FaShip,
-  FaTruckLoading,
-  FaHandshake,
-  FaHeadset,
   FaCreditCard,
   FaDollarSign,
   FaBolt,
