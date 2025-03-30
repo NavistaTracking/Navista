@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaPlane, FaShip, FaTruck, FaWarehouse } from 'react-icons/fa';
 import Icon from './icons/Icon';
 import Logo from './Logo';
@@ -7,6 +7,51 @@ import { useTheme } from '../contexts/ThemeContext';
 
 const Footer: React.FC = () => {
   const { isDarkMode } = useTheme();
+  const navigate = useNavigate();
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  const handleNavClick = (to: string) => {
+    navigate(to);
+    scrollToTop();
+  };
+
+  const handleFreightModeClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    const href = e.currentTarget.getAttribute('href');
+    if (href) {
+      // If we're not on the services page, navigate first
+      if (!window.location.pathname.includes('/services')) {
+        navigate('/services');
+        // Wait for navigation to complete before scrolling
+        setTimeout(() => {
+          const element = document.getElementById(id);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+            element.classList.add('animate-pulse');
+            setTimeout(() => {
+              element.classList.remove('animate-pulse');
+            }, 2000);
+          }
+        }, 100);
+      } else {
+        // If we're already on the services page, just scroll
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+          element.classList.add('animate-pulse');
+          setTimeout(() => {
+            element.classList.remove('animate-pulse');
+          }, 2000);
+        }
+      }
+    }
+  };
   
   return (
     <footer className={`${isDarkMode ? 'bg-[#1a0e0a] border-gray-800' : 'bg-[#351c15]'} text-white`}>
@@ -20,18 +65,18 @@ const Footer: React.FC = () => {
             <p className="text-gray-300 mb-6 text-sm sm:text-base">
               Your trusted partner in global logistics and transportation services. Delivering excellence in shipping solutions since 2004.
             </p>
-            <div className="flex space-x-6">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#ffbe03]">
-                <FaFacebook size={24} />
+            <div className="flex justify-center sm:justify-start space-x-6">
+              <a href="#" className="text-gray-300 hover:text-[#ffbe03] transition-colors">
+                <Icon icon={FaFacebook} size={24} />
               </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#ffbe03]">
-                <FaTwitter size={24} />
+              <a href="#" className="text-gray-300 hover:text-[#ffbe03] transition-colors">
+                <Icon icon={FaTwitter} size={24} />
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#ffbe03]">
-                <FaInstagram size={24} />
+              <a href="#" className="text-gray-300 hover:text-[#ffbe03] transition-colors">
+                <Icon icon={FaInstagram} size={24} />
               </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#ffbe03]">
-                <FaLinkedin size={24} />
+              <a href="#" className="text-gray-300 hover:text-[#ffbe03] transition-colors">
+                <Icon icon={FaLinkedin} size={24} />
               </a>
             </div>
           </div>
@@ -41,34 +86,34 @@ const Footer: React.FC = () => {
             <h3 className="text-xl font-bold mb-6 text-[#ffbe03]">Quick Links</h3>
             <ul className="space-y-4">
               <li>
-                <Link to="/" className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
+                <button onClick={() => handleNavClick('/')} className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
                   Home
-                </Link>
+                </button>
               </li>
               <li>
-                <Link to="/about" className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
+                <button onClick={() => handleNavClick('/about')} className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
                   About Us
-                </Link>
+                </button>
               </li>
               <li>
-                <Link to="/services" className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
+                <button onClick={() => handleNavClick('/services')} className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
                   Services
-                </Link>
+                </button>
               </li>
               <li>
-                <Link to="/track" className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
+                <button onClick={() => handleNavClick('/track')} className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
                   Track Package
-                </Link>
+                </button>
               </li>
               <li>
-                <Link to="/contact" className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
+                <button onClick={() => handleNavClick('/contact')} className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
                   Contact
-                </Link>
+                </button>
               </li>
               <li>
-                <Link to="/faq" className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
+                <button onClick={() => handleNavClick('/faq')} className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
                   FAQ
-                </Link>
+                </button>
               </li>
             </ul>
           </div>
@@ -79,28 +124,23 @@ const Footer: React.FC = () => {
             <ul className="space-y-4">
               <li className="flex items-center justify-center sm:justify-start space-x-3">
                 <Icon icon={FaPlane} size={16} className="text-[#ffbe03]" />
-                <Link to="/services#air-freight" className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
+                <Link to="/services#freight-mode-air-freight" onClick={(e) => handleFreightModeClick(e, 'freight-mode-air-freight')} className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
                   Air Freight
                 </Link>
               </li>
               <li className="flex items-center justify-center sm:justify-start space-x-3">
                 <Icon icon={FaShip} size={16} className="text-[#ffbe03]" />
-                <Link to="/services#sea-freight" className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
+                <Link to="/services#freight-mode-sea-freight" onClick={(e) => handleFreightModeClick(e, 'freight-mode-sea-freight')} className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
                   Sea Freight
                 </Link>
               </li>
               <li className="flex items-center justify-center sm:justify-start space-x-3">
                 <Icon icon={FaTruck} size={16} className="text-[#ffbe03]" />
-                <Link to="/services#ground-transport" className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
+                <Link to="/services#freight-mode-land-freight" onClick={(e) => handleFreightModeClick(e, 'freight-mode-land-freight')} className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
                   Ground Transport
                 </Link>
               </li>
-              <li className="flex items-center justify-center sm:justify-start space-x-3">
-                <Icon icon={FaWarehouse} size={16} className="text-[#ffbe03]" />
-                <Link to="/services#warehousing" className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
-                  Warehousing
-                </Link>
-              </li>
+              
             </ul>
           </div>
 
@@ -139,15 +179,15 @@ const Footer: React.FC = () => {
               © {new Date().getFullYear()} Global Track. All rights reserved.
             </p>
             <div className="flex flex-wrap justify-center sm:justify-end gap-4 sm:gap-6">
-              <Link to="/privacy" className="text-gray-300 hover:text-[#ffbe03] text-xs sm:text-sm transition-colors">
+              <button onClick={() => handleNavClick('/privacy')} className="text-gray-300 hover:text-[#ffbe03] text-xs sm:text-sm transition-colors">
                 Privacy Policy
-              </Link>
-              <Link to="/terms" className="text-gray-300 hover:text-[#ffbe03] text-xs sm:text-sm transition-colors">
+              </button>
+              <button onClick={() => handleNavClick('/terms')} className="text-gray-300 hover:text-[#ffbe03] text-xs sm:text-sm transition-colors">
                 Terms of Service
-              </Link>
-              <Link to="/faq" className="text-gray-300 hover:text-[#ffbe03] text-xs sm:text-sm transition-colors">
+              </button>
+              <button onClick={() => handleNavClick('/faq')} className="text-gray-300 hover:text-[#ffbe03] text-xs sm:text-sm transition-colors">
                 FAQ
-              </Link>
+              </button>
             </div>
           </div>
         </div>

@@ -1,28 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useTheme } from '../contexts/ThemeContext';
-import { useAuth } from '../contexts/AuthContext';
-import { getAllShipments, createShipment, updateShipment, deleteShipment, updateTrackingInfo, Shipment } from '../services/shipmentService';
-import {
-  FaPlus,
-  FaTrash,
-  FaTruck,
-  FaPlane,
-  FaShip,
-  FaBox,
-  FaBolt,
-  FaWineGlass,
-  FaWeightHanging,
-  FaCreditCard,
-  FaDollarSign,
-  FaUniversity,
-  FaPaypal,
-  FaEnvelope,
-  FaShieldAlt,
-  FaSpinner,
-  FaSync,
-  FaMapMarkerAlt
-} from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
+import {
+  Shipment,
+  getAllShipments,
+  createShipment,
+  updateShipment,
+  deleteShipment,
+  updateTrackingInfo
+} from '../services/shipmentService';
 import {
   User,
   getAllUsers,
@@ -31,10 +18,10 @@ import {
   deleteUser,
   updateUserPermissions
 } from '../services/userService';
+import { FaPlus, FaEdit, FaTrash, FaMapMarkerAlt, FaSearch, FaFilter, FaSync, FaSpinner, FaEnvelope, FaChartLine, FaUsers, FaCog, FaShieldAlt } from 'react-icons/fa';
 import Icon from '../components/icons/Icon';
 import AnimatedCard from '../components/animations/AnimatedCard';
 import { toast } from 'react-toastify';
-import { sendTestEmails } from '../services/emailService';
 
 type ShipmentFormData = {
   // Shipper Information
@@ -173,8 +160,9 @@ const AdministrationAndDevelopment: React.FC = () => {
   };
 
   const handleTestEmail = async () => {
-    try {
-      const success = await sendTestEmails();
+    console.log('Oops! Test email service not available for now');
+    /*try {
+      const success = await testEmailService();
       if (success) {
         toast.success('Test emails sent successfully!');
       } else {
@@ -183,7 +171,7 @@ const AdministrationAndDevelopment: React.FC = () => {
     } catch (error) {
       console.error('Email test failed:', error);
       toast.error('Failed to send test emails');
-    }
+    }*/
   };
 
   // Shipment handlers
