@@ -1,16 +1,20 @@
 import React from 'react';
-import { FaTruck, FaPlane, FaShip, FaBox, FaGlobe, FaShieldAlt, FaClock, FaMapMarkerAlt, FaShippingFast } from 'react-icons/fa';
+import { FaTruck, FaPlane, FaShip, FaBox, FaGlobe, FaShieldAlt, FaClock, FaMapMarkerAlt, FaShippingFast, FaCheckCircle, FaWarehouse } from 'react-icons/fa';
 import Icon from '../components/icons/Icon';
 import AnimatedCard from '../components/animations/AnimatedCard';
+import { useTheme } from '../contexts/ThemeContext';
+import '../styles/animations.css';
 
 const Services: React.FC = () => {
+  const { isDarkMode } = useTheme();
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Hero Section */}
       <div className="relative bg-[#351c15] dark:bg-gray-800 py-16">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1519003722824-194d4455a60c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+            src="https://images.unsplash.com/photo-1577563908411-5077b6dc7624?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
             alt="Modern logistics facility"
             className="w-full h-full object-cover opacity-30 dark:opacity-20"
           />
@@ -91,7 +95,7 @@ const Services: React.FC = () => {
             </div>
             <div className="mt-10 lg:mt-0">
               <img
-                src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+                src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
                 alt="Logistics operations"
                 className="rounded-lg shadow-lg dark:shadow-gray-800"
               />
@@ -111,7 +115,7 @@ const Services: React.FC = () => {
           </div>
           <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             <AnimatedCard animation="slide" delay="0ms">
-              <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+              <div id="freight-mode-air-freight" className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
                 <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
                   <Icon icon={FaPlane} size={32} />
                 </div>
@@ -126,11 +130,25 @@ const Services: React.FC = () => {
                     className="rounded-lg shadow-md"
                   />
                 </div>
+                <ul className="mt-4 space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                  <li className="flex items-center">
+                    <Icon icon={FaCheckCircle} size={16} className="text-[#ffbe03] mr-2" />
+                    Express delivery options
+                  </li>
+                  <li className="flex items-center">
+                    <Icon icon={FaCheckCircle} size={16} className="text-[#ffbe03] mr-2" />
+                    Global network coverage
+                  </li>
+                  <li className="flex items-center">
+                    <Icon icon={FaCheckCircle} size={16} className="text-[#ffbe03] mr-2" />
+                    Real-time tracking
+                  </li>
+                </ul>
               </div>
             </AnimatedCard>
 
             <AnimatedCard animation="slide" delay="200ms">
-              <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+              <div id="freight-mode-sea-freight" className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
                 <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
                   <Icon icon={FaShip} size={32} />
                 </div>
@@ -145,11 +163,25 @@ const Services: React.FC = () => {
                     className="rounded-lg shadow-md"
                   />
                 </div>
+                <ul className="mt-4 space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                  <li className="flex items-center">
+                    <Icon icon={FaCheckCircle} size={16} className="text-[#ffbe03] mr-2" />
+                    FCL and LCL options
+                  </li>
+                  <li className="flex items-center">
+                    <Icon icon={FaCheckCircle} size={16} className="text-[#ffbe03] mr-2" />
+                    Port-to-port service
+                  </li>
+                  <li className="flex items-center">
+                    <Icon icon={FaCheckCircle} size={16} className="text-[#ffbe03] mr-2" />
+                    Customs clearance
+                  </li>
+                </ul>
               </div>
             </AnimatedCard>
 
             <AnimatedCard animation="slide" delay="400ms">
-              <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+              <div id="freight-mode-land-freight" className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
                 <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
                   <Icon icon={FaTruck} size={32} />
                 </div>
@@ -164,8 +196,129 @@ const Services: React.FC = () => {
                     className="rounded-lg shadow-md"
                   />
                 </div>
+                <ul className="mt-4 space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                  <li className="flex items-center">
+                    <Icon icon={FaCheckCircle} size={16} className="text-[#ffbe03] mr-2" />
+                    Door-to-door delivery
+                  </li>
+                  <li className="flex items-center">
+                    <Icon icon={FaCheckCircle} size={16} className="text-[#ffbe03] mr-2" />
+                    Scheduled pickups
+                  </li>
+                  <li className="flex items-center">
+                    <Icon icon={FaCheckCircle} size={16} className="text-[#ffbe03] mr-2" />
+                    Route optimization
+                  </li>
+                </ul>
               </div>
             </AnimatedCard>
+          </div>
+        </div>
+      </div>
+
+      {/* Partners Section */}
+      <div className="bg-gray-50 dark:bg-gray-900 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white">Our Global Partners</h2>
+            <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
+              We collaborate with the world's leading logistics and shipping companies to provide comprehensive tracking solutions
+            </p>
+          </div>
+          <div className="mt-12">
+            <div className="relative overflow-hidden">
+              <div className="flex animate-scroll">
+                {[
+                  { name: 'FedEx', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/fedex.svg' },
+                  { name: 'Aramex', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/aramex.svg' },
+                  { name: 'Japan Post', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/japan-post.jpg' },
+                  { name: 'DTDC', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/Others/dtdc.svg' },
+                  { name: 'USPS', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/usps-usa.svg' },
+                  { name: 'Poste Italiane', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/Others/poste-italiane.svg' },
+                  { name: 'La Poste', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/la-poste-colissimo-france.svg' },
+                  { name: 'UPS', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/ups.svg' },
+                  { name: 'DPD', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/dpd.svg' },
+                  { name: 'GLS', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/gls.svg' },
+                  { name: 'PostNL', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/postnl-parcel-service-tracking.png' },
+                ].map((partner, index) => (
+                  <div key={index} className="flex-shrink-0 mx-8">
+                    <img
+                      src={partner.logo}
+                      alt={partner.name}
+                      className="h-12 w-auto object-contain"
+                    />
+                  </div>
+                ))}
+                {/* Duplicate logos for seamless scrolling */}
+                {[
+                  { name: 'FedEx', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/fedex.svg' },
+                  { name: 'Aramex', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/aramex.svg' },
+                  { name: 'Japan Post', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/japan-post.jpg' },
+                  { name: 'DTDC', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/Others/dtdc.svg' },
+                  { name: 'USPS', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/usps-usa.svg' },
+                  { name: 'Poste Italiane', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/Others/poste-italiane.svg' },
+                  { name: 'La Poste', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/la-poste-colissimo-france.svg' },
+                  { name: 'UPS', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/ups.svg' },
+                  { name: 'DPD', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/dpd.svg' },
+                  { name: 'GLS', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/gls.svg' },
+                  { name: 'PostNL', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/postnl-parcel-service-tracking.png' },
+                ].map((partner, index) => (
+                  <div key={`duplicate-${index}`} className="flex-shrink-0 mx-8">
+                    <img
+                      src={partner.logo}
+                      alt={partner.name}
+                      className="h-12 w-auto object-contain"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="mt-12 text-center">
+            <p className="text-gray-600 dark:text-gray-300">
+              Our partnerships enable us to provide real-time tracking and shipping solutions across the globe
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Additional Services Section */}
+      <div className="bg-white dark:bg-gray-800 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white">Additional Services</h2>
+            <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
+              Comprehensive logistics solutions to meet all your shipping needs
+            </p>
+          </div>
+          <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+              <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
+                <Icon icon={FaWarehouse} size={32} />
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white">Warehousing</h3>
+              <p className="mt-2 text-base text-gray-500 dark:text-gray-400">
+                Secure storage solutions with inventory management and order fulfillment.
+              </p>
+            </div>
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+              <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
+                <Icon icon={FaShippingFast} size={32} />
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white">Express Delivery</h3>
+              <p className="mt-2 text-base text-gray-500 dark:text-gray-400">
+                Fast and reliable express delivery services for time-sensitive shipments.
+              </p>
+            </div>
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+              <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
+                <Icon icon={FaGlobe} size={32} />
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white">International Shipping</h3>
+              <p className="mt-2 text-base text-gray-500 dark:text-gray-400">
+                Global shipping solutions with customs clearance and documentation.
+              </p>
+            </div>
           </div>
         </div>
       </div>
