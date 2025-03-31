@@ -215,7 +215,7 @@ const Track: React.FC = () => {
                 </div>
               </div>
               <div className="text-left sm:text-right">
-                <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full ${
+                    <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full ${
                   shipment.status.toLowerCase() === 'delivered' 
                     ? isDarkMode ? 'bg-green-400/10' : 'bg-green-100'
                     : shipment.status.toLowerCase() === 'in_transit'
@@ -225,8 +225,8 @@ const Track: React.FC = () => {
                     : shipment.status.toLowerCase() === 'on_hold'
                     ? isDarkMode ? 'bg-yellow-400/10' : 'bg-yellow-100'
                     : isDarkMode ? 'bg-gray-400/10' : 'bg-gray-100'
-                }`}>
-                  <div className={`w-2 h-2 rounded-full ${
+                    }`}>
+                      <div className={`w-2 h-2 rounded-full ${
                     shipment.status.toLowerCase() === 'delivered'
                       ? isDarkMode ? 'bg-green-400' : 'bg-green-500'
                       : shipment.status.toLowerCase() === 'in_transit'
@@ -236,7 +236,7 @@ const Track: React.FC = () => {
                       : shipment.status.toLowerCase() === 'on_hold'
                       ? isDarkMode ? 'bg-yellow-400' : 'bg-yellow-500'
                       : isDarkMode ? 'bg-gray-400' : 'bg-gray-500'
-                  }`}></div>
+                      }`}></div>
                   <span className={`text-xs sm:text-sm font-semibold uppercase ${
                     shipment.status.toLowerCase() === 'delivered'
                       ? isDarkMode ? 'text-green-400' : 'text-green-600'
@@ -249,99 +249,99 @@ const Track: React.FC = () => {
                       : isDarkMode ? 'text-gray-400' : 'text-gray-600'
                   }`}>
                     {shipment.status.toUpperCase().replace(/_/g, ' ')}
-                  </span>
+                      </span>
                 </div>
                 <div className={`mt-3 flex items-center gap-3 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
                   <FaCalendarAlt className={`text-lg sm:text-xl ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#b98f31]'}`} />
-                  <div>
+                    <div>
                     <div className="text-xs sm:text-sm text-gray-400 uppercase">EXPECTED DELIVERY</div>
                     <div className="text-sm sm:text-base font-semibold">{shipment.expectedDeliveryDate}</div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+                  </div>
+              </div>
 
-          {/* Tracking History */}
+              {/* Tracking History */}
           <div className={`rounded-lg p-4 sm:p-6 mb-4 sm:mb-6 ${isDarkMode ? 'bg-slate-800' : 'bg-white shadow-md'}`}>
             <h2 className={`text-lg sm:text-xl font-bold mb-6 sm:mb-8 ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#b98f31]'}`}>TRACKING HISTORY</h2>
-            <div className="relative">
+                <div className="relative">
               <div className="absolute left-[15px] sm:left-[19px] top-0 bottom-0 w-0.5 bg-gray-700/30"></div>
               <div className="space-y-6 sm:space-y-8">
-                {shipment.shipmentHistory?.map((history, index) => {
-                  let statusColor;
-                  let StatusIcon;
-                  let bgColor;
-                  
-                  switch (history.status.toLowerCase()) {
-                    case 'pending':
+                    {shipment.shipmentHistory?.map((history, index) => {
+                      let statusColor;
+                      let StatusIcon;
+                      let bgColor;
+                      
+                      switch (history.status.toLowerCase()) {
+                        case 'pending':
                       statusColor = isDarkMode ? 'text-gray-400' : 'text-gray-600';
                       bgColor = isDarkMode ? 'bg-gray-400/10' : 'bg-gray-100';
-                      StatusIcon = FaClock;
-                      break;
-                    case 'in_transit':
-                      statusColor = isDarkMode ? 'text-blue-400' : 'text-blue-600';
-                      bgColor = isDarkMode ? 'bg-blue-400/10' : 'bg-blue-100';
-                      StatusIcon = FaTruck;
-                      break;
-                    case 'delayed':
-                      statusColor = isDarkMode ? 'text-red-400' : 'text-red-600';
-                      bgColor = isDarkMode ? 'bg-red-400/10' : 'bg-red-100';
-                      StatusIcon = FaExclamationTriangle;
-                      break;
-                    case 'delivered':
-                      statusColor = isDarkMode ? 'text-green-400' : 'text-green-600';
-                      bgColor = isDarkMode ? 'bg-green-400/10' : 'bg-green-100';
-                      StatusIcon = FaCheckCircle;
-                      break;
-                    case 'on_hold':
-                      statusColor = isDarkMode ? 'text-yellow-400' : 'text-yellow-600';
-                      bgColor = isDarkMode ? 'bg-yellow-400/10' : 'bg-yellow-100';
-                      StatusIcon = FaPauseCircle;
-                      break;
-                    default:
-                      statusColor = isDarkMode ? 'text-gray-400' : 'text-gray-600';
-                      bgColor = isDarkMode ? 'bg-gray-400/10' : 'bg-gray-100';
-                      StatusIcon = FaBox;
-                  }
+                          StatusIcon = FaClock;
+                          break;
+                        case 'in_transit':
+                          statusColor = isDarkMode ? 'text-blue-400' : 'text-blue-600';
+                          bgColor = isDarkMode ? 'bg-blue-400/10' : 'bg-blue-100';
+                          StatusIcon = FaTruck;
+                          break;
+                        case 'delayed':
+                          statusColor = isDarkMode ? 'text-red-400' : 'text-red-600';
+                          bgColor = isDarkMode ? 'bg-red-400/10' : 'bg-red-100';
+                          StatusIcon = FaExclamationTriangle;
+                          break;
+                        case 'delivered':
+                          statusColor = isDarkMode ? 'text-green-400' : 'text-green-600';
+                          bgColor = isDarkMode ? 'bg-green-400/10' : 'bg-green-100';
+                          StatusIcon = FaCheckCircle;
+                          break;
+                        case 'on_hold':
+                          statusColor = isDarkMode ? 'text-yellow-400' : 'text-yellow-600';
+                          bgColor = isDarkMode ? 'bg-yellow-400/10' : 'bg-yellow-100';
+                          StatusIcon = FaPauseCircle;
+                          break;
+                        default:
+                          statusColor = isDarkMode ? 'text-gray-400' : 'text-gray-600';
+                          bgColor = isDarkMode ? 'bg-gray-400/10' : 'bg-gray-100';
+                          StatusIcon = FaBox;
+                      }
 
-                  return (
+                      return (
                     <div key={index} className="relative pl-8 sm:pl-10">
                       <div className={`absolute left-0 ml-[3px] mt-[30px] sm:ml-[6px] sm:mt-[20px] p-1.5 rounded-full ${bgColor}`}>
                         <StatusIcon className={`text-sm sm:text-base ${statusColor}`} />
-                      </div>
+                          </div>
                       <div className={`p-3 sm:p-4 rounded-lg ${
-                        isDarkMode 
+                            isDarkMode 
                           ? 'bg-slate-700 shadow-md shadow-slate-900/10' 
-                          : 'bg-gray-50 shadow-sm'
-                      }`}>
+                              : 'bg-gray-50 shadow-sm'
+                          }`}>
                         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 sm:gap-6">
-                          <div>
+                              <div>
                             <div className={`font-bold text-xs sm:text-sm uppercase mb-1 ${statusColor}`}>
                               {history.status.toUpperCase().replace(/_/g, ' ')}
-                            </div>
-                            <div className="text-xs text-gray-500">
-                              {history.date} {history.time}
-                            </div>
-                          </div>
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                  {history.date} {history.time}
+                                </div>
+                              </div>
                           <div className="text-left sm:text-right">
                             <div className={`font-bold text-xs sm:text-sm uppercase ${
-                              isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                            }`}>
-                              {history.location}
-                            </div>
-                            <div className="text-xs text-gray-500">
-                              {history.remarks}
+                                  isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                                }`}>
+                                  {history.location}
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                  {history.remarks}
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                  );
-                })}
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
 
           {/* Shipment Details */}
           <div className={`rounded-lg p-4 sm:p-6 mb-4 sm:mb-6 ${isDarkMode ? 'bg-slate-800' : 'bg-white shadow-md'}`}>
@@ -350,24 +350,32 @@ const Track: React.FC = () => {
               <div className="flex items-center gap-2">
                 <FaMapMarkerAlt className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
                 <div>
-                  <div className="text-xs sm:text-sm text-gray-400 uppercase">FROM</div>
-                  <div className="text-sm sm:text-base font-semibold uppercase">{shipment.origin}</div>
-                  <div className="text-xs sm:text-sm text-gray-400 uppercase mt-1">TO</div>
-                  <div className="text-sm sm:text-base font-semibold uppercase">{shipment.destination}</div>
+                  <div className="flex items-center gap-2 sm:block">
+                    <div className="text-xs sm:text-sm text-gray-400 uppercase">FROM</div>
+                    <div className="text-sm sm:text-base font-semibold uppercase">{shipment.origin}</div>
+                  </div>
+                  <div className="flex items-center gap-2 sm:block mt-1">
+                    <div className="text-xs sm:text-sm text-gray-400 uppercase">TO</div>
+                    <div className="text-sm sm:text-base font-semibold uppercase">{shipment.destination}</div>
+                  </div>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <FaTruck className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
                 <div>
-                  <div className="text-xs sm:text-sm text-gray-400 uppercase">CARRIER</div>
-                  <div className="text-sm sm:text-base font-semibold uppercase">{shipment.carrier}</div>
+                  <div className="flex items-center gap-2 sm:block">
+                    <div className="text-xs sm:text-sm text-gray-400 uppercase">CARRIER</div>
+                    <div className="text-sm sm:text-base font-semibold uppercase">{shipment.carrier}</div>
+                  </div>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <FaBox className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
                 <div>
-                  <div className="text-xs sm:text-sm text-gray-400 uppercase">TYPE</div>
-                  <div className="text-sm sm:text-base font-semibold uppercase">{shipment.typeOfShipment}</div>
+                  <div className="flex items-center gap-2 sm:block">
+                    <div className="text-xs sm:text-sm text-gray-400 uppercase">TYPE</div>
+                    <div className="text-sm sm:text-base font-semibold uppercase">{shipment.typeOfShipment}</div>
+                  </div>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -379,22 +387,28 @@ const Track: React.FC = () => {
                   <FaTruck className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
                 )}
                 <div>
-                  <div className="text-xs sm:text-sm text-gray-400 uppercase">MODE</div>
-                  <div className="text-sm sm:text-base font-semibold uppercase">{shipment.shipmentMode}</div>
+                  <div className="flex items-center gap-2 sm:block">
+                    <div className="text-xs sm:text-sm text-gray-400 uppercase">MODE</div>
+                    <div className="text-sm sm:text-base font-semibold uppercase">{shipment.shipmentMode}</div>
+                  </div>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <FaCreditCard className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
                 <div>
-                  <div className="text-xs sm:text-sm text-gray-400 uppercase">PAYMENT</div>
-                  <div className="text-sm sm:text-base font-semibold uppercase">{shipment.paymentMode.toUpperCase().replace(/_/g, ' ')}</div>
+                  <div className="flex items-center gap-2 sm:block">
+                    <div className="text-xs sm:text-sm text-gray-400 uppercase">PAYMENT</div>
+                    <div className="text-sm sm:text-base font-semibold uppercase">{shipment.paymentMode.toUpperCase().replace(/_/g, ' ')}</div>
+                  </div>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <FaDollarSign className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
                 <div>
-                  <div className="text-xs sm:text-sm text-gray-400 uppercase">TOTAL FREIGHT</div>
-                  <div className="text-sm sm:text-base font-semibold">${shipment.totalFreight}</div>
+                  <div className="flex items-center gap-2 sm:block">
+                    <div className="text-xs sm:text-sm text-gray-400 uppercase">TOTAL FREIGHT</div>
+                    <div className="text-sm sm:text-base font-semibold uppercase">${shipment.totalFreight}</div>
+                  </div>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -450,17 +464,17 @@ const Track: React.FC = () => {
                         <div className="text-xs sm:text-sm text-gray-400 uppercase">DIMENSIONS</div>
                         <div className={`text-sm sm:text-base font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                           {pkg.length} x {pkg.width} x {pkg.height} cm
-                        </div>
+                  </div>
                       </div>
-                    </div>
-                    <div className="flex items-center gap-2">
+                      </div>
+                      <div className="flex items-center gap-2">
                       <FaBoxOpen className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
                       <div>
                         <div className="text-xs sm:text-sm text-gray-400 uppercase">QUANTITY</div>
                         <div className={`text-sm sm:text-base font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>{pkg.quantity}</div>
                       </div>
-                    </div>
-                    <div className="flex items-center gap-2">
+                      </div>
+                      <div className="flex items-center gap-2">
                       <FaBox className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
                       <div>
                         <div className="text-xs sm:text-sm text-gray-400 uppercase">PIECE TYPE</div>
@@ -642,14 +656,14 @@ const Track: React.FC = () => {
             </div>
           </div>
 
-          {/* About Section */}
+      {/* About Section */}
           <div className="py-12 sm:py-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div>
                   <h2 className={`text-3xl sm:text-4xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                     Your Trusted Shipping Partner
-                  </h2>
+            </h2>
                   <p className={`text-lg mb-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                     We provide reliable and efficient shipping solutions worldwide. Our advanced tracking system ensures you always know where your shipment is and when it will arrive.
                   </p>

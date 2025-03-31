@@ -5,6 +5,7 @@ interface AnimatedCardProps {
   children: React.ReactNode;
   animation?: 'fade' | 'slide' | 'scale' | 'hover';
   delay?: string;
+  className?: string;
 }
 
 interface AnimationVariant {
@@ -41,7 +42,8 @@ const animations: Record<string, AnimationVariant> = {
 const AnimatedCard: React.FC<AnimatedCardProps> = ({ 
   children, 
   animation = 'fade',
-  delay = '0ms'
+  delay = '0ms',
+  className = ''
 }) => {
   return (
     <motion.div
@@ -50,6 +52,7 @@ const AnimatedCard: React.FC<AnimatedCardProps> = ({
       exit={animations[animation].exit}
       whileHover={animations[animation].whileHover}
       transition={{ duration: 0.3, delay: parseFloat(delay) / 1000 }}
+      className={`animate-${animation} ${className}`}
     >
       {children}
     </motion.div>

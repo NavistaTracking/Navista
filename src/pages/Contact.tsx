@@ -20,7 +20,6 @@ const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    phone: '',
     subject: '',
     message: '',
   });
@@ -32,7 +31,7 @@ const Contact: React.FC = () => {
     try {
       await sendContactFormEmail(formData);
       toast.success('Message sent successfully!');
-      setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+      setFormData({ name: '', email: '', subject: '', message: '' });
     } catch (error) {
       console.error('Failed to send contact form:', error);
       toast.error('Failed to send message. Please try again.');
@@ -121,29 +120,6 @@ const Contact: React.FC = () => {
                 </div>
               </div>
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Phone
-                </label>
-                <div className="mt-1 relative rounded-md shadow-sm">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Icon icon={FaPhone} size={16} className="text-[#351c15] dark:text-[#ffbe03]" />
-                  </div>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    placeholder="Your phone number"
-                    className={`w-full pl-10 pr-4 py-3 rounded-lg border ${
-                      isDarkMode 
-                        ? 'bg-gray-800 border-gray-700 text-gray-100 placeholder-gray-400' 
-                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
-                    } focus:outline-none focus:ring-2 focus:ring-[#ffbe03] dark:focus:ring-[#ffbe03]`}
-                  />
-                </div>
-              </div>
-              <div>
                 <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                   Subject
                 </label>
@@ -212,17 +188,6 @@ const Contact: React.FC = () => {
                     <p className="text-base font-medium text-gray-900 dark:text-white">Address</p>
                     <p className="mt-1 text-base text-gray-500 dark:text-gray-400">
                       123 Logistics Street, Business District, City, Country
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start">
-                  <div className="flex-shrink-0">
-                    <Icon icon={FaPhone} size={24} className="text-[#ffbe03]" />
-                  </div>
-                  <div className="ml-4">
-                    <p className="text-base font-medium text-gray-900 dark:text-white">Phone</p>
-                    <p className="mt-1 text-base text-gray-500 dark:text-gray-400">
-                      +1 (555) 123-4567
                     </p>
                   </div>
                 </div>

@@ -42,7 +42,6 @@ export interface EmailData {
 export interface ContactFormData {
   name: string;
   email: string;
-  phone: string;
   subject: string;
   message: string;
 }
@@ -123,7 +122,6 @@ export const sendContactFormEmail = async (data: ContactFormData) => {
     const templateParams = {
       from_name: data.name,
       from_email: data.email,
-      phone: data.phone,
       subject: data.subject,
       message: data.message,
       reply_to: data.email

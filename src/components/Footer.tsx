@@ -25,22 +25,11 @@ const Footer: React.FC = () => {
     e.preventDefault();
     const href = e.currentTarget.getAttribute('href');
     if (href) {
-      // If we're not on the services page, navigate first
-      if (!window.location.pathname.includes('/services')) {
-        navigate('/services');
-        // Wait for navigation to complete before scrolling
-        setTimeout(() => {
-          const element = document.getElementById(id);
-          if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-            element.classList.add('animate-pulse');
-            setTimeout(() => {
-              element.classList.remove('animate-pulse');
-            }, 2000);
-          }
-        }, 100);
-      } else {
-        // If we're already on the services page, just scroll
+      // Navigate to the services page
+      navigate('/services');
+      
+      // Use a shorter timeout to ensure the navigation has started
+      setTimeout(() => {
         const element = document.getElementById(id);
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
@@ -48,8 +37,20 @@ const Footer: React.FC = () => {
           setTimeout(() => {
             element.classList.remove('animate-pulse');
           }, 2000);
+        } else {
+          // If element not found, try again after a short delay
+          setTimeout(() => {
+            const element = document.getElementById(id);
+            if (element) {
+              element.scrollIntoView({ behavior: 'smooth' });
+              element.classList.add('animate-pulse');
+              setTimeout(() => {
+                element.classList.remove('animate-pulse');
+              }, 2000);
+            }
+          }, 100);
         }
-      }
+      }, 50);
     }
   };
   
@@ -140,7 +141,12 @@ const Footer: React.FC = () => {
                   Ground Transport
                 </Link>
               </li>
-              
+              <li className="flex items-center justify-center sm:justify-start space-x-3">
+                <Icon icon={FaWarehouse} size={16} className="text-[#ffbe03]" />
+                <Link to="/services#freight-mode-warehousing" onClick={(e) => handleFreightModeClick(e, 'freight-mode-warehousing')} className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
+                  Warehousing
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -148,12 +154,6 @@ const Footer: React.FC = () => {
           <div className="text-center sm:text-left">
             <h3 className="text-xl font-bold mb-6 text-[#ffbe03]">Contact Us</h3>
             <ul className="space-y-4">
-              <li className="flex items-center justify-center sm:justify-start space-x-3">
-                <Icon icon={FaPhone} size={16} className="text-[#ffbe03]" />
-                <span className="text-gray-300">
-                  <a href="tel:+1-555-123-4567" className="hover:text-[#ffbe03] transition-colors text-sm sm:text-base">+1 (555) 123-4567</a>
-                </span>
-              </li>
               <li className="flex items-center justify-center sm:justify-start space-x-3">
                 <Icon icon={FaEnvelope} size={16} className="text-[#ffbe03]" />
                 <span className="text-gray-300">

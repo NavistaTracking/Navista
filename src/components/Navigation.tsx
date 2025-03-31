@@ -37,7 +37,7 @@ const Navbar: React.FC = () => {
 
   return (
     <nav ref={menuRef} className={`${isDarkMode ? 'bg-[#1a0e0a] border-gray-800' : 'bg-white border-gray-200'} shadow-lg border-b sticky top-0 z-50`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <div onClick={() => handleNavigation('/')} className="flex-shrink-0 cursor-pointer">

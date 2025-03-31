@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaPlane, FaShip, FaTruck, FaWarehouse, FaUser, FaCheckCircle, FaBox, FaCreditCard, FaShippingFast, FaCheckDouble, FaStar, FaStarHalf, FaGlobe, FaAward, FaCertificate, FaMedal, FaHandshake, FaSearch, FaMapMarker, FaEnvelope, FaCalendar, FaBarcode, FaPhone, FaHome, FaPaw, FaMoneyBillWave } from 'react-icons/fa';
+import { FaPlane, FaShip, FaTruck, FaWarehouse, FaUser, FaCheckCircle, FaBox, FaCreditCard, FaShippingFast, FaCheckDouble, FaStar, FaStarHalf, FaGlobe, FaAward, FaCertificate, FaMedal, FaHandshake, FaSearch, FaMapMarker, FaEnvelope, FaCalendar, FaBarcode, FaPhone, FaHome, FaPaw, FaMoneyBillWave, FaChevronLeft, FaChevronRight, FaFileAlt, FaCalendarCheck, FaBoxOpen } from 'react-icons/fa';
 import AnimatedCard from '../components/animations/AnimatedCard';
 import Marquee from '../components/animations/Marquee';
+import Icon from '../components/icons/Icon';
 
 const Home: React.FC = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
       {/* Hero Section */}
@@ -177,7 +180,115 @@ const Home: React.FC = () => {
             </div>
           </AnimatedCard>
 
-          <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+          {/* Mobile Slideshow */}
+          <div className="lg:hidden mt-12">
+            <div className="relative overflow-hidden">
+              <div className="flex transition-transform duration-300 ease-in-out" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
+                <AnimatedCard animation="hover" className="w-full flex-shrink-0">
+                  <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-shadow duration-300">
+                    <img
+                      src="https://images.unsplash.com/photo-1506012787146-f92b2d7d6d96?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+                      alt="Air freight"
+                      className="h-48 w-full object-cover rounded-lg mb-4"
+                    />
+                    <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
+                      <FaPlane className="h-5 w-5" />
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Air Freight</h3>
+                    <p className="mt-2 text-gray-500 dark:text-gray-400">
+                      Fast and reliable air freight services for time-sensitive shipments and international deliveries.
+                    </p>
+                  </div>
+                </AnimatedCard>
+
+                <AnimatedCard animation="hover" className="w-full flex-shrink-0">
+                  <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-shadow duration-300">
+                    <img
+                      src="https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+                      alt="Sea freight"
+                      className="h-48 w-full object-cover rounded-lg mb-4"
+                    />
+                    <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
+                      <FaShip className="h-5 w-5" />
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Sea Freight</h3>
+                    <p className="mt-2 text-gray-500 dark:text-gray-400">
+                      Cost-effective ocean shipping solutions for large shipments, with full container and consolidated options.
+                    </p>
+                  </div>
+                </AnimatedCard>
+
+                <AnimatedCard animation="hover" className="w-full flex-shrink-0">
+                  <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-shadow duration-300">
+                    <img
+                      src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+                      alt="Ground transport"
+                      className="h-48 w-full object-cover rounded-lg mb-4"
+                    />
+                    <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
+                      <FaTruck className="h-5 w-5" />
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Ground Transport</h3>
+                    <p className="mt-2 text-gray-500 dark:text-gray-400">
+                      Efficient ground shipping network with extensive coverage and reliable delivery times.
+                    </p>
+                  </div>
+                </AnimatedCard>
+
+                <AnimatedCard animation="hover" className="w-full flex-shrink-0">
+                  <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-shadow duration-300">
+                    <img
+                      src="https://images.unsplash.com/photo-1553413077-190dd305871c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+                      alt="Warehousing"
+                      className="h-48 w-full object-cover rounded-lg mb-4"
+                    />
+                    <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
+                      <FaWarehouse className="h-5 w-5" />
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Warehousing</h3>
+                    <p className="mt-2 text-gray-500 dark:text-gray-400">
+                      Secure storage solutions with inventory management and distribution services.
+                    </p>
+                  </div>
+                </AnimatedCard>
+              </div>
+            </div>
+            {/* Navigation Buttons */}
+            <div className="flex justify-center mt-6 space-x-4">
+              <button
+                onClick={() => setCurrentSlide((prev) => (prev > 0 ? prev - 1 : 3))}
+                className="p-2 rounded-full bg-[#351c15] dark:bg-[#ffbe03] text-white hover:bg-[#4a2a1f] dark:hover:bg-[#e6a902] transition-colors"
+                aria-label="Previous slide"
+              >
+                <FaChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                onClick={() => setCurrentSlide((prev) => (prev < 3 ? prev + 1 : 0))}
+                className="p-2 rounded-full bg-[#351c15] dark:bg-[#ffbe03] text-white hover:bg-[#4a2a1f] dark:hover:bg-[#e6a902] transition-colors"
+                aria-label="Next slide"
+              >
+                <FaChevronRight className="h-5 w-5" />
+              </button>
+            </div>
+            {/* Slide Indicators */}
+            <div className="flex justify-center mt-4 space-x-2">
+              {[0, 1, 2, 3].map((index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`w-2 h-2 rounded-full transition-colors ${
+                    currentSlide === index
+                      ? 'bg-[#351c15] dark:bg-[#ffbe03]'
+                      : 'bg-gray-300 dark:bg-gray-600'
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop Grid */}
+          <div className="hidden lg:grid lg:grid-cols-4 gap-8 mt-12">
             <AnimatedCard animation="hover">
               <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-shadow duration-300">
                 <img
@@ -213,7 +324,7 @@ const Home: React.FC = () => {
             </AnimatedCard>
 
             <AnimatedCard animation="hover">
-              <div className="relative p-6 pb-12 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-shadow duration-300">
+              <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-shadow duration-300">
                 <img
                   src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
                   alt="Ground transport"
@@ -230,7 +341,7 @@ const Home: React.FC = () => {
             </AnimatedCard>
 
             <AnimatedCard animation="hover">
-              <div className="relative p-6 pb-12 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-shadow duration-300">
+              <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-shadow duration-300">
                 <img
                   src="https://images.unsplash.com/photo-1553413077-190dd305871c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
                   alt="Warehousing"
@@ -263,56 +374,90 @@ const Home: React.FC = () => {
             </div>
           </AnimatedCard>
 
-          {/* Mobile View */}
-          <div className="mt-12 lg:hidden">
-            <div className="space-y-8">
-              <AnimatedCard animation="slide" delay="0ms">
-                <div className="flex flex-col items-center space-y-4">
-                  <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
-                    <FaUser className="h-5 w-5 text-white dark:text-[#ffbe03]" />
+          {/* Mobile Slideshow */}
+          <div className="lg:hidden mt-12">
+            <div className="relative overflow-hidden">
+              <div className="flex transition-transform duration-300 ease-in-out" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
+                <AnimatedCard animation="slide" delay="0ms" className="w-full flex-shrink-0">
+                  <div className="flex flex-col items-center space-y-4">
+                    <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
+                      <FaUser className="h-5 w-5 text-white dark:text-[#ffbe03]" />
+                    </div>
+                    <div className="text-center">
+                      <h3 className="text-lg font-medium text-gray-900 dark:text-white">Request Quote</h3>
+                      <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Fill out our simple form to get started</p>
+                    </div>
                   </div>
-                  <div className="text-center">
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Request Quote</h3>
-                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Fill out our simple form to get started</p>
-                  </div>
-                </div>
-              </AnimatedCard>
+                </AnimatedCard>
 
-              <AnimatedCard animation="slide" delay="200ms">
-                <div className="flex flex-col items-center space-y-4">
-                  <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
-                    <FaCreditCard className="h-5 w-5 text-white dark:text-[#ffbe03]" />
+                <AnimatedCard animation="slide" delay="200ms" className="w-full flex-shrink-0">
+                  <div className="flex flex-col items-center space-y-4">
+                    <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
+                      <FaCreditCard className="h-5 w-5 text-white dark:text-[#ffbe03]" />
+                    </div>
+                    <div className="text-center">
+                      <h3 className="text-lg font-medium text-gray-900 dark:text-white">Book Shipment</h3>
+                      <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Secure your shipping slot</p>
+                    </div>
                   </div>
-                  <div className="text-center">
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Book Shipment</h3>
-                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Secure your shipping slot</p>
-                  </div>
-                </div>
-              </AnimatedCard>
+                </AnimatedCard>
 
-              <AnimatedCard animation="slide" delay="400ms">
-                <div className="flex flex-col items-center space-y-4">
-                  <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
-                    <FaBox className="h-5 w-5 text-white dark:text-[#ffbe03]" />
+                <AnimatedCard animation="slide" delay="400ms" className="w-full flex-shrink-0">
+                  <div className="flex flex-col items-center space-y-4">
+                    <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
+                      <FaBox className="h-5 w-5 text-white dark:text-[#ffbe03]" />
+                    </div>
+                    <div className="text-center">
+                      <h3 className="text-lg font-medium text-gray-900 dark:text-white">Package Pickup</h3>
+                      <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">We collect from your location</p>
+                    </div>
                   </div>
-                  <div className="text-center">
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Package Pickup</h3>
-                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">We collect from your location</p>
-                  </div>
-                </div>
-              </AnimatedCard>
+                </AnimatedCard>
 
-              <AnimatedCard animation="slide" delay="600ms">
-                <div className="flex flex-col items-center space-y-4">
-                  <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
-                    <FaShippingFast className="h-5 w-5 text-white dark:text-[#ffbe03]" />
+                <AnimatedCard animation="slide" delay="600ms" className="w-full flex-shrink-0">
+                  <div className="flex flex-col items-center space-y-4">
+                    <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
+                      <FaShippingFast className="h-5 w-5 text-white dark:text-[#ffbe03]" />
+                    </div>
+                    <div className="text-center">
+                      <h3 className="text-lg font-medium text-gray-900 dark:text-white">Fast Delivery</h3>
+                      <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Track your shipment to destination</p>
+                    </div>
                   </div>
-                  <div className="text-center">
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Fast Delivery</h3>
-                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Track your shipment to destination</p>
-                  </div>
-                </div>
-              </AnimatedCard>
+                </AnimatedCard>
+              </div>
+            </div>
+            {/* Navigation Buttons */}
+            <div className="flex justify-center mt-6 space-x-4">
+              <button
+                onClick={() => setCurrentSlide((prev) => (prev > 0 ? prev - 1 : 3))}
+                className="p-2 rounded-full bg-[#351c15] dark:bg-[#ffbe03] text-white hover:bg-[#4a2a1f] dark:hover:bg-[#e6a902] transition-colors"
+                aria-label="Previous slide"
+              >
+                <FaChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                onClick={() => setCurrentSlide((prev) => (prev < 3 ? prev + 1 : 0))}
+                className="p-2 rounded-full bg-[#351c15] dark:bg-[#ffbe03] text-white hover:bg-[#4a2a1f] dark:hover:bg-[#e6a902] transition-colors"
+                aria-label="Next slide"
+              >
+                <FaChevronRight className="h-5 w-5" />
+              </button>
+            </div>
+            {/* Slide Indicators */}
+            <div className="flex justify-center mt-4 space-x-2">
+              {[0, 1, 2, 3].map((index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`w-2 h-2 rounded-full transition-colors ${
+                    currentSlide === index
+                      ? 'bg-[#351c15] dark:bg-[#ffbe03]'
+                      : 'bg-gray-300 dark:bg-gray-600'
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
             </div>
           </div>
 
@@ -365,8 +510,6 @@ const Home: React.FC = () => {
               </div>
             </div>
           </div>
-
-          
         </div>
       </div>
 
