@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FaTruck, FaPlane, FaShip, FaBox, FaGlobe, FaShieldAlt, FaClock, FaMapMarkerAlt, FaShippingFast, FaCheckCircle, FaWarehouse, FaChartLine, FaHandshake, FaAward, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import Icon from '../components/icons/Icon';
 import AnimatedCard from '../components/animations/AnimatedCard';
@@ -8,6 +8,30 @@ import '../styles/animations.css';
 const Services: React.FC = () => {
   const { isDarkMode } = useTheme();
   const [currentSlide, setCurrentSlide] = React.useState(0);
+  const [activeCard, setActiveCard] = React.useState<string | null>(null);
+
+  useEffect(() => {
+    // Check for hash in URL and scroll to the corresponding service
+    const hash = window.location.hash;
+    if (hash) {
+      const id = hash.replace('#', '');
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          setActiveCard(id);
+          element.classList.add('animate-pulse');
+          setTimeout(() => {
+            element.classList.remove('animate-pulse');
+          }, 2000);
+        }
+      }, 500);
+    }
+  }, []);
+
+  const handleCardHover = (id: string) => {
+    setActiveCard(id);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -120,7 +144,14 @@ const Services: React.FC = () => {
               <div className="relative overflow-hidden">
                 <div className="flex transition-transform duration-300 ease-in-out" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
                   <AnimatedCard animation="slide" delay="0ms" className="w-full flex-shrink-0">
-                    <div id="freight-mode-air-freight" className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+                    <div
+                      id="freight-mode-air-freight-mobile"
+                      className={`bg-gray-50 dark:bg-gray-700 rounded-lg p-6 transition-all duration-300 transform hover:shadow-xl ${
+                        activeCard === 'freight-mode-air-freight-mobile' ? 'ring-2 ring-[#ffbe03] shadow-lg' : ''
+                      }`}
+                      onTouchStart={() => handleCardHover('freight-mode-air-freight-mobile')}
+                      onTouchEnd={() => handleCardHover('')}
+                    >
                       <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
                         <Icon icon={FaPlane} size={32} />
                       </div>
@@ -153,7 +184,14 @@ const Services: React.FC = () => {
                   </AnimatedCard>
 
                   <AnimatedCard animation="slide" delay="200ms" className="w-full flex-shrink-0">
-                    <div id="freight-mode-sea-freight" className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+                    <div
+                      id="freight-mode-sea-freight-mobile"
+                      className={`bg-gray-50 dark:bg-gray-700 rounded-lg p-6 transition-all duration-300 transform hover:shadow-xl ${
+                        activeCard === 'freight-mode-sea-freight-mobile' ? 'ring-2 ring-[#ffbe03] shadow-lg' : ''
+                      }`}
+                      onTouchStart={() => handleCardHover('freight-mode-sea-freight-mobile')}
+                      onTouchEnd={() => handleCardHover('')}
+                    >
                       <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
                         <Icon icon={FaShip} size={32} />
                       </div>
@@ -186,7 +224,14 @@ const Services: React.FC = () => {
                   </AnimatedCard>
 
                   <AnimatedCard animation="slide" delay="400ms" className="w-full flex-shrink-0">
-                    <div id="freight-mode-land-freight" className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+                    <div
+                      id="freight-mode-land-freight-mobile"
+                      className={`bg-gray-50 dark:bg-gray-700 rounded-lg p-6 transition-all duration-300 transform hover:shadow-xl ${
+                        activeCard === 'freight-mode-land-freight-mobile' ? 'ring-2 ring-[#ffbe03] shadow-lg' : ''
+                      }`}
+                      onTouchStart={() => handleCardHover('freight-mode-land-freight-mobile')}
+                      onTouchEnd={() => handleCardHover('')}
+                    >
                       <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
                         <Icon icon={FaTruck} size={32} />
                       </div>
@@ -219,7 +264,14 @@ const Services: React.FC = () => {
                   </AnimatedCard>
 
                   <AnimatedCard animation="slide" delay="600ms" className="w-full flex-shrink-0">
-                    <div id="freight-mode-warehousing" className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+                    <div
+                      id="freight-mode-warehousing-mobile"
+                      className={`bg-gray-50 dark:bg-gray-700 rounded-lg p-6 transition-all duration-300 transform hover:shadow-xl ${
+                        activeCard === 'freight-mode-warehousing-mobile' ? 'ring-2 ring-[#ffbe03] shadow-lg' : ''
+                      }`}
+                      onTouchStart={() => handleCardHover('freight-mode-warehousing-mobile')}
+                      onTouchEnd={() => handleCardHover('')}
+                    >
                       <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
                         <Icon icon={FaWarehouse} size={32} />
                       </div>
@@ -289,7 +341,14 @@ const Services: React.FC = () => {
             {/* Desktop Grid */}
             <div className="hidden lg:grid lg:grid-cols-4 gap-8">
               <AnimatedCard animation="slide" delay="0ms">
-                <div id="freight-mode-air-freight" className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+                <div
+                  id="freight-mode-air-freight"
+                  className={`bg-gray-50 dark:bg-gray-700 rounded-lg p-6 transition-all duration-300 transform hover:scale-105 hover:shadow-xl ${
+                    activeCard === 'freight-mode-air-freight' ? 'ring-2 ring-[#ffbe03] shadow-lg' : ''
+                  }`}
+                  onMouseEnter={() => handleCardHover('freight-mode-air-freight')}
+                  onMouseLeave={() => handleCardHover('')}
+                >
                   <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
                     <Icon icon={FaPlane} size={32} />
                   </div>
@@ -321,7 +380,14 @@ const Services: React.FC = () => {
                 </div>
               </AnimatedCard>
               <AnimatedCard animation="slide" delay="200ms">
-                <div id="freight-mode-sea-freight" className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+                <div
+                  id="freight-mode-sea-freight"
+                  className={`bg-gray-50 dark:bg-gray-700 rounded-lg p-6 transition-all duration-300 transform hover:scale-105 hover:shadow-xl ${
+                    activeCard === 'freight-mode-sea-freight' ? 'ring-2 ring-[#ffbe03] shadow-lg' : ''
+                  }`}
+                  onMouseEnter={() => handleCardHover('freight-mode-sea-freight')}
+                  onMouseLeave={() => handleCardHover('')}
+                >
                   <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
                     <Icon icon={FaShip} size={32} />
                   </div>
@@ -353,7 +419,14 @@ const Services: React.FC = () => {
                 </div>
               </AnimatedCard>
               <AnimatedCard animation="slide" delay="400ms">
-                <div id="freight-mode-land-freight" className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+                <div
+                  id="freight-mode-land-freight"
+                  className={`bg-gray-50 dark:bg-gray-700 rounded-lg p-6 transition-all duration-300 transform hover:scale-105 hover:shadow-xl ${
+                    activeCard === 'freight-mode-land-freight' ? 'ring-2 ring-[#ffbe03] shadow-lg' : ''
+                  }`}
+                  onMouseEnter={() => handleCardHover('freight-mode-land-freight')}
+                  onMouseLeave={() => handleCardHover('')}
+                >
                   <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
                     <Icon icon={FaTruck} size={32} />
                   </div>
@@ -385,7 +458,14 @@ const Services: React.FC = () => {
                 </div>
               </AnimatedCard>
               <AnimatedCard animation="slide" delay="600ms">
-                <div id="freight-mode-warehousing" className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+                <div
+                  id="freight-mode-warehousing"
+                  className={`bg-gray-50 dark:bg-gray-700 rounded-lg p-6 transition-all duration-300 transform hover:scale-105 hover:shadow-xl ${
+                    activeCard === 'freight-mode-warehousing' ? 'ring-2 ring-[#ffbe03] shadow-lg' : ''
+                  }`}
+                  onMouseEnter={() => handleCardHover('freight-mode-warehousing')}
+                  onMouseLeave={() => handleCardHover('')}
+                >
                   <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
                     <Icon icon={FaWarehouse} size={32} />
                   </div>

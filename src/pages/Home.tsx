@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaPlane, FaShip, FaTruck, FaWarehouse, FaUser, FaCheckCircle, FaBox, FaCreditCard, FaShippingFast, FaCheckDouble, FaStar, FaStarHalf, FaGlobe, FaAward, FaCertificate, FaMedal, FaHandshake, FaSearch, FaMapMarker, FaEnvelope, FaCalendar, FaBarcode, FaPhone, FaHome, FaPaw, FaMoneyBillWave, FaChevronLeft, FaChevronRight, FaFileAlt, FaCalendarCheck, FaBoxOpen } from 'react-icons/fa';
+import { FaPlane, FaShip, FaTruck, FaWarehouse, FaUser, FaCheckCircle, FaBox, FaCreditCard, FaShippingFast, FaCheckDouble, FaStar, FaStarHalf, FaGlobe, FaAward, FaCertificate, FaMedal, FaHandshake, FaSearch, FaMapMarker, FaEnvelope, FaCalendar, FaBarcode, FaPhone, FaHome, FaPaw, FaMoneyBillWave, FaArrowRight, FaShieldAlt, FaHeadset, FaChartLine } from 'react-icons/fa';
 import AnimatedCard from '../components/animations/AnimatedCard';
 import Marquee from '../components/animations/Marquee';
-import Icon from '../components/icons/Icon';
 
 const Home: React.FC = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
       {/* Hero Section */}
@@ -24,7 +21,7 @@ const Home: React.FC = () => {
           <div className="text-center">
             <h1 className="text-4xl font-extrabold text-white sm:text-5xl md:text-6xl">
               Global Shipping &<br />
-              Logistics Solutions
+              <span className='text-[#ffbe03]'>Logistics Solutions</span>
             </h1>
             <p className="mt-3 max-w-md mx-auto text-base text-gray-100 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
               Comprehensive shipping and logistics services. We handle everything from small packages to large freight, ensuring efficient delivery worldwide.
@@ -41,7 +38,7 @@ const Home: React.FC = () => {
               <div className="mt-3 sm:mt-0 sm:ml-3">
                 <Link
                   to="/contact"
-                  className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#351c15] dark:bg-[#ffbe03] hover:bg-[#4a2a1f] dark:hover:bg-[#e6a902] md:py-4 md:text-lg md:px-10"
+                  className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#351c15] dark:bg-transparent hover:bg-[#4a2a1f] dark:border-[#e6a902] dark:border-2 dark:hover:bg-[#e6a902] md:py-4 md:text-lg md:px-10"
                 >
                   Get a Quote
                 </Link>
@@ -180,180 +177,134 @@ const Home: React.FC = () => {
             </div>
           </AnimatedCard>
 
-          {/* Mobile Slideshow */}
-          <div className="lg:hidden mt-12">
-            <div className="relative overflow-hidden">
-              <div className="flex transition-transform duration-300 ease-in-out" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
-                <AnimatedCard animation="hover" className="w-full flex-shrink-0">
-                  <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-shadow duration-300">
-                    <img
-                      src="https://images.unsplash.com/photo-1506012787146-f92b2d7d6d96?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                      alt="Air freight"
-                      className="h-48 w-full object-cover rounded-lg mb-4"
-                    />
-                    <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
-                      <FaPlane className="h-5 w-5" />
-                    </div>
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Air Freight</h3>
-                    <p className="mt-2 text-gray-500 dark:text-gray-400">
-                      Fast and reliable air freight services for time-sensitive shipments and international deliveries.
-                    </p>
+          <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+            <AnimatedCard animation="hover">
+              <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-all duration-300 transform hover:-translate-y-2">
+                <div className="absolute top-0 left-0 w-full h-1 bg-[#ffbe03] rounded-t-lg"></div>
+                <div className="flex flex-col items-center text-center">
+                  <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] bg-opacity-10 dark:bg-opacity-20 flex items-center justify-center mb-6 transform transition-transform duration-300 group-hover:scale-110">
+                    <FaPlane className="h-10 w-10 text-[#351c15] dark:text-[#ffbe03]" />
                   </div>
-                </AnimatedCard>
-
-                <AnimatedCard animation="hover" className="w-full flex-shrink-0">
-                  <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-shadow duration-300">
-                    <img
-                      src="https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                      alt="Sea freight"
-                      className="h-48 w-full object-cover rounded-lg mb-4"
-                    />
-                    <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
-                      <FaShip className="h-5 w-5" />
-                    </div>
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Sea Freight</h3>
-                    <p className="mt-2 text-gray-500 dark:text-gray-400">
-                      Cost-effective ocean shipping solutions for large shipments, with full container and consolidated options.
-                    </p>
-                  </div>
-                </AnimatedCard>
-
-                <AnimatedCard animation="hover" className="w-full flex-shrink-0">
-                  <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-shadow duration-300">
-                    <img
-                      src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                      alt="Ground transport"
-                      className="h-48 w-full object-cover rounded-lg mb-4"
-                    />
-                    <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
-                      <FaTruck className="h-5 w-5" />
-                    </div>
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Ground Transport</h3>
-                    <p className="mt-2 text-gray-500 dark:text-gray-400">
-                      Efficient ground shipping network with extensive coverage and reliable delivery times.
-                    </p>
-                  </div>
-                </AnimatedCard>
-
-                <AnimatedCard animation="hover" className="w-full flex-shrink-0">
-                  <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-shadow duration-300">
-                    <img
-                      src="https://images.unsplash.com/photo-1553413077-190dd305871c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                      alt="Warehousing"
-                      className="h-48 w-full object-cover rounded-lg mb-4"
-                    />
-                    <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
-                      <FaWarehouse className="h-5 w-5" />
-                    </div>
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Warehousing</h3>
-                    <p className="mt-2 text-gray-500 dark:text-gray-400">
-                      Secure storage solutions with inventory management and distribution services.
-                    </p>
-                  </div>
-                </AnimatedCard>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Air Freight</h3>
+                  <p className="text-gray-500 dark:text-gray-400">
+                    Fast and reliable air freight services for time-sensitive shipments and international deliveries.
+                  </p>
+                  <Link to="/services" className="mt-6 inline-flex items-center text-[#351c15] dark:text-[#ffbe03] font-medium hover:underline">
+                    Learn More <FaArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </div>
               </div>
-            </div>
-            {/* Navigation Buttons */}
-            <div className="flex justify-center mt-6 space-x-4">
-              <button
-                onClick={() => setCurrentSlide((prev) => (prev > 0 ? prev - 1 : 3))}
-                className="p-2 rounded-full bg-[#351c15] dark:bg-[#ffbe03] text-white hover:bg-[#4a2a1f] dark:hover:bg-[#e6a902] transition-colors"
-                aria-label="Previous slide"
-              >
-                <FaChevronLeft className="h-5 w-5" />
-              </button>
-              <button
-                onClick={() => setCurrentSlide((prev) => (prev < 3 ? prev + 1 : 0))}
-                className="p-2 rounded-full bg-[#351c15] dark:bg-[#ffbe03] text-white hover:bg-[#4a2a1f] dark:hover:bg-[#e6a902] transition-colors"
-                aria-label="Next slide"
-              >
-                <FaChevronRight className="h-5 w-5" />
-              </button>
-            </div>
-            {/* Slide Indicators */}
-            <div className="flex justify-center mt-4 space-x-2">
-              {[0, 1, 2, 3].map((index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentSlide(index)}
-                  className={`w-2 h-2 rounded-full transition-colors ${
-                    currentSlide === index
-                      ? 'bg-[#351c15] dark:bg-[#ffbe03]'
-                      : 'bg-gray-300 dark:bg-gray-600'
-                  }`}
-                  aria-label={`Go to slide ${index + 1}`}
-                />
-              ))}
-            </div>
+            </AnimatedCard>
+
+            <AnimatedCard animation="hover">
+              <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-all duration-300 transform hover:-translate-y-2">
+                <div className="absolute top-0 left-0 w-full h-1 bg-[#ffbe03] rounded-t-lg"></div>
+                <div className="flex flex-col items-center text-center">
+                  <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] bg-opacity-10 dark:bg-opacity-20 flex items-center justify-center mb-6 transform transition-transform duration-300 group-hover:scale-110">
+                    <FaShip className="h-10 w-10 text-[#351c15] dark:text-[#ffbe03]" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Sea Freight</h3>
+                  <p className="text-gray-500 dark:text-gray-400">
+                    Cost-effective ocean shipping solutions for large shipments, with full container and consolidated options.
+                  </p>
+                  <Link to="/services" className="mt-6 inline-flex items-center text-[#351c15] dark:text-[#ffbe03] font-medium hover:underline">
+                    Learn More <FaArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </div>
+              </div>
+            </AnimatedCard>
+
+            <AnimatedCard animation="hover">
+              <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-all duration-300 transform hover:-translate-y-2">
+                <div className="absolute top-0 left-0 w-full h-1 bg-[#ffbe03] rounded-t-lg"></div>
+                <div className="flex flex-col items-center text-center">
+                  <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] bg-opacity-10 dark:bg-opacity-20 flex items-center justify-center mb-6 transform transition-transform duration-300 group-hover:scale-110">
+                    <FaTruck className="h-10 w-10 text-[#351c15] dark:text-[#ffbe03]" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Ground Transport</h3>
+                  <p className="text-gray-500 dark:text-gray-400">
+                    Efficient ground shipping network with extensive coverage and reliable delivery times.
+                  </p>
+                  <Link to="/services" className="mt-6 inline-flex items-center text-[#351c15] dark:text-[#ffbe03] font-medium hover:underline">
+                    Learn More <FaArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </div>
+              </div>
+            </AnimatedCard>
+
+            <AnimatedCard animation="hover">
+              <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-all duration-300 transform hover:-translate-y-2">
+                <div className="absolute top-0 left-0 w-full h-1 bg-[#ffbe03] rounded-t-lg"></div>
+                <div className="flex flex-col items-center text-center">
+                  <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] bg-opacity-10 dark:bg-opacity-20 flex items-center justify-center mb-6 transform transition-transform duration-300 group-hover:scale-110">
+                    <FaWarehouse className="h-10 w-10 text-[#351c15] dark:text-[#ffbe03]" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Warehousing</h3>
+                  <p className="text-gray-500 dark:text-gray-400">
+                    Secure storage solutions with inventory management and distribution services.
+                  </p>
+                  <Link to="/services" className="mt-6 inline-flex items-center text-[#351c15] dark:text-[#ffbe03] font-medium hover:underline">
+                    Learn More <FaArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </div>
+              </div>
+            </AnimatedCard>
           </div>
+        </div>
+      </div>
 
-          {/* Desktop Grid */}
-          <div className="hidden lg:grid lg:grid-cols-4 gap-8 mt-12">
-            <AnimatedCard animation="hover">
-              <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-shadow duration-300">
-                <img
-                  src="https://images.unsplash.com/photo-1506012787146-f92b2d7d6d96?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                  alt="Air freight"
-                  className="h-48 w-full object-cover rounded-lg mb-4"
-                />
-                <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
-                  <FaPlane className="h-5 w-5" />
+      {/* Why Choose Us Section */}
+      <div className="py-16 bg-gradient-to-b from-gray-50 to-white dark:from-gray-800 dark:to-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedCard animation="fade">
+            <div className="text-center">
+              <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl">
+                Why Choose Us
+              </h2>
+              <p className="mt-4 text-lg text-gray-500 dark:text-gray-400">
+                We provide exceptional logistics services with a focus on quality and reliability
+              </p>
+            </div>
+          </AnimatedCard>
+
+          <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+            <AnimatedCard animation="slide" delay="0ms">
+              <div className="flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-700 transition-shadow duration-300">
+                <div className="flex items-center justify-center w-20 h-20 mb-4 rounded-full bg-[#351c15] dark:bg-[#ffbe03] bg-opacity-10 dark:bg-opacity-20">
+                  <FaGlobe className="h-10 w-10 text-[#351c15] dark:text-[#ffbe03]" />
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white">Air Freight</h3>
-                <p className="mt-2 text-gray-500 dark:text-gray-400">
-                  Fast and reliable air freight services for time-sensitive shipments and international deliveries.
-                </p>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white text-center">Global Network</h3>
+                <p className="mt-2 text-gray-500 dark:text-gray-400 text-center">Extensive coverage across 150+ countries worldwide</p>
               </div>
             </AnimatedCard>
 
-            <AnimatedCard animation="hover">
-              <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-shadow duration-300">
-                <img
-                  src="https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                  alt="Sea freight"
-                  className="h-48 w-full object-cover rounded-lg mb-4"
-                />
-                <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
-                  <FaShip className="h-5 w-5" />
+            <AnimatedCard animation="slide" delay="200ms">
+              <div className="flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-700 transition-shadow duration-300">
+                <div className="flex items-center justify-center w-20 h-20 mb-4 rounded-full bg-[#351c15] dark:bg-[#ffbe03] bg-opacity-10 dark:bg-opacity-20">
+                  <FaShieldAlt className="h-10 w-10 text-[#351c15] dark:text-[#ffbe03]" />
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white">Sea Freight</h3>
-                <p className="mt-2 text-gray-500 dark:text-gray-400">
-                  Cost-effective ocean shipping solutions for large shipments, with full container and consolidated options.
-                </p>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white text-center">Secure Shipping</h3>
+                <p className="mt-2 text-gray-500 dark:text-gray-400 text-center">Advanced security measures to protect your shipments</p>
               </div>
             </AnimatedCard>
 
-            <AnimatedCard animation="hover">
-              <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-shadow duration-300">
-                <img
-                  src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                  alt="Ground transport"
-                  className="h-48 w-full object-cover rounded-lg mb-4"
-                />
-                <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
-                  <FaTruck className="h-5 w-5" />
+            <AnimatedCard animation="slide" delay="400ms">
+              <div className="flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-700 transition-shadow duration-300">
+                <div className="flex items-center justify-center w-20 h-20 mb-4 rounded-full bg-[#351c15] dark:bg-[#ffbe03] bg-opacity-10 dark:bg-opacity-20">
+                  <FaHeadset className="h-10 w-10 text-[#351c15] dark:text-[#ffbe03]" />
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white">Ground Transport</h3>
-                <p className="mt-2 text-gray-500 dark:text-gray-400">
-                  Efficient ground shipping network with extensive coverage and reliable delivery times.
-                </p>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white text-center">24/7 Support</h3>
+                <p className="mt-2 text-gray-500 dark:text-gray-400 text-center">Round-the-clock customer service for your convenience</p>
               </div>
             </AnimatedCard>
 
-            <AnimatedCard animation="hover">
-              <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-shadow duration-300">
-                <img
-                  src="https://images.unsplash.com/photo-1553413077-190dd305871c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                  alt="Warehousing"
-                  className="h-48 w-full object-cover rounded-lg mb-4"
-                />
-                <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
-                  <FaWarehouse className="h-5 w-5" />
+            <AnimatedCard animation="slide" delay="600ms">
+              <div className="flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-700 transition-shadow duration-300">
+                <div className="flex items-center justify-center w-20 h-20 mb-4 rounded-full bg-[#351c15] dark:bg-[#ffbe03] bg-opacity-10 dark:bg-opacity-20">
+                  <FaChartLine className="h-10 w-10 text-[#351c15] dark:text-[#ffbe03]" />
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white">Warehousing</h3>
-                <p className="mt-2 text-gray-500 dark:text-gray-400">
-                  Secure storage solutions with inventory management and distribution services.
-                </p>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white text-center">Real-time Tracking</h3>
+                <p className="mt-2 text-gray-500 dark:text-gray-400 text-center">Advanced tracking systems to monitor your shipments</p>
               </div>
             </AnimatedCard>
           </div>
@@ -361,7 +312,7 @@ const Home: React.FC = () => {
       </div>
 
       {/* How It Works Section */}
-      <div className="py-12 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-900">
+      <div className="py-16 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedCard animation="fade">
             <div className="text-center">
@@ -374,90 +325,56 @@ const Home: React.FC = () => {
             </div>
           </AnimatedCard>
 
-          {/* Mobile Slideshow */}
-          <div className="lg:hidden mt-12">
-            <div className="relative overflow-hidden">
-              <div className="flex transition-transform duration-300 ease-in-out" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
-                <AnimatedCard animation="slide" delay="0ms" className="w-full flex-shrink-0">
-                  <div className="flex flex-col items-center space-y-4">
-                    <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
-                      <FaUser className="h-5 w-5 text-white dark:text-[#ffbe03]" />
-                    </div>
-                    <div className="text-center">
-                      <h3 className="text-lg font-medium text-gray-900 dark:text-white">Request Quote</h3>
-                      <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Fill out our simple form to get started</p>
-                    </div>
+          {/* Mobile View */}
+          <div className="mt-12 lg:hidden">
+            <div className="space-y-8">
+              <AnimatedCard animation="slide" delay="0ms" className="w-full flex-shrink-0">
+                <div className="flex flex-col items-center space-y-4">
+                  <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
+                    <FaUser className="h-8 w-8 text-white dark:text-[#ffbe03]" />
                   </div>
-                </AnimatedCard>
+                  <div className="text-center">
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Request Quote</h3>
+                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Fill out our simple form to get started</p>
+                  </div>
+                </div>
+              </AnimatedCard>
 
-                <AnimatedCard animation="slide" delay="200ms" className="w-full flex-shrink-0">
-                  <div className="flex flex-col items-center space-y-4">
-                    <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
-                      <FaCreditCard className="h-5 w-5 text-white dark:text-[#ffbe03]" />
-                    </div>
-                    <div className="text-center">
-                      <h3 className="text-lg font-medium text-gray-900 dark:text-white">Book Shipment</h3>
-                      <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Secure your shipping slot</p>
-                    </div>
+              <AnimatedCard animation="slide" delay="200ms" className="w-full flex-shrink-0">
+                <div className="flex flex-col items-center space-y-4">
+                  <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
+                    <FaCreditCard className="h-8 w-8 text-white dark:text-[#ffbe03]" />
                   </div>
-                </AnimatedCard>
+                  <div className="text-center">
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Book Shipment</h3>
+                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Secure your shipping slot</p>
+                  </div>
+                </div>
+              </AnimatedCard>
 
-                <AnimatedCard animation="slide" delay="400ms" className="w-full flex-shrink-0">
-                  <div className="flex flex-col items-center space-y-4">
-                    <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
-                      <FaBox className="h-5 w-5 text-white dark:text-[#ffbe03]" />
-                    </div>
-                    <div className="text-center">
-                      <h3 className="text-lg font-medium text-gray-900 dark:text-white">Package Pickup</h3>
-                      <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">We collect from your location</p>
-                    </div>
+              <AnimatedCard animation="slide" delay="400ms" className="w-full flex-shrink-0">
+                <div className="flex flex-col items-center space-y-4">
+                  <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
+                    <FaBox className="h-8 w-8 text-white dark:text-[#ffbe03]" />
                   </div>
-                </AnimatedCard>
+                  <div className="text-center">
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Package Pickup</h3>
+                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">We collect from your location</p>
+                  </div>
+                </div>
+              </AnimatedCard>
 
-                <AnimatedCard animation="slide" delay="600ms" className="w-full flex-shrink-0">
-                  <div className="flex flex-col items-center space-y-4">
-                    <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
-                      <FaShippingFast className="h-5 w-5 text-white dark:text-[#ffbe03]" />
-                    </div>
-                    <div className="text-center">
-                      <h3 className="text-lg font-medium text-gray-900 dark:text-white">Fast Delivery</h3>
-                      <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Track your shipment to destination</p>
-                    </div>
+              <AnimatedCard animation="slide" delay="600ms" className="w-full flex-shrink-0">
+                <div className="flex flex-col items-center space-y-4">
+                  <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
+                    <FaShippingFast className="h-8 w-8 text-white dark:text-[#ffbe03]" />
                   </div>
-                </AnimatedCard>
-              </div>
-            </div>
-            {/* Navigation Buttons */}
-            <div className="flex justify-center mt-6 space-x-4">
-              <button
-                onClick={() => setCurrentSlide((prev) => (prev > 0 ? prev - 1 : 3))}
-                className="p-2 rounded-full bg-[#351c15] dark:bg-[#ffbe03] text-white hover:bg-[#4a2a1f] dark:hover:bg-[#e6a902] transition-colors"
-                aria-label="Previous slide"
-              >
-                <FaChevronLeft className="h-5 w-5" />
-              </button>
-              <button
-                onClick={() => setCurrentSlide((prev) => (prev < 3 ? prev + 1 : 0))}
-                className="p-2 rounded-full bg-[#351c15] dark:bg-[#ffbe03] text-white hover:bg-[#4a2a1f] dark:hover:bg-[#e6a902] transition-colors"
-                aria-label="Next slide"
-              >
-                <FaChevronRight className="h-5 w-5" />
-              </button>
-            </div>
-            {/* Slide Indicators */}
-            <div className="flex justify-center mt-4 space-x-2">
-              {[0, 1, 2, 3].map((index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentSlide(index)}
-                  className={`w-2 h-2 rounded-full transition-colors ${
-                    currentSlide === index
-                      ? 'bg-[#351c15] dark:bg-[#ffbe03]'
-                      : 'bg-gray-300 dark:bg-gray-600'
-                  }`}
-                  aria-label={`Go to slide ${index + 1}`}
-                />
-              ))}
+                  <div className="text-center">
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Fast Delivery</h3>
+                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Track your shipment to destination</p>
+                  </div>
+                </div>
+              </AnimatedCard>
             </div>
           </div>
 
@@ -469,42 +386,42 @@ const Home: React.FC = () => {
               
               <div className="relative flex justify-between">
                 <AnimatedCard animation="slide">
-                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-700 p-6">
-                    <div className="h-24 w-24 rounded-full mx-auto mb-4 bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center transform hover:scale-110 transition-transform duration-300">
-                      <FaUser className="h-5 w-5 text-white dark:text-[#ffbe03]" />
+                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-700 p-6 transform hover:scale-105 transition-transform duration-300">
+                    <div className="h-24 w-24 rounded-full mx-auto mb-4 bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
+                      <FaUser className="h-10 w-10 text-white dark:text-[#ffbe03]" />
                     </div>
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Request Quote</h3>
-                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Fill out our simple form</p>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white text-center">Request Quote</h3>
+                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400 text-center">Fill out our simple form</p>
                   </div>
                 </AnimatedCard>
 
                 <AnimatedCard animation="slide" delay="0.5s">
-                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-700 p-6">
-                    <div className="h-24 w-24 rounded-full mx-auto mb-4 bg-[#351c15] dark:bg-opacity-20 dark:bg-[#ffbe03] flex items-center justify-center transform hover:scale-110 transition-transform duration-300">
-                      <FaCreditCard className="h-5 w-5 text-white dark:text-[#ffbe03]" />
+                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-700 p-6 transform hover:scale-105 transition-transform duration-300">
+                    <div className="h-24 w-24 rounded-full mx-auto mb-4 bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
+                      <FaCreditCard className="h-10 w-10 text-white dark:text-[#ffbe03]" />
                     </div>
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Book Shipment</h3>
-                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Secure your slot</p>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white text-center">Book Shipment</h3>
+                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400 text-center">Secure your slot</p>
                   </div>
                 </AnimatedCard>
 
                 <AnimatedCard animation="slide" delay="1s">
-                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-700 p-6">
-                    <div className="h-24 w-24 rounded-full mx-auto mb-4 bg-[#351c15] dark:bg-opacity-20 dark:bg-[#ffbe03] flex items-center justify-center transform hover:scale-110 transition-transform duration-300">
-                      <FaBox className="h-5 w-5 text-white dark:text-[#ffbe03]" />
+                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-700 p-6 transform hover:scale-105 transition-transform duration-300">
+                    <div className="h-24 w-24 rounded-full mx-auto mb-4 bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
+                      <FaBox className="h-10 w-10 text-white dark:text-[#ffbe03]" />
                     </div>
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Package Pickup</h3>
-                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">We collect from you</p>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white text-center">Package Pickup</h3>
+                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400 text-center">We collect from you</p>
                   </div>
                 </AnimatedCard>
 
                 <AnimatedCard animation="slide" delay="1.5s">
-                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-700 p-6">
-                    <div className="h-24 w-24 rounded-full mx-auto mb-4 bg-[#351c15] dark:bg-opacity-20 dark:bg-[#ffbe03] flex items-center justify-center transform hover:scale-110 transition-transform duration-300">
-                      <FaShippingFast className="h-5 w-5 text-white dark:text-[#ffbe03]" />
+                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-700 p-6 transform hover:scale-105 transition-transform duration-300">
+                    <div className="h-24 w-24 rounded-full mx-auto mb-4 bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
+                      <FaShippingFast className="h-10 w-10 text-white dark:text-[#ffbe03]" />
                     </div>
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Fast Delivery</h3>
-                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Track to destination</p>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white text-center">Fast Delivery</h3>
+                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400 text-center">Track to destination</p>
                   </div>
                 </AnimatedCard>
               </div>

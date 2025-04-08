@@ -25,32 +25,37 @@ const Footer: React.FC = () => {
     e.preventDefault();
     const href = e.currentTarget.getAttribute('href');
     if (href) {
-      // Navigate to the services page
+      // First navigate to the services page
       navigate('/services');
       
-      // Use a shorter timeout to ensure the navigation has started
+      // Wait for navigation and DOM update
       setTimeout(() => {
         const element = document.getElementById(id);
         if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
+          // Scroll the element into view
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          // Add highlight effect
           element.classList.add('animate-pulse');
           setTimeout(() => {
             element.classList.remove('animate-pulse');
           }, 2000);
         } else {
-          // If element not found, try again after a short delay
-          setTimeout(() => {
-            const element = document.getElementById(id);
-            if (element) {
-              element.scrollIntoView({ behavior: 'smooth' });
-              element.classList.add('animate-pulse');
+          // If element not found immediately, try again after the page has loaded
+          const retryInterval = setInterval(() => {
+            const retryElement = document.getElementById(id);
+            if (retryElement) {
+              retryElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              retryElement.classList.add('animate-pulse');
               setTimeout(() => {
-                element.classList.remove('animate-pulse');
+                retryElement.classList.remove('animate-pulse');
               }, 2000);
+              clearInterval(retryInterval);
             }
           }, 100);
+          // Clear interval after 3 seconds if element is still not found
+          setTimeout(() => clearInterval(retryInterval), 3000);
         }
-      }, 50);
+      }, 500); // Increased timeout to ensure navigation is complete
     }
   };
   
@@ -64,56 +69,74 @@ const Footer: React.FC = () => {
               <Logo className="!bg-transparent" />
             </div>
             <p className="text-gray-300 mb-6 text-sm sm:text-base">
-              Your trusted partner in global logistics and transportation services. Delivering excellence in shipping solutions since 2004.
+              Your trusted partner in global logistics and transportation services. Delivering excellence in shipping solutions since 2020.
             </p>
-            <div className="flex justify-center sm:justify-start space-x-6">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-[#ffbe03] transition-colors">
-                <Icon icon={FaFacebook} size={24} />
+            <div className="flex justify-center sm:justify-start space-x-4">
+              <a
+                href="https://www.facebook.com/ups"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-300 hover:text-[#ffbe03] transition-colors duration-300 transform hover:scale-110"
+              >
+                <FaFacebook className="h-5 w-5" />
               </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-[#ffbe03] transition-colors">
-                <Icon icon={FaTwitter} size={24} />
+              <a
+                href="https://twitter.com/UPS"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-300 hover:text-[#ffbe03] transition-colors duration-300 transform hover:scale-110"
+              >
+                <FaTwitter className="h-5 w-5" />
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-[#ffbe03] transition-colors">
-                <Icon icon={FaInstagram} size={24} />
+              <a
+                href="https://www.instagram.com/ups"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-300 hover:text-[#ffbe03] transition-colors duration-300 transform hover:scale-110"
+              >
+                <FaInstagram className="h-5 w-5" />
               </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-[#ffbe03] transition-colors">
-                <Icon icon={FaLinkedin} size={24} />
+              <a
+                href="https://www.linkedin.com/company/ups"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-300 hover:text-[#ffbe03] transition-colors duration-300 transform hover:scale-110"
+              >
+                <FaLinkedin className="h-5 w-5" />
               </a>
             </div>
           </div>
 
           {/* Quick Links */}
           <div className="text-center sm:text-left">
-            <h3 className="text-xl font-bold mb-6 text-[#ffbe03]">Quick Links</h3>
+            <h3 className="text-xl font-bold mb-6 text-[#ffbe03] relative inline-block">
+              Quick Links
+              <span className="absolute bottom-0 left-0 w-12 h-1 bg-[#ffbe03]"></span>
+            </h3>
             <ul className="space-y-4">
               <li>
-                <button onClick={() => handleNavClick('/')} className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
+                <button onClick={() => handleNavClick('/')} className="text-gray-300 hover:text-[#ffbe03] transition-colors duration-300 text-sm sm:text-base">
                   Home
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNavClick('/about')} className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
+                <button onClick={() => handleNavClick('/about')} className="text-gray-300 hover:text-[#ffbe03] transition-colors duration-300 text-sm sm:text-base">
                   About Us
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNavClick('/services')} className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
+                <button onClick={() => handleNavClick('/services')} className="text-gray-300 hover:text-[#ffbe03] transition-colors duration-300 text-sm sm:text-base">
                   Services
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNavClick('/track')} className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
+                <button onClick={() => handleNavClick('/track')} className="text-gray-300 hover:text-[#ffbe03] transition-colors duration-300 text-sm sm:text-base">
                   Track Package
                 </button>
               </li>
               <li>
-                <button onClick={() => handleNavClick('/contact')} className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
+                <button onClick={() => handleNavClick('/contact')} className="text-gray-300 hover:text-[#ffbe03] transition-colors duration-300 text-sm sm:text-base">
                   Contact
-                </button>
-              </li>
-              <li>
-                <button onClick={() => handleNavClick('/faq')} className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
-                  FAQ
                 </button>
               </li>
             </ul>
@@ -121,29 +144,32 @@ const Footer: React.FC = () => {
 
           {/* Services */}
           <div className="text-center sm:text-left">
-            <h3 className="text-xl font-bold mb-6 text-[#ffbe03]">Our Services</h3>
+            <h3 className="text-xl font-bold mb-6 text-[#ffbe03] relative inline-block">
+              Our Services
+              <span className="absolute bottom-0 left-0 w-12 h-1 bg-[#ffbe03]"></span>
+            </h3>
             <ul className="space-y-4">
               <li className="flex items-center justify-center sm:justify-start space-x-3">
                 <Icon icon={FaPlane} size={16} className="text-[#ffbe03]" />
-                <Link to="/services#freight-mode-air-freight" onClick={(e) => handleFreightModeClick(e, 'freight-mode-air-freight')} className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
+                <Link to="/services#freight-mode-air-freight" onClick={(e) => handleFreightModeClick(e, 'freight-mode-air-freight')} className="text-gray-300 hover:text-[#ffbe03] transition-colors duration-300 text-sm sm:text-base">
                   Air Freight
                 </Link>
               </li>
               <li className="flex items-center justify-center sm:justify-start space-x-3">
                 <Icon icon={FaShip} size={16} className="text-[#ffbe03]" />
-                <Link to="/services#freight-mode-sea-freight" onClick={(e) => handleFreightModeClick(e, 'freight-mode-sea-freight')} className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
+                <Link to="/services#freight-mode-sea-freight" onClick={(e) => handleFreightModeClick(e, 'freight-mode-sea-freight')} className="text-gray-300 hover:text-[#ffbe03] transition-colors duration-300 text-sm sm:text-base">
                   Sea Freight
                 </Link>
               </li>
               <li className="flex items-center justify-center sm:justify-start space-x-3">
                 <Icon icon={FaTruck} size={16} className="text-[#ffbe03]" />
-                <Link to="/services#freight-mode-land-freight" onClick={(e) => handleFreightModeClick(e, 'freight-mode-land-freight')} className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
+                <Link to="/services#freight-mode-land-freight" onClick={(e) => handleFreightModeClick(e, 'freight-mode-land-freight')} className="text-gray-300 hover:text-[#ffbe03] transition-colors duration-300 text-sm sm:text-base">
                   Ground Transport
                 </Link>
               </li>
               <li className="flex items-center justify-center sm:justify-start space-x-3">
                 <Icon icon={FaWarehouse} size={16} className="text-[#ffbe03]" />
-                <Link to="/services#freight-mode-warehousing" onClick={(e) => handleFreightModeClick(e, 'freight-mode-warehousing')} className="text-gray-300 hover:text-[#ffbe03] transition-colors text-sm sm:text-base">
+                <Link to="/services#freight-mode-warehousing" onClick={(e) => handleFreightModeClick(e, 'freight-mode-warehousing')} className="text-gray-300 hover:text-[#ffbe03] transition-colors duration-300 text-sm sm:text-base">
                   Warehousing
                 </Link>
               </li>
@@ -152,20 +178,15 @@ const Footer: React.FC = () => {
 
           {/* Contact Info */}
           <div className="text-center sm:text-left">
-            <h3 className="text-xl font-bold mb-6 text-[#ffbe03]">Contact Us</h3>
+            <h3 className="text-xl font-bold mb-6 text-[#ffbe03] relative inline-block">
+              Contact Us
+              <span className="absolute bottom-0 left-0 w-12 h-1 bg-[#ffbe03]"></span>
+            </h3>
             <ul className="space-y-4">
               <li className="flex items-center justify-center sm:justify-start space-x-3">
                 <Icon icon={FaEnvelope} size={16} className="text-[#ffbe03]" />
                 <span className="text-gray-300">
-                  <a href="mailto:info@globaltrack.com" className="hover:text-[#ffbe03] transition-colors text-sm sm:text-base">info@globaltrack.com</a>
-                </span>
-              </li>
-              <li className="flex flex-col sm:flex-row items-center sm:items-start space-y-2 sm:space-y-0 sm:space-x-3">
-                <Icon icon={FaMapMarkerAlt} size={16} className="text-[#ffbe03]" />
-                <span className="text-gray-300 text-center sm:text-left text-sm sm:text-base">
-                  123 Global Track Street<br />
-                  New York, NY 10001<br />
-                  United States
+                  <a href="mailto:globaltrackteam@gmail.com" className="hover:text-[#ffbe03] transition-colors duration-300 text-sm sm:text-base">globaltrackteam@gmail.com</a>
                 </span>
               </li>
             </ul>
@@ -176,16 +197,16 @@ const Footer: React.FC = () => {
         <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-[#4a2a1f]">
           <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
             <p className="text-gray-300 text-xs sm:text-sm text-center sm:text-left">
-              © {new Date().getFullYear()} Global Track. All rights reserved.
+              © 2020 Global Track. All rights reserved.
             </p>
             <div className="flex flex-wrap justify-center sm:justify-end gap-4 sm:gap-6">
-              <button onClick={() => handleNavClick('/privacy')} className="text-gray-300 hover:text-[#ffbe03] text-xs sm:text-sm transition-colors">
+              <button onClick={() => handleNavClick('/privacy')} className="text-gray-300 hover:text-[#ffbe03] text-xs sm:text-sm transition-colors duration-300">
                 Privacy Policy
               </button>
-              <button onClick={() => handleNavClick('/terms')} className="text-gray-300 hover:text-[#ffbe03] text-xs sm:text-sm transition-colors">
+              <button onClick={() => handleNavClick('/terms')} className="text-gray-300 hover:text-[#ffbe03] text-xs sm:text-sm transition-colors duration-300">
                 Terms of Service
               </button>
-              <button onClick={() => handleNavClick('/faq')} className="text-gray-300 hover:text-[#ffbe03] text-xs sm:text-sm transition-colors">
+              <button onClick={() => handleNavClick('/faq')} className="text-gray-300 hover:text-[#ffbe03] text-xs sm:text-sm transition-colors duration-300">
                 FAQ
               </button>
             </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { getShipmentByTracking, Shipment } from '../services/shipmentService';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
@@ -36,14 +36,57 @@ import {
   FaTwitter,
   FaLinkedin,
   FaInstagram,
+  FaSpinner,
+  FaCheck,
+  FaCopy,
+  FaArrowRight,
 } from 'react-icons/fa';
 import AnimatedCard from '../components/animations/AnimatedCard';
 
 const Track: React.FC = () => {
+  const { isDarkMode } = useTheme();
   const [trackingNumber, setTrackingNumber] = useState('');
   const [shipment, setShipment] = useState<Shipment | null>(null);
-  const [loading, setLoading] = useState(false);
-  const { isDarkMode } = useTheme();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [showTrackingForm, setShowTrackingForm] = useState(true);
+  const [copied, setCopied] = useState(false);
+  const resultsRef = useRef<HTMLDivElement>(null);
+
+  const formatText = (text: string) => {
+    return text
+      .split('_')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+  };
+
+  const handleCopyTracking = () => {
+    navigator.clipboard.writeText(trackingNumber);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+    toast.success('Tracking number copied to clipboard!');
+  };
+
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!trackingNumber.trim()) {
+      toast.error('Please enter a tracking number');
+      return;
+    }
+    setIsLoading(true);
+    setError(null);
+    setShipment(null);
+
+    try {
+      const shipmentData = await getShipmentByTracking(trackingNumber);
+      setShipment(shipmentData);
+      setShowTrackingForm(false);
+    } catch (err) {
+      setError('Shipment not found. Please check your tracking number and try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -67,31 +110,6 @@ const Track: React.FC = () => {
       setTimeout(() => {
         element.classList.remove('animate-pulse');
       }, 2000);
-    }
-  };
-
-  const handleTrack = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!trackingNumber.trim()) {
-      toast.error('Please enter a tracking number');
-      return;
-    }
-
-    try {
-      setLoading(true);
-      const data = await getShipmentByTracking(trackingNumber);
-      if (data) {
-        setShipment(data);
-        toast.success('Shipment found!');
-      } else {
-        toast.error('No shipment found with this tracking number');
-        setShipment(null);
-      }
-    } catch (error) {
-      toast.error('Failed to fetch shipment details');
-      console.error(error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -157,37 +175,47 @@ const Track: React.FC = () => {
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
       {/* Hero Section with Tracking */}
-      <div className="bg-[#351c15] dark:bg-[#1a0e0a] text-white py-8 sm:py-16">
+      <div className="bg-[#351c15] dark:bg-[#1a0e0a] text-white py-12 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-3xl sm:text-4xl font-bold mb-4">Track Your Shipment</h1>
-            <p className="text-base sm:text-lg mb-6 sm:mb-8">Enter your tracking number to get real-time updates</p>
-            <form onSubmit={handleTrack} className="max-w-2xl mx-auto">
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <h1 className="text-4xl sm:text-5xl font-bold mb-6">Track Your Shipment</h1>
+            <p className="text-lg sm:text-xl mb-8 text-gray-300">Enter your tracking number to get real-time updates</p>
+            <form onSubmit={handleSearch} className="max-w-2xl mx-auto">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <div className="flex-1 relative">
                   <input
                     type="text"
                     value={trackingNumber}
                     onChange={(e) => setTrackingNumber(e.target.value)}
                     placeholder="Enter tracking number"
-                    className={`w-full px-4 py-3 rounded-lg text-base sm:text-lg ${
+                    className={`w-full px-6 py-4 rounded-lg text-lg ${
                       isDarkMode 
                         ? 'bg-gray-800 text-gray-100 placeholder-gray-400 border-gray-700' 
                         : 'bg-white text-gray-900 placeholder-gray-500 border-gray-300'
-                    } focus:ring-2 focus:ring-[#ffbe03] focus:border-[#ffbe03]`}
+                    } focus:ring-2 focus:ring-[#ffbe03] focus:border-[#ffbe03] shadow-lg`}
                   />
-                  <FaSearch className={`absolute right-4 top-1/2 transform -translate-y-1/2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'} text-lg sm:text-xl`} />
+                  <FaSearch className={`absolute right-4 top-1/2 transform -translate-y-1/2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'} text-xl`} />
                 </div>
                 <button
                   type="submit"
-                  disabled={loading}
-                  className={`px-6 sm:px-8 py-3 font-semibold rounded-lg text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 ${
+                  disabled={isLoading}
+                  className={`px-8 py-4 font-semibold rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 transition-all duration-300 ${
                     isDarkMode
                       ? 'bg-[#ffbe03] text-gray-900 hover:bg-[#e6a902] focus:ring-[#ffbe03] focus:ring-offset-gray-900'
                       : 'bg-white text-[#351c15] hover:bg-gray-100 focus:ring-[#351c15] focus:ring-offset-[#351c15]'
                   }`}
                 >
-                  {loading ? 'Tracking...' : 'Track'}
+                  {isLoading ? (
+                    <div className="flex items-center gap-2">
+                      <FaSpinner className="animate-spin" />
+                      <span>Tracking...</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <FaSearch />
+                      <span>Track</span>
+                    </div>
+                  )}
                 </button>
               </div>
             </form>
@@ -196,88 +224,65 @@ const Track: React.FC = () => {
       </div>
 
       {shipment ? (
-        <div className="max-w-7xl mx-auto p-4 sm:p-6">
-          {/* Shipment Status */}
-          <div className={`rounded-lg p-4 sm:p-6 mb-4 sm:mb-6 ${
-            isDarkMode 
+        <div className="max-w-7xl mx-auto p-4 sm:p-6" ref={resultsRef}>
+          {/* Tracking Number Display */}
+              <div className={`rounded-lg p-6 mb-6 ${
+                isDarkMode 
               ? 'bg-slate-800 shadow-lg shadow-slate-900/20' 
-              : 'bg-white shadow-lg'
-          }`}>
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 sm:gap-0">
-              <div>
-                <h2 className={`text-lg sm:text-xl font-bold mb-3 sm:mb-4 ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#b98f31]'}`}>SHIPMENT STATUS</h2>
-                <div className={`flex items-center gap-3 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                  <FaMapMarkerAlt className={`text-lg sm:text-xl ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#b98f31]'}`} />
+                  : 'bg-white shadow-lg'
+              }`}>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                   <div>
-                    <div className="text-xs sm:text-sm text-gray-400 uppercase">CURRENT LOCATION</div>
-                    <div className="text-base sm:text-lg font-semibold uppercase">{shipment.currentLocation}</div>
-                  </div>
+                <h2 className={`text-sm uppercase tracking-wider ${isDarkMode ? 'text-gray-400' : 'text-gray-500'} mb-2`}>Tracking Number</h2>
+                <div className="flex items-center gap-3">
+                  <span className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{shipment.trackingNumber}</span>
+                  <button
+                    onClick={handleCopyTracking}
+                    className={`p-2 rounded-full transition-colors duration-200 ${
+                      isDarkMode 
+                        ? 'hover:bg-slate-700 text-gray-400 hover:text-white' 
+                        : 'hover:bg-gray-100 text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    {copied ? <FaCheck className="text-green-500" /> : <FaCopy />}
+                  </button>
                 </div>
               </div>
-              <div className="text-left sm:text-right">
-                    <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full ${
-                  shipment.status.toLowerCase() === 'delivered' 
-                    ? isDarkMode ? 'bg-green-400/10' : 'bg-green-100'
-                    : shipment.status.toLowerCase() === 'in_transit'
-                    ? isDarkMode ? 'bg-blue-400/10' : 'bg-blue-100'
-                    : shipment.status.toLowerCase() === 'delayed'
-                    ? isDarkMode ? 'bg-red-400/10' : 'bg-red-100'
-                    : shipment.status.toLowerCase() === 'on_hold'
-                    ? isDarkMode ? 'bg-yellow-400/10' : 'bg-yellow-100'
-                    : isDarkMode ? 'bg-gray-400/10' : 'bg-gray-100'
-                    }`}>
-                      <div className={`w-2 h-2 rounded-full ${
-                    shipment.status.toLowerCase() === 'delivered'
-                      ? isDarkMode ? 'bg-green-400' : 'bg-green-500'
-                      : shipment.status.toLowerCase() === 'in_transit'
-                      ? isDarkMode ? 'bg-blue-400' : 'bg-blue-500'
-                      : shipment.status.toLowerCase() === 'delayed'
-                      ? isDarkMode ? 'bg-red-400' : 'bg-red-500'
-                      : shipment.status.toLowerCase() === 'on_hold'
-                      ? isDarkMode ? 'bg-yellow-400' : 'bg-yellow-500'
-                      : isDarkMode ? 'bg-gray-400' : 'bg-gray-500'
-                      }`}></div>
-                  <span className={`text-xs sm:text-sm font-semibold uppercase ${
-                    shipment.status.toLowerCase() === 'delivered'
-                      ? isDarkMode ? 'text-green-400' : 'text-green-600'
-                      : shipment.status.toLowerCase() === 'in_transit'
-                      ? isDarkMode ? 'text-blue-400' : 'text-blue-600'
-                      : shipment.status.toLowerCase() === 'delayed'
-                      ? isDarkMode ? 'text-red-400' : 'text-red-600'
-                      : shipment.status.toLowerCase() === 'on_hold'
-                      ? isDarkMode ? 'text-yellow-400' : 'text-yellow-600'
-                      : isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                  }`}>
-                    {shipment.status.toUpperCase().replace(/_/g, ' ')}
-                      </span>
-                </div>
-                <div className={`mt-3 flex items-center gap-3 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                  <FaCalendarAlt className={`text-lg sm:text-xl ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#b98f31]'}`} />
-                    <div>
-                    <div className="text-xs sm:text-sm text-gray-400 uppercase">EXPECTED DELIVERY</div>
-                    <div className="text-sm sm:text-base font-semibold">{shipment.expectedDeliveryDate}</div>
-                  </div>
-                </div>
+              <div className={`px-4 py-2 rounded-full ${
+                shipment.status === 'delivered' 
+                  ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+                  : shipment.status === 'in_transit'
+                  ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
+                  : shipment.status === 'delayed'
+                  ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+                  : shipment.status === 'on_hold'
+                  ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
+                  : 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400'
+              }`}>
+                <span className="font-semibold">{formatText(shipment.status)}</span>
               </div>
                   </div>
               </div>
 
-              {/* Tracking History */}
-          <div className={`rounded-lg p-4 sm:p-6 mb-4 sm:mb-6 ${isDarkMode ? 'bg-slate-800' : 'bg-white shadow-md'}`}>
-            <h2 className={`text-lg sm:text-xl font-bold mb-6 sm:mb-8 ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#b98f31]'}`}>TRACKING HISTORY</h2>
+          {/* Shipment Status Timeline */}
+          <div className={`rounded-lg p-6 mb-6 ${
+            isDarkMode 
+              ? 'bg-slate-800 shadow-lg shadow-slate-900/20' 
+              : 'bg-white shadow-lg'
+          }`}>
+            <h2 className={`text-xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Shipment Progress</h2>
                 <div className="relative">
-              <div className="absolute left-[15px] sm:left-[19px] top-0 bottom-0 w-0.5 bg-gray-700/30"></div>
-              <div className="space-y-6 sm:space-y-8">
+              <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gray-200 dark:bg-gray-700"></div>
                     {shipment.shipmentHistory?.map((history, index) => {
                       let statusColor;
+                let bgColor;
                       let StatusIcon;
-                      let bgColor;
-                      
-                      switch (history.status.toLowerCase()) {
-                        case 'pending':
-                      statusColor = isDarkMode ? 'text-gray-400' : 'text-gray-600';
-                      bgColor = isDarkMode ? 'bg-gray-400/10' : 'bg-gray-100';
-                          StatusIcon = FaClock;
+
+                switch (history.status) {
+                  case 'delivered':
+                    statusColor = isDarkMode ? 'text-green-400' : 'text-green-600';
+                    bgColor = isDarkMode ? 'bg-green-400/10' : 'bg-green-100';
+                    StatusIcon = FaCheckCircle;
                           break;
                         case 'in_transit':
                           statusColor = isDarkMode ? 'text-blue-400' : 'text-blue-600';
@@ -288,11 +293,6 @@ const Track: React.FC = () => {
                           statusColor = isDarkMode ? 'text-red-400' : 'text-red-600';
                           bgColor = isDarkMode ? 'bg-red-400/10' : 'bg-red-100';
                           StatusIcon = FaExclamationTriangle;
-                          break;
-                        case 'delivered':
-                          statusColor = isDarkMode ? 'text-green-400' : 'text-green-600';
-                          bgColor = isDarkMode ? 'bg-green-400/10' : 'bg-green-100';
-                          StatusIcon = FaCheckCircle;
                           break;
                         case 'on_hold':
                           statusColor = isDarkMode ? 'text-yellow-400' : 'text-yellow-600';
@@ -306,31 +306,31 @@ const Track: React.FC = () => {
                       }
 
                       return (
-                    <div key={index} className="relative pl-8 sm:pl-10">
-                      <div className={`absolute left-0 ml-[3px] mt-[30px] sm:ml-[6px] sm:mt-[20px] p-1.5 rounded-full ${bgColor}`}>
-                        <StatusIcon className={`text-sm sm:text-base ${statusColor}`} />
+                  <div key={index} className="relative pl-8 mb-6 last:mb-0">
+                    <div className={`absolute left-0 -ml-[13px] mt-[25px] p-1.5 rounded-full ${bgColor}`}>
+                      <StatusIcon className={`text-base ${statusColor}`} />
                           </div>
-                      <div className={`p-3 sm:p-4 rounded-lg ${
+                          <div className={`p-4 rounded-lg ${
                             isDarkMode 
-                          ? 'bg-slate-700 shadow-md shadow-slate-900/10' 
+                        ? 'bg-slate-700 shadow-md shadow-slate-900/10' 
                               : 'bg-gray-50 shadow-sm'
                           }`}>
-                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 sm:gap-6">
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 sm:gap-6">
                               <div>
-                            <div className={`font-bold text-xs sm:text-sm uppercase mb-1 ${statusColor}`}>
-                              {history.status.toUpperCase().replace(/_/g, ' ')}
+                                <div className={`font-bold text-sm uppercase mb-1 ${statusColor}`}>
+                            {history.status.toUpperCase().replace(/_/g, ' ')}
                                 </div>
-                                <div className="text-xs text-gray-500">
+                          <div className="text-sm text-gray-500">
                                   {history.date} {history.time}
                                 </div>
                               </div>
-                          <div className="text-left sm:text-right">
-                            <div className={`font-bold text-xs sm:text-sm uppercase ${
+                        <div className="text-left sm:text-right">
+                                <div className={`font-bold text-sm uppercase ${
                                   isDarkMode ? 'text-gray-300' : 'text-gray-700'
                                 }`}>
                                   {history.location}
                                 </div>
-                                <div className="text-xs text-gray-500">
+                          <div className="text-sm text-gray-500">
                                   {history.remarks}
                                 </div>
                               </div>
@@ -340,204 +340,233 @@ const Track: React.FC = () => {
                       );
                     })}
                   </div>
-                </div>
-              </div>
+          </div>
 
-          {/* Shipment Details */}
-          <div className={`rounded-lg p-4 sm:p-6 mb-4 sm:mb-6 ${isDarkMode ? 'bg-slate-800' : 'bg-white shadow-md'}`}>
-            <h2 className={`text-lg sm:text-xl font-bold mb-3 sm:mb-4 ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#b98f31]'}`}>SHIPMENT DETAILS</h2>
-            <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-              <div className="flex items-center gap-2">
-                <FaMapMarkerAlt className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
+          {/* Shipment Details Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            {/* Origin & Destination */}
+            <div className={`rounded-lg p-6 ${
+              isDarkMode 
+                ? 'bg-slate-800 shadow-lg shadow-slate-900/20' 
+                : 'bg-white shadow-lg'
+            }`}>
+              <h2 className={`text-xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Route Information</h2>
+              <div className="space-y-6">
                 <div>
-                  <div className="flex items-center gap-2 sm:block">
-                    <div className="text-xs sm:text-sm text-gray-400 uppercase">FROM</div>
-                    <div className="text-sm sm:text-base font-semibold uppercase">{shipment.origin}</div>
-                  </div>
-                  <div className="flex items-center gap-2 sm:block mt-1">
-                    <div className="text-xs sm:text-sm text-gray-400 uppercase">TO</div>
-                    <div className="text-sm sm:text-base font-semibold uppercase">{shipment.destination}</div>
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <FaTruck className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
-                <div>
-                  <div className="flex items-center gap-2 sm:block">
-                    <div className="text-xs sm:text-sm text-gray-400 uppercase">CARRIER</div>
-                    <div className="text-sm sm:text-base font-semibold uppercase">{shipment.carrier}</div>
+                  <div className={`text-sm uppercase tracking-wider mb-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Origin</div>
+                  <div className={`flex items-center gap-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    <FaMapMarkerAlt className={`text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
+                    <span className="font-medium">{shipment.origin}</span>
                   </div>
                 </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <FaBox className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
                 <div>
-                  <div className="flex items-center gap-2 sm:block">
-                    <div className="text-xs sm:text-sm text-gray-400 uppercase">TYPE</div>
-                    <div className="text-sm sm:text-base font-semibold uppercase">{shipment.typeOfShipment}</div>
+                  <div className={`text-sm uppercase tracking-wider mb-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Destination</div>
+                  <div className={`flex items-center gap-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    <FaMapMarkerAlt className={`text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
+                    <span className="font-medium">{shipment.destination}</span>
                   </div>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                {shipment.shipmentMode.toLowerCase().includes('sea') ? (
-                  <FaShip className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
-                ) : shipment.shipmentMode.toLowerCase().includes('air') ? (
-                  <FaPlane className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
-                ) : (
-                  <FaTruck className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
-                )}
-                <div>
-                  <div className="flex items-center gap-2 sm:block">
-                    <div className="text-xs sm:text-sm text-gray-400 uppercase">MODE</div>
-                    <div className="text-sm sm:text-base font-semibold uppercase">{shipment.shipmentMode}</div>
+            </div>
+
+            {/* Package Summary */}
+            <div className={`rounded-lg p-6 ${
+              isDarkMode 
+                ? 'bg-slate-800 shadow-lg shadow-slate-900/20' 
+                : 'bg-white shadow-lg'
+            }`}>
+              <h2 className={`text-xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Package Summary</h2>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className={`text-sm uppercase tracking-wider ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Total Packages</div>
+                  <div className={`font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    {shipment.packages.length}
                   </div>
                 </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <FaCreditCard className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
-                <div>
-                  <div className="flex items-center gap-2 sm:block">
-                    <div className="text-xs sm:text-sm text-gray-400 uppercase">PAYMENT</div>
-                    <div className="text-sm sm:text-base font-semibold uppercase">{shipment.paymentMode.toUpperCase().replace(/_/g, ' ')}</div>
+                <div className="flex items-center justify-between">
+                  <div className={`text-sm uppercase tracking-wider ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Total Weight</div>
+                  <div className={`font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    {shipment.packages.reduce((total, pkg) => total + pkg.weight, 0)} KG
                   </div>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <FaDollarSign className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
-                <div>
-                  <div className="flex items-center gap-2 sm:block">
-                    <div className="text-xs sm:text-sm text-gray-400 uppercase">TOTAL FREIGHT</div>
-                    <div className="text-sm sm:text-base font-semibold uppercase">${shipment.totalFreight}</div>
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <FaClock className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
-                <div>
-                  <div className="text-xs sm:text-sm text-gray-400 uppercase">PICKUP</div>
-                  <div className="text-sm sm:text-base font-semibold">{shipment.pickupDate} {shipment.pickupTime}</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <FaClock className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
-                <div>
-                  <div className="text-xs sm:text-sm text-gray-400 uppercase">DEPARTURE</div>
-                  <div className="text-sm sm:text-base font-semibold">{shipment.departureTime}</div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Package Details */}
-          <div className={`rounded-lg p-4 sm:p-6 mb-4 sm:mb-6 ${isDarkMode ? 'bg-slate-800' : 'bg-white shadow-md'}`}>
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 sm:gap-0 mb-3 sm:mb-4">
-              <h2 className={`text-lg sm:text-xl font-bold ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#b98f31]'}`}>PACKAGE DETAILS</h2>
-              <div className="flex items-center gap-2">
-                <FaWeightHanging className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
-                <span className={`text-sm sm:text-base font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                  Total Weight: {shipment.packages.reduce((total, pkg) => total + pkg.weight, 0)} KG
-                </span>
-              </div>
-            </div>
-            <div className="space-y-4">
-              {shipment.packages.map((pkg, index) => (
-                <div key={index} className={`p-3 sm:p-4 rounded-lg ${
-                  isDarkMode ? 'bg-slate-700' : 'bg-gray-50'
-                }`}>
-                  <div className="flex items-center gap-3 mb-2 sm:mb-3">
-                    <FaBox className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
-                    <span className={`text-sm sm:text-base font-semibold uppercase ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                      Package {index + 1} ({pkg.quantity} {pkg.pieceType})
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                    <div className="flex items-center gap-2">
-                      <FaWeightHanging className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
-                      <div>
-                        <div className="text-xs sm:text-sm text-gray-400 uppercase">WEIGHT</div>
-                        <div className={`text-sm sm:text-base font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>{pkg.weight} KG</div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <FaRuler className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
-                      <div>
-                        <div className="text-xs sm:text-sm text-gray-400 uppercase">DIMENSIONS</div>
-                        <div className={`text-sm sm:text-base font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                          {pkg.length} x {pkg.width} x {pkg.height} cm
-                  </div>
-                      </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                      <FaBoxOpen className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
-                      <div>
-                        <div className="text-xs sm:text-sm text-gray-400 uppercase">QUANTITY</div>
-                        <div className={`text-sm sm:text-base font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>{pkg.quantity}</div>
-                      </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                      <FaBox className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
-                      <div>
-                        <div className="text-xs sm:text-sm text-gray-400 uppercase">PIECE TYPE</div>
-                        <div className={`text-sm sm:text-base font-semibold uppercase ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>{pkg.pieceType}</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className={`mt-3 p-3 rounded-lg ${
-                    isDarkMode ? 'bg-slate-700' : 'bg-gray-100'
-                  }`}>
-                    <div className={`text-sm sm:text-base font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>{pkg.description}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Shipper and Receiver Information */}
-          <div className={`rounded-lg p-4 sm:p-6 ${isDarkMode ? 'bg-slate-800' : 'bg-white shadow-md'}`}>
-            <h2 className={`text-lg sm:text-xl font-bold mb-3 sm:mb-4 ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#b98f31]'}`}>SHIPPER & RECEIVER INFORMATION</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {/* Shipper Information */}
-              <div className={`space-y-2 sm:space-y-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                <div className="flex items-center gap-2">
-                  <FaUser className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
-                  <span className="text-sm sm:text-base uppercase">{shipment.shipperName}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <FaMapMarkerAlt className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
-                  <span className="text-sm sm:text-base uppercase">{shipment.shipperAddress}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <FaPhone className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
-                  <span className="text-sm sm:text-base">{shipment.shipperPhone}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <FaEnvelope className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
-                  <span className="text-sm sm:text-base">{shipment.shipperEmail}</span>
+          {/* Detailed Shipment Information */}
+          <div className={`rounded-lg p-6 mb-6 ${
+            isDarkMode 
+              ? 'bg-slate-800 shadow-lg shadow-slate-900/20' 
+              : 'bg-white shadow-lg'
+          }`}>
+            <h2 className={`text-xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Shipment Information</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div>
+                <div className={`text-sm uppercase tracking-wider mb-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Carrier</div>
+                <div className={`flex items-center gap-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  <FaTruck className={`text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
+                  <span className="font-medium">{shipment.carrier}</span>
                 </div>
               </div>
-
-              {/* Receiver Information */}
-              <div className={`space-y-2 sm:space-y-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                <div className="flex items-center gap-2">
-                  <FaUser className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
-                  <span className="text-sm sm:text-base uppercase">{shipment.receiverName}</span>
+              <div>
+                <div className={`text-sm uppercase tracking-wider mb-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Type of Shipment</div>
+                <div className={`flex items-center gap-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  <FaBox className={`text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
+                  <span className="font-medium capitalize">{shipment.typeOfShipment.replace(/_/g, ' ')}</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <FaMapMarkerAlt className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
-                  <span className="text-sm sm:text-base uppercase">{shipment.receiverAddress}</span>
+              </div>
+              <div>
+                <div className={`text-sm uppercase tracking-wider mb-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Shipment Mode</div>
+                <div className={`flex items-center gap-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  {shipment.shipmentMode.toLowerCase().includes('sea') ? (
+                    <FaShip className={`text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
+                  ) : shipment.shipmentMode.toLowerCase().includes('air') ? (
+                    <FaPlane className={`text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
+                  ) : (
+                    <FaTruck className={`text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
+                  )}
+                  <span className="font-medium capitalize">{shipment.shipmentMode.replace(/_/g, ' ')}</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <FaPhone className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
-                  <span className="text-sm sm:text-base">{shipment.receiverPhone}</span>
+              </div>
+              <div>
+                <div className={`text-sm uppercase tracking-wider mb-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Payment Mode</div>
+                <div className={`flex items-center gap-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  <FaCreditCard className={`text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
+                  <span className="font-medium capitalize">{shipment.paymentMode.replace(/_/g, ' ')}</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <FaEnvelope className={`text-base sm:text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
-                  <span className="text-sm sm:text-base">{shipment.receiverEmail}</span>
+              </div>
+              <div>
+                <div className={`text-sm uppercase tracking-wider mb-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Total Freight</div>
+                <div className={`flex items-center gap-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  <FaDollarSign className={`text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
+                  <span className="font-medium">${shipment.totalFreight}</span>
+                </div>
+              </div>
+              <div>
+                <div className={`text-sm uppercase tracking-wider mb-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Expected Delivery</div>
+                <div className={`flex items-center gap-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  <FaCalendarAlt className={`text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
+                  <span className="font-medium">{shipment.expectedDeliveryDate}</span>
+                </div>
+              </div>
+              <div>
+                <div className={`text-sm uppercase tracking-wider mb-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Pick-up Date</div>
+                <div className={`flex items-center gap-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  <FaCalendarAlt className={`text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
+                  <span className="font-medium">{shipment.pickupDate}</span>
+                </div>
+              </div>
+              <div>
+                <div className={`text-sm uppercase tracking-wider mb-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Pick-up Time</div>
+                <div className={`flex items-center gap-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  <FaClock className={`text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
+                  <span className="font-medium">{shipment.pickupTime}</span>
+                </div>
+              </div>
+              <div>
+                <div className={`text-sm uppercase tracking-wider mb-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Departure Time</div>
+                <div className={`flex items-center gap-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  <FaClock className={`text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
+                  <span className="font-medium">{shipment.departureTime}</span>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+
+          {/* Package Details Table */}
+          <div className={`rounded-lg p-6 mb-6 ${
+            isDarkMode 
+              ? 'bg-slate-800 shadow-lg shadow-slate-900/20' 
+              : 'bg-white shadow-lg'
+          }`}>
+            <h2 className={`text-xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Package Details</h2>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className={`border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+                    <th className={`py-3 px-4 text-left text-sm font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Qty.</th>
+                    <th className={`py-3 px-4 text-left text-sm font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Piece Type</th>
+                    <th className={`py-3 px-4 text-left text-sm font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Description</th>
+                    <th className={`py-3 px-4 text-left text-sm font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Length(cm)</th>
+                    <th className={`py-3 px-4 text-left text-sm font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Width(cm)</th>
+                    <th className={`py-3 px-4 text-left text-sm font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Height(cm)</th>
+                    <th className={`py-3 px-4 text-left text-sm font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Weight (kg)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {shipment.packages.map((pkg, index) => (
+                    <tr key={index} className={`border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} ${index % 2 === 0 ? (isDarkMode ? 'bg-slate-700/50' : 'bg-gray-50') : ''}`}>
+                      <td className={`py-3 px-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>{pkg.quantity}</td>
+                      <td className={`py-3 px-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>{pkg.pieceType}</td>
+                      <td className={`py-3 px-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>{pkg.description}</td>
+                      <td className={`py-3 px-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>{pkg.length}</td>
+                      <td className={`py-3 px-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>{pkg.width}</td>
+                      <td className={`py-3 px-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>{pkg.height}</td>
+                      <td className={`py-3 px-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>{pkg.weight}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+                </div>
+              </div>
+
+              {/* Contact Information */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Shipper Information */}
+            <div className={`rounded-lg p-6 ${
+              isDarkMode 
+                ? 'bg-slate-800 shadow-lg shadow-slate-900/20' 
+                : 'bg-white shadow-lg'
+            }`}>
+              <h2 className={`text-xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Shipper Information</h2>
+              <div className={`space-y-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                <div className="flex items-center gap-3">
+                  <FaUser className={`text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
+                  <span className="font-medium">{shipment.shipperName}</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <FaMapMarkerAlt className={`text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
+                  <span className="font-medium">{shipment.shipperAddress}</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <FaPhone className={`text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
+                  <span className="font-medium">{shipment.shipperPhone}</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <FaEnvelope className={`text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
+                  <span className="font-medium">{shipment.shipperEmail}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Receiver Information */}
+            <div className={`rounded-lg p-6 ${
+              isDarkMode 
+                ? 'bg-slate-800 shadow-lg shadow-slate-900/20' 
+                : 'bg-white shadow-lg'
+            }`}>
+              <h2 className={`text-xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Receiver Information</h2>
+              <div className={`space-y-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                <div className="flex items-center gap-3">
+                  <FaUser className={`text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
+                  <span className="font-medium">{shipment.receiverName}</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <FaMapMarkerAlt className={`text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
+                  <span className="font-medium">{shipment.receiverAddress}</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <FaPhone className={`text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
+                  <span className="font-medium">{shipment.receiverPhone}</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <FaEnvelope className={`text-lg ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
+                  <span className="font-medium">{shipment.receiverEmail}</span>
+                </div>
+              </div>
+            </div>
+                      </div>
+                      </div>
       ) : (
         <>
           {/* Features Section */}
@@ -550,7 +579,7 @@ const Track: React.FC = () => {
                 <p className={`mt-4 text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                   Experience seamless shipment tracking with our state-of-the-art system
                 </p>
-              </div>
+                      </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {/* Real-time Tracking */}
@@ -573,14 +602,14 @@ const Track: React.FC = () => {
                   <div className={`p-6 rounded-xl ${isDarkMode ? 'bg-slate-800' : 'bg-white'} shadow-lg`}>
                     <div className={`w-12 h-12 rounded-full ${isDarkMode ? 'bg-[#ffbe03]/10' : 'bg-[#351c15]/10'} flex items-center justify-center mb-4`}>
                       <FaPlane className={`text-2xl ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`} />
-                    </div>
+                      </div>
                     <h3 className={`text-xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                       Global Coverage
                     </h3>
                     <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                       Track shipments worldwide with our extensive network of carriers and partners.
                     </p>
-                  </div>
+                      </div>
                 </AnimatedCard>
 
                 {/* Detailed Updates */}

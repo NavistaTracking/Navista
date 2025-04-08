@@ -18,6 +18,7 @@ import {
   deleteUser,
   updateUserPermissions
 } from '../services/userService';
+import { sendShipperEmail, sendReceiverEmail } from '../services/emailService';
 import { FaPlus, FaEdit, FaTrash, FaMapMarkerAlt, FaSearch, FaFilter, FaSync, FaSpinner, FaEnvelope, FaChartLine, FaUsers, FaCog, FaShieldAlt } from 'react-icons/fa';
 import Icon from '../components/icons/Icon';
 import AnimatedCard from '../components/animations/AnimatedCard';
@@ -108,6 +109,35 @@ const defaultShipmentForm: ShipmentFormData = {
   comments: ''
 };
 
+// Add these formatting functions at the top of the file after the imports
+const formatPaymentMode = (mode: string) => {
+  const formattingMap: { [key: string]: string } = {
+    'bank_transfer': 'Bank Transfer',
+    'credit_card': 'Credit Card',
+    'cash': 'Cash',
+    'check': 'Check'
+  };
+  return formattingMap[mode.toLowerCase()] || mode;
+};
+
+const formatShipmentType = (type: string) => {
+  const formattingMap: { [key: string]: string } = {
+    'standard': 'Standard',
+    'express': 'Express',
+    'economy': 'Economy'
+  };
+  return formattingMap[type.toLowerCase()] || type;
+};
+
+const formatShipmentMode = (mode: string) => {
+  const formattingMap: { [key: string]: string } = {
+    'land_shipping': 'Land Shipping',
+    'air_shipping': 'Air Shipping',
+    'sea_shipping': 'Sea Shipping'
+  };
+  return formattingMap[mode.toLowerCase()] || mode;
+};
+
 const AdministrationAndDevelopment: React.FC = () => {
   const { logout, user } = useAuth();
   const { isDarkMode } = useTheme();
@@ -160,18 +190,83 @@ const AdministrationAndDevelopment: React.FC = () => {
   };
 
   const handleTestEmail = async () => {
-    console.log('Oops! Test email service not available for now');
-    /*try {
-      const success = await testEmailService();
-      if (success) {
-        toast.success('Test emails sent successfully!');
-      } else {
-        toast.error('Failed to send test emails');
-      }
+    try {
+      const testShipment: Shipment = {
+        id: 'test-id',
+        trackingNumber: 'TEST' + Math.floor(Math.random() * 1000000).toString().padStart(6, '0'),
+        shipperName: 'Test Shipper',
+        shipperEmail: 'mishaelsema@gmail.com',
+        shipperAddress: '123 Shipper St, Test City',
+        shipperPhone: '+1 234-567-8900',
+        receiverName: 'Test Receiver',
+        receiverEmail: 'mishaelsema@gmail.com',
+        receiverAddress: '456 Receiver Ave, Test Town',
+        receiverPhone: '+1 987-654-3210',
+        origin: 'Test Origin City',
+        destination: 'Test Destination City',
+        carrier: 'Global Track Express',
+        typeOfShipment: 'Express',
+        shipmentMode: 'Air Shipping',
+        packageCount: 2,
+        product: 'Test Products',
+        productQuantity: 5,
+        paymentMode: 'Credit Card',
+        totalFreight: 250.00,
+        weight: 15.5,
+        expectedDeliveryDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        departureTime: '09:00',
+        pickupDate: new Date().toISOString().split('T')[0],
+        pickupTime: '14:00',
+        packages: [
+          {
+            quantity: 2,
+            pieceType: 'Box',
+            description: 'Fragile Electronics',
+            length: 30,
+            width: 20,
+            height: 15,
+            weight: 7.5
+          },
+          {
+            quantity: 3,
+            pieceType: 'Package',
+            description: 'Office Supplies',
+            length: 25,
+            width: 25,
+            height: 10,
+            weight: 8
+          }
+        ],
+        totalVolumetricWeight: 18.75,
+        totalVolume: 0.0225,
+        totalActualWeight: 15.5,
+        shipmentHistory: [
+          {
+            date: new Date().toISOString().split('T')[0],
+            time: new Date().toLocaleTimeString(),
+            location: 'Test Origin City',
+            status: 'pending',
+            updatedBy: 'admin',
+            remarks: 'Shipment created and ready for pickup'
+          }
+        ],
+        status: 'pending',
+        currentLocation: 'Test Origin City',
+        comments: 'Test shipment for email template verification',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      await Promise.all([
+        sendShipperEmail(testShipment),
+        sendReceiverEmail(testShipment)
+      ]);
+      
+      toast.success('Test emails sent successfully!');
     } catch (error) {
       console.error('Email test failed:', error);
       toast.error('Failed to send test emails');
-    }*/
+    }
   };
 
   // Shipment handlers
@@ -454,6 +549,11 @@ const AdministrationAndDevelopment: React.FC = () => {
                   <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${
                     isDarkMode ? 'text-gray-300' : 'text-gray-500'
                   }`}>
+                    Payment Mode
+                  </th>
+                  <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${
+                    isDarkMode ? 'text-gray-300' : 'text-gray-500'
+                  }`}>
                     Actions
                   </th>
                 </tr>
@@ -477,11 +577,11 @@ const AdministrationAndDevelopment: React.FC = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          shipment.status === 'delivered' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
-                          shipment.status === 'in_transit' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
-                          shipment.status === 'delayed' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' :
-                          shipment.status === 'on_hold' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' :
-                          'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+                          shipment.status === 'delivered' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' :
+                          shipment.status === 'in_transit' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400' :
+                          shipment.status === 'delayed' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' :
+                          shipment.status === 'on_hold' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' :
+                          'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400'
                         }`}>
                           {shipment.status.replace('_', ' ').toUpperCase()}
                         </span>
@@ -494,6 +594,9 @@ const AdministrationAndDevelopment: React.FC = () => {
                       </td>
                       <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-900'}`}>
                         {shipment.expectedDeliveryDate}
+                      </td>
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-900'}`}>
+                        {formatPaymentMode(shipment.paymentMode)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <button
@@ -690,8 +793,8 @@ const AdministrationAndDevelopment: React.FC = () => {
                     required
                   >
                         <option value="">Select Type</option>
-                        <option value="express">Express</option>
                         <option value="standard">Standard</option>
+                        <option value="express">Express</option>
                         <option value="economy">Economy</option>
                   </select>
                 </div>
@@ -705,9 +808,9 @@ const AdministrationAndDevelopment: React.FC = () => {
                     required
                   >
                         <option value="">Select Mode</option>
-                    <option value="Land Shipping">Land Shipping</option>
-                    <option value="Air Shipping">Air Shipping</option>
-                    <option value="Sea Shipping">Sea Shipping</option>
+                    <option value="land_shipping">Land Shipping</option>
+                    <option value="air_shipping">Air Shipping</option>
+                    <option value="sea_shipping">Sea Shipping</option>
                   </select>
                 </div>
                     <div>
@@ -760,19 +863,21 @@ const AdministrationAndDevelopment: React.FC = () => {
                 </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Payment Mode</label>
-                      <select
+                      <input
+                        type="text"
+                        placeholder="Enter payment method"
                         value={shipmentFormData.paymentMode}
-                        onChange={(e) => setShipmentFormData({ ...shipmentFormData, paymentMode: e.target.value })}
+                        onChange={(e) => {
+                          const value = e.target.value
+                            .split(' ')
+                            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                            .join(' ');
+                          setShipmentFormData({ ...shipmentFormData, paymentMode: value });
+                        }}
                         className="w-full px-3 py-2 border rounded-md"
-                        title="Select the preferred payment method"
+                        title="Enter the preferred payment method"
                         required
-                      >
-                        <option value="">Select Payment Mode</option>
-                        <option value="cash">Cash</option>
-                        <option value="credit_card">Credit Card</option>
-                        <option value="bank_transfer">Bank Transfer</option>
-                        <option value="check">Check</option>
-                      </select>
+                      />
                     </div>
               </div>
             </div>
@@ -1144,8 +1249,8 @@ const AdministrationAndDevelopment: React.FC = () => {
                   required
                 >
                         <option value="">Select Type</option>
-                        <option value="express">Express</option>
                         <option value="standard">Standard</option>
+                        <option value="express">Express</option>
                         <option value="economy">Economy</option>
                 </select>
               </div>
@@ -1158,9 +1263,9 @@ const AdministrationAndDevelopment: React.FC = () => {
                         required
                       >
                         <option value="">Select Mode</option>
-                        <option value="Land Shipping">Land Shipping</option>
-                        <option value="Air Shipping">Air Shipping</option>
-                        <option value="Sea Shipping">Sea Shipping</option>
+                        <option value="land_shipping">Land Shipping</option>
+                        <option value="air_shipping">Air Shipping</option>
+                        <option value="sea_shipping">Sea Shipping</option>
                       </select>
                     </div>
                     <div>
@@ -1205,19 +1310,22 @@ const AdministrationAndDevelopment: React.FC = () => {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Payment Mode</label>
-                      <select
+                      <input
+                        type="text"
+                        placeholder="Enter payment method"
                         value={trackingFormData.paymentMode || selectedShipment.paymentMode}
-                        onChange={(e) => setTrackingFormData({ ...trackingFormData, paymentMode: e.target.value })}
+                        onChange={(e) => {
+                          const value = e.target.value
+                            .split(' ')
+                            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                            .join(' ');
+                          setTrackingFormData({ ...trackingFormData, paymentMode: value });
+                        }}
                         className="w-full px-3 py-2 border rounded-md"
+                        title="Enter the preferred payment method"
                         required
-                      >
-                        <option value="">Select Payment Mode</option>
-                        <option value="cash">Cash</option>
-                        <option value="credit_card">Credit Card</option>
-                        <option value="bank_transfer">Bank Transfer</option>
-                        <option value="check">Check</option>
-                      </select>
-              </div>
+                      />
+                    </div>
           </div>
         </div>
 

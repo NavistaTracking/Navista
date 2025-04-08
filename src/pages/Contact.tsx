@@ -92,7 +92,7 @@ const Contact: React.FC = () => {
                       isDarkMode 
                         ? 'bg-gray-800 border-gray-700 text-gray-100 placeholder-gray-400' 
                         : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
-                    } focus:outline-none focus:ring-2 focus:ring-[#ffbe03] dark:focus:ring-[#ffbe03]`}
+                    } focus:outline-none focus:ring-2 focus:ring-[#ffbe03] dark:focus:ring-[#ffbe03] transition-all duration-300`}
                   />
                 </div>
               </div>
@@ -115,7 +115,7 @@ const Contact: React.FC = () => {
                       isDarkMode 
                         ? 'bg-gray-800 border-gray-700 text-gray-100 placeholder-gray-400' 
                         : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
-                    } focus:outline-none focus:ring-2 focus:ring-[#ffbe03] dark:focus:ring-[#ffbe03]`}
+                    } focus:outline-none focus:ring-2 focus:ring-[#ffbe03] dark:focus:ring-[#ffbe03] transition-all duration-300`}
                   />
                 </div>
               </div>
@@ -134,7 +134,7 @@ const Contact: React.FC = () => {
                     isDarkMode 
                       ? 'bg-gray-800 border-gray-700 text-gray-100 placeholder-gray-400' 
                       : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
-                  } focus:outline-none focus:ring-2 focus:ring-[#ffbe03] dark:focus:ring-[#ffbe03]`}
+                  } focus:outline-none focus:ring-2 focus:ring-[#ffbe03] dark:focus:ring-[#ffbe03] transition-all duration-300`}
                 />
               </div>
               <div>
@@ -152,7 +152,7 @@ const Contact: React.FC = () => {
                     isDarkMode 
                       ? 'bg-gray-800 border-gray-700 text-gray-100 placeholder-gray-400' 
                       : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
-                  } focus:outline-none focus:ring-2 focus:ring-[#ffbe03] dark:focus:ring-[#ffbe03]`}
+                  } focus:outline-none focus:ring-2 focus:ring-[#ffbe03] dark:focus:ring-[#ffbe03] transition-all duration-300`}
                 />
               </div>
               <button
@@ -162,7 +162,7 @@ const Contact: React.FC = () => {
                   isDarkMode 
                     ? 'text-gray-900 bg-[#ffbe03] hover:bg-[#e6a902]' 
                     : 'text-white bg-[#351c15] hover:bg-[#4a2a1f]'
-                } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ffbe03] disabled:opacity-50`}
+                } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ffbe03] disabled:opacity-50 transition-all duration-300 transform hover:scale-105`}
               >
                 {loading ? (
                   <FaSpinner className="animate-spin mr-2" />
@@ -182,23 +182,12 @@ const Contact: React.FC = () => {
               <div className="space-y-6">
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
-                    <Icon icon={FaMapMarkerAlt} size={24} className="text-[#ffbe03]" />
-                  </div>
-                  <div className="ml-4">
-                    <p className="text-base font-medium text-gray-900 dark:text-white">Address</p>
-                    <p className="mt-1 text-base text-gray-500 dark:text-gray-400">
-                      123 Logistics Street, Business District, City, Country
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start">
-                  <div className="flex-shrink-0">
                     <Icon icon={FaEnvelope} size={24} className="text-[#ffbe03]" />
                   </div>
                   <div className="ml-4">
                     <p className="text-base font-medium text-gray-900 dark:text-white">Email</p>
                     <p className="mt-1 text-base text-gray-500 dark:text-gray-400">
-                      contact@logistics.com
+                      globaltrackteam@gmail.com
                     </p>
                   </div>
                 </div>
@@ -208,11 +197,11 @@ const Contact: React.FC = () => {
                   </div>
                   <div className="ml-4">
                     <p className="text-base font-medium text-gray-900 dark:text-white">Business Hours</p>
-                    <div className="mt-1 space-y-1">
-                      <p className="text-base text-gray-500 dark:text-gray-400">Monday - Friday: 9:00 AM - 6:00 PM</p>
-                      <p className="text-base text-gray-500 dark:text-gray-400">Saturday: 9:00 AM - 1:00 PM</p>
-                      <p className="text-base text-gray-500 dark:text-gray-400">Sunday: Closed</p>
-                    </div>
+                    <p className="mt-1 text-base text-gray-500 dark:text-gray-400">
+                      Monday - Friday: 9:00 AM - 6:00 PM<br />
+                      Saturday: 9:00 AM - 1:00 PM<br />
+                      Sunday: Closed
+                    </p>
                   </div>
                 </div>
               </div>

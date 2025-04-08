@@ -21,7 +21,7 @@ app.post('/api/send-email', async (req, res) => {
     }
 
     const data = await resend.emails.send({
-      from: 'Global Track <noreply@globaltrack.com>',
+      from: 'Global Track <globaltrackteam@gmail.com>',
       to: req.body.to,
       subject: req.body.subject,
       html: req.body.html
