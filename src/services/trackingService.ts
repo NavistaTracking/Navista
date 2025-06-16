@@ -18,6 +18,12 @@ import { sendShipperEmail, sendReceiverEmail, EmailData } from './emailService';
 export interface TrackingDetails {
   id: string;
   trackingNumber: string;
+  // User Information
+  createdBy: {
+    userId: string;
+    email: string;
+    name: string;
+  };
   // Shipper Information
   shipperName: string;
   shipperAddress: string;
@@ -54,7 +60,7 @@ export interface TrackingDetails {
   // Comments
   comments: string;
   // Status
-  status: string;
+  status: 'pending' | 'in_transit' | 'on_hold' | 'delivered' | 'delayed';
   currentLocation: string;
   lastUpdated: string;
 }
@@ -71,18 +77,36 @@ const generateTrackingNumber = (): string => {
 };
 
 // Create new tracking
-export const createTracking = async (data: CreateTrackingData): Promise<{ id: string; trackingNumber: string }> => {
+export const createTracking = async (data: CreateTrackingData, user: { id: string; email: string | null; name: string }): Promise<{ id: string; trackingNumber: string }> => {
   try {
     const trackingNumber = generateTrackingNumber();
     const trackingRef = collection(db, 'trackings');
     const docRef = await addDoc(trackingRef, {
       ...data,
       trackingNumber,
+      createdBy: {
+        userId: user.id,
+        email: user.email,
+        name: user.name
+      },
       status: data.status || 'Pending',
       currentLocation: data.origin,
       lastUpdated: serverTimestamp(),
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
+    });
+
+    // Create history entry
+    const historyRef = collection(db, 'trackingHistory');
+    await addDoc(historyRef, {
+      trackingId: docRef.id,
+      trackingNumber,
+      action: 'created',
+      userId: user.id,
+      userEmail: user.email,
+      userName: user.name,
+      timestamp: serverTimestamp(),
+      details: 'Tracking created'
     });
 
     // Send emails to both shipper and receiver
@@ -118,6 +142,97 @@ export const createTracking = async (data: CreateTrackingData): Promise<{ id: st
   }
 };
 
+// Get trackings for a specific user
+export const getUserTrackings = async (userId: string): Promise<TrackingDetails[]> => {
+  try {
+    const trackingRef = collection(db, 'trackings');
+    const q = query(
+      trackingRef,
+      where('createdBy.userId', '==', userId),
+      orderBy('createdAt', 'desc')
+    );
+    const querySnapshot = await getDocs(q);
+    
+    return querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      const lastUpdated = data.lastUpdated ? (data.lastUpdated as Timestamp).toDate().toLocaleString() : 'N/A';
+
+      return {
+        id: doc.id,
+        trackingNumber: data.trackingNumber,
+        createdBy: data.createdBy,
+        // Shipper Information
+        shipperName: data.shipperName,
+        shipperAddress: data.shipperAddress,
+        shipperPhone: data.shipperPhone,
+        shipperEmail: data.shipperEmail,
+        // Receiver Information
+        receiverName: data.receiverName,
+        receiverAddress: data.receiverAddress,
+        receiverPhone: data.receiverPhone,
+        receiverEmail: data.receiverEmail,
+        // Shipment Information
+        origin: data.origin,
+        destination: data.destination,
+        carrier: data.carrier,
+        shipmentType: data.shipmentType,
+        shipmentMode: data.shipmentMode,
+        product: data.product,
+        productQuantity: data.productQuantity,
+        paymentMode: data.paymentMode,
+        totalFreight: data.totalFreight,
+        // Schedule
+        expectedDeliveryDate: data.expectedDeliveryDate,
+        departureTime: data.departureTime,
+        pickupDate: data.pickupDate,
+        pickupTime: data.pickupTime,
+        // Package Details
+        quantity: data.quantity,
+        pieceType: data.pieceType,
+        description: data.description,
+        length: data.length,
+        width: data.width,
+        height: data.height,
+        weight: data.weight,
+        // Comments
+        comments: data.comments,
+        // Status
+        status: data.status,
+        currentLocation: data.currentLocation,
+        lastUpdated,
+      };
+    });
+  } catch (error) {
+    console.error('Error getting user trackings:', error);
+    throw error;
+  }
+};
+
+// Get tracking history
+export const getTrackingHistory = async (trackingId: string): Promise<any[]> => {
+  try {
+    const historyRef = collection(db, 'trackingHistory');
+    const q = query(
+      historyRef,
+      where('trackingId', '==', trackingId),
+      orderBy('timestamp', 'desc')
+    );
+    const querySnapshot = await getDocs(q);
+    
+    return querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        ...data,
+        timestamp: data.timestamp ? (data.timestamp as Timestamp).toDate().toLocaleString() : 'N/A'
+      };
+    });
+  } catch (error) {
+    console.error('Error getting tracking history:', error);
+    throw error;
+  }
+};
+
 // Get tracking by number
 export const getTrackingByNumber = async (trackingNumber: string): Promise<TrackingDetails | null> => {
   try {
@@ -136,6 +251,8 @@ export const getTrackingByNumber = async (trackingNumber: string): Promise<Track
     return {
       id: doc.id,
       trackingNumber: data.trackingNumber,
+      // User Information
+      createdBy: data.createdBy,
       // Shipper Information
       shipperName: data.shipperName,
       shipperAddress: data.shipperAddress,
@@ -196,6 +313,8 @@ export const getAllTrackings = async (): Promise<TrackingDetails[]> => {
       return {
         id: doc.id,
         trackingNumber: data.trackingNumber,
+        // User Information
+        createdBy: data.createdBy,
         // Shipper Information
         shipperName: data.shipperName,
         shipperAddress: data.shipperAddress,
@@ -243,8 +362,8 @@ export const getAllTrackings = async (): Promise<TrackingDetails[]> => {
   }
 };
 
-// Update tracking
-export const updateTracking = async (id: string, data: UpdateTrackingData): Promise<void> => {
+// Update tracking with history
+export const updateTracking = async (id: string, data: UpdateTrackingData, user: { id: string; email: string | null; name: string }): Promise<void> => {
   try {
     const trackingRef = doc(db, 'trackings', id);
     const updateData = {
@@ -253,6 +372,20 @@ export const updateTracking = async (id: string, data: UpdateTrackingData): Prom
       updatedAt: serverTimestamp(),
     };
     await updateDoc(trackingRef, updateData);
+
+    // Create history entry
+    const historyRef = collection(db, 'trackingHistory');
+    await addDoc(historyRef, {
+      trackingId: id,
+      trackingNumber: data.trackingNumber,
+      action: 'updated',
+      userId: user.id,
+      userEmail: user.email,
+      userName: user.name,
+      timestamp: serverTimestamp(),
+      details: 'Tracking updated',
+      changes: Object.keys(data)
+    });
 
     // Send email updates if email is provided
     if (data.shipperEmail) {
@@ -290,11 +423,29 @@ export const updateTracking = async (id: string, data: UpdateTrackingData): Prom
   }
 };
 
-// Delete tracking
-export const deleteTracking = async (trackingNumber: string): Promise<void> => {
+// Delete tracking with history
+export const deleteTracking = async (id: string, user: { id: string; email: string | null; name: string }): Promise<void> => {
   try {
-    await deleteDoc(doc(db, 'trackings', trackingNumber));
+    const trackingRef = doc(db, 'trackings', id);
+    const trackingDoc = await getDoc(trackingRef);
+    const trackingData = trackingDoc.data();
+
+    // Create history entry before deletion
+    const historyRef = collection(db, 'trackingHistory');
+    await addDoc(historyRef, {
+      trackingId: id,
+      trackingNumber: trackingData?.trackingNumber,
+      action: 'deleted',
+      userId: user.id,
+      userEmail: user.email,
+      userName: user.name,
+      timestamp: serverTimestamp(),
+      details: 'Tracking deleted'
+    });
+
+    await deleteDoc(trackingRef);
   } catch (error) {
-    throw new Error('Failed to delete tracking');
+    console.error('Error deleting tracking:', error);
+    throw error;
   }
 }; 

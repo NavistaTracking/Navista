@@ -1,6 +1,6 @@
 {
-  "name": "Global Track",
-  "short_name": "Global Track",
+  "name": "Navista",
+  "short_name": "Navista",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
@@ -16,6 +16,6 @@
     }
   ],
   "theme_color": "#ffffff",
-  "background_color": "#563400",
+  "background_color": "#ffffff",
   "display": "standalone"
 }

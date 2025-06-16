@@ -1,115 +1,126 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
 
 const Terms: React.FC = () => {
   const { isDarkMode } = useTheme();
 
   return (
-    <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
-      {/* Hero Section */}
-      <div className="relative bg-[#351c15] dark:bg-[#1a0e0a] py-12">
-        <div className="absolute inset-0">
-          <img
-            src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-            alt="Terms and Conditions"
-            className="w-full h-full object-cover opacity-30 dark:opacity-20"
-          />
-        </div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
-            Terms & Conditions
-          </h1>
-          <p className="mt-6 text-xl text-gray-300 dark:text-gray-200 max-w-3xl mx-auto">
-            Please read these terms carefully before using our services.
-          </p>
-        </div>
-      </div>
-
-      {/* Content Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-lg p-6 md:p-8`}>
-          <div className="prose max-w-none">
-            <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-[#ffbe03]' : 'text-gray-900'} mb-4`}>1. Acceptance of Terms</h2>
-            <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-6`}>
-              By accessing and using our services, you agree to be bound by these Terms and Conditions, our Privacy Policy, and any other policies referenced herein.
-            </p>
-
-            <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-[#ffbe03]' : 'text-gray-900'} mb-4`}>2. Service Description</h2>
-            <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-6`}>
-              We provide shipping, tracking, and logistics services. Our services include:
-            </p>
-            <ul className={`list-disc pl-6 mb-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              <li>Package tracking and monitoring</li>
-              <li>Domestic and international shipping</li>
-              <li>Logistics solutions</li>
-              <li>Warehousing services</li>
-              <li>Customer support</li>
-            </ul>
-
-            <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-[#ffbe03]' : 'text-gray-900'} mb-4`}>3. User Responsibilities</h2>
-            <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-6`}>
-              When using our services, you agree to:
-            </p>
-            <ul className={`list-disc pl-6 mb-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              <li>Provide accurate and complete information</li>
-              <li>Comply with all applicable laws and regulations</li>
-              <li>Maintain the security of your account credentials</li>
-              <li>Not misuse or abuse our services</li>
-              <li>Pay all fees and charges in a timely manner</li>
-            </ul>
-
-            <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-[#ffbe03]' : 'text-gray-900'} mb-4`}>4. Shipping Policies</h2>
-            <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-6`}>
-              Our shipping services are subject to:
-            </p>
-            <ul className={`list-disc pl-6 mb-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              <li>Applicable shipping rates and fees</li>
-              <li>Delivery time estimates</li>
-              <li>Package size and weight restrictions</li>
-              <li>Prohibited items policies</li>
-              <li>International shipping regulations</li>
-            </ul>
-
-            <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-[#ffbe03]' : 'text-gray-900'} mb-4`}>5. Liability</h2>
-            <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-6`}>
-              Our liability is limited to the extent permitted by law. We are not responsible for:
-            </p>
-            <ul className={`list-disc pl-6 mb-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              <li>Delays due to customs or regulatory holds</li>
-              <li>Force majeure events</li>
-              <li>Incorrect information provided by users</li>
-              <li>Third-party service failures</li>
-            </ul>
-
-            <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-[#ffbe03]' : 'text-gray-900'} mb-4`}>6. Intellectual Property</h2>
-            <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-6`}>
-              All content, trademarks, and intellectual property on our platform are owned by us or our licensors and are protected by applicable laws.
-            </p>
-
-            <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-[#ffbe03]' : 'text-gray-900'} mb-4`}>7. Termination</h2>
-            <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-6`}>
-              We reserve the right to terminate or suspend services to any user who violates these terms or engages in fraudulent activity.
-            </p>
-
-            <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-[#ffbe03]' : 'text-gray-900'} mb-4`}>8. Modifications</h2>
-            <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-6`}>
-              We may modify these terms at any time. Continued use of our services after changes constitutes acceptance of the modified terms.
-            </p>
-
-            <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-[#ffbe03]' : 'text-gray-900'} mb-4`}>9. Contact Information</h2>
-            <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-6`}>
-              For questions about these Terms & Conditions, please{' '}
-              <Link to="/contact" className={`${isDarkMode ? 'text-[#ffbe03] hover:text-[#e6a902]' : 'text-[#351c15] hover:text-[#4a2a1f]'}`}>
-                contact us
-              </Link>
-              .
-            </p>
-
-            <div className="border-t border-gray-200 dark:border-gray-700 pt-6 mt-6">
-              <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                Last updated: {new Date().toLocaleDateString()}
+    <div className={`min-h-screen ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto">
+          <div className={`${isDarkMode ? 'bg-gray-900' : 'bg-white'} rounded-lg shadow-xl p-4 md:p-8`}>
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-[rgb(89,40,177)] dark:text-[rgb(100,50,187)] mb-4 md:mb-8">
+              Terms of Service
+            </h1>
+            
+            <div className={`prose ${isDarkMode ? 'prose-invert' : ''} max-w-none`}>
+              <p className={`text-base md:text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                Welcome to NAVISTA. By using our AI-powered tracking services, you agree to these Terms of Service. Please read them carefully.
               </p>
+
+              <h2 className="text-xl md:text-2xl font-bold mt-6 md:mt-8 mb-3 md:mb-4 text-[rgb(89,40,177)] dark:text-[rgb(100,50,187)]">
+                Acceptance of Terms
+              </h2>
+              <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                By accessing or using NAVISTA's services, you agree to be bound by these Terms. If you do not agree to these Terms, please do not use our services.
+              </p>
+
+              <h2 className="text-xl md:text-2xl font-bold mt-6 md:mt-8 mb-3 md:mb-4 text-[rgb(89,40,177)] dark:text-[rgb(100,50,187)]">
+                Use License
+              </h2>
+              <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                Permission is granted to temporarily use our services for both personal and commercial purposes, subject to the following restrictions:
+              </p>
+              <ul className={`list-disc pl-4 md:pl-5 space-y-1 md:space-y-2 text-sm md:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                <li>You must not modify or copy our materials</li>
+                <li>You must not use our services for any illegal purpose</li>
+                <li>You must not attempt to reverse engineer our AI systems</li>
+                <li>You must not remove any copyright or proprietary notations</li>
+              </ul>
+
+              <h2 className="text-xl md:text-2xl font-bold mt-6 md:mt-8 mb-3 md:mb-4 text-[rgb(89,40,177)] dark:text-[rgb(100,50,187)]">
+                Service Description
+              </h2>
+              <p className={`text-sm md:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                NAVISTA provides real-time shipment tracking services using advanced AI technology. Our services include:
+              </p>
+              <ul className={`list-disc pl-4 md:pl-5 space-y-1 md:space-y-2 text-sm md:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                <li>Real-time shipment tracking</li>
+                <li>AI-powered delivery predictions</li>
+                <li>Multi-carrier integration</li>
+                <li>Automated status updates</li>
+                <li>Customer support services</li>
+              </ul>
+
+              <h2 className="text-xl md:text-2xl font-bold mt-6 md:mt-8 mb-3 md:mb-4 text-[rgb(89,40,177)] dark:text-[rgb(100,50,187)]">
+                User Responsibilities
+              </h2>
+              <ul className={`list-disc pl-4 md:pl-5 space-y-1 md:space-y-2 text-sm md:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                <li>Provide accurate tracking information</li>
+                <li>Maintain the security of your account</li>
+                <li>Use the service in compliance with laws</li>
+                <li>Report any issues or discrepancies</li>
+                <li>Keep contact information up to date</li>
+              </ul>
+
+              <h2 className="text-xl md:text-2xl font-bold mt-6 md:mt-8 mb-3 md:mb-4 text-[rgb(89,40,177)] dark:text-[rgb(100,50,187)]">
+                Service Limitations
+              </h2>
+              <p className={`text-sm md:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                While we strive for accuracy, please note:
+              </p>
+              <ul className={`list-disc pl-4 md:pl-5 space-y-1 md:space-y-2 text-sm md:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                <li>Tracking updates depend on carrier data</li>
+                <li>Delivery predictions are estimates</li>
+                <li>Service availability may vary by region</li>
+                <li>Technical issues may cause temporary delays</li>
+              </ul>
+
+              <h2 className="text-xl md:text-2xl font-bold mt-6 md:mt-8 mb-3 md:mb-4 text-[rgb(89,40,177)] dark:text-[rgb(100,50,187)]">
+                Intellectual Property
+              </h2>
+              <p className={`text-sm md:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                All content and technology used in our service is protected by intellectual property rights. Users may not:
+              </p>
+              <ul className={`list-disc pl-4 md:pl-5 space-y-1 md:space-y-2 text-sm md:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                <li>Copy or modify our technology</li>
+                <li>Reverse engineer our systems</li>
+                <li>Use our branding without permission</li>
+                <li>Share access credentials</li>
+              </ul>
+
+              <h2 className="text-xl md:text-2xl font-bold mt-6 md:mt-8 mb-3 md:mb-4 text-[rgb(89,40,177)] dark:text-[rgb(100,50,187)]">
+                Limitation of Liability
+              </h2>
+              <p className={`text-sm md:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                NAVISTA is not liable for:
+              </p>
+              <ul className={`list-disc pl-4 md:pl-5 space-y-1 md:space-y-2 text-sm md:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                <li>Delays in shipment delivery</li>
+                <li>Inaccurate tracking information</li>
+                <li>Service interruptions</li>
+                <li>Data loss or security breaches</li>
+                <li>Indirect or consequential damages</li>
+              </ul>
+
+              <h2 className="text-xl md:text-2xl font-bold mt-6 md:mt-8 mb-3 md:mb-4 text-[rgb(89,40,177)] dark:text-[rgb(100,50,187)]">
+                Changes to Terms
+              </h2>
+              <p className={`text-sm md:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                We may update these terms periodically. Continued use of our services after changes constitutes acceptance of the new terms.
+              </p>
+
+              <h2 className="text-xl md:text-2xl font-bold mt-6 md:mt-8 mb-3 md:mb-4 text-[rgb(89,40,177)] dark:text-[rgb(100,50,187)]">
+                Contact Information
+              </h2>
+              <p className={`text-sm md:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                For questions about these terms, please contact us at:
+              </p>
+              <p className={`mt-2 text-sm md:text-base ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                Email: <a href="mailto:navistateam@gmail.com" className={`${isDarkMode ? 'text-[rgb(100,50,187)] hover:text-[rgb(120,70,207)]' : 'text-[rgb(89,40,177)] hover:text-[rgb(109,60,197)]'}`}>navistateam@gmail.com</a>
+              </p>
+
+              
             </div>
           </div>
         </div>

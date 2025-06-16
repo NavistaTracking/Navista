@@ -7,7 +7,7 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login, user, error } = useAuth();
+  const { login, user, error, logout } = useAuth();
   const navigate = useNavigate();
 
   const toastConfig: ToastOptions = {
@@ -19,8 +19,8 @@ const Login: React.FC = () => {
     draggable: true,
   };
 
-  // If user is already logged in, redirect to admin page
-  if (user) {
+  // Only redirect if user is logged in AND has admin role
+  if (user && user.role === 'admin') {
     return <Navigate to="/administration_and_development" replace />;
   }
 
@@ -31,12 +31,22 @@ const Login: React.FC = () => {
     try {
       setIsLoading(true);
       await login(email, password);
-      // Only show success toast if login was successful
-      toast.success('Login successful', toastConfig);
-      // Navigate immediately after successful login
-      navigate('/administration_and_development', { replace: true });
+      
+      // Check if the logged-in user has admin role
+      const currentUser = await new Promise(resolve => {
+        // Small timeout to ensure auth state is updated
+        setTimeout(() => resolve(user), 100);
+      });
+      
+      if (currentUser && (currentUser as any).role === 'admin') {
+        toast.success('Login successful', toastConfig);
+        navigate('/administration_and_development', { replace: true });
+      } else {
+        toast.error('Access denied. Admin privileges required.', toastConfig);
+        // Logout the user if they don't have admin role
+        await logout();
+      }
     } catch (error) {
-      // Use the error message from AuthContext
       toast.error(error instanceof Error ? error.message : 'An error occurred during login', toastConfig);
     } finally {
       setIsLoading(false);

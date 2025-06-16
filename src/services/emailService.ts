@@ -27,7 +27,29 @@ Weight: ${pkg.weight}kg`;
   }).join('\n\n');
 };
 
-export interface EmailData extends Shipment {}
+export interface ShipmentPackage {
+  quantity: number;
+  pieceType: string;
+  description: string;
+  length: number;
+  width: number;
+  height: number;
+  weight: number;
+}
+
+export interface EmailData {
+  trackingNumber: string;
+  shipperName: string;
+  shipperEmail: string;
+  receiverName: string;
+  receiverEmail: string;
+  origin: string;
+  destination: string;
+  expectedDeliveryDate: string;
+  status: 'pending' | 'in_transit' | 'on_hold' | 'delivered' | 'delayed';
+  currentLocation: string;
+  packages?: ShipmentPackage[];
+}
 
 export interface ContactFormData {
   name: string;
@@ -38,74 +60,81 @@ export interface ContactFormData {
 
 export const sendShipperEmail = async (data: EmailData) => {
   try {
-    checkEmailConfig('SHIPPER');
-    const prefix = isTest ? 'TEST_' : 'REACT_APP_EMAILJS';
-    
-    const templateParams = {
-      to_name: data.shipperName,
-      tracking: data.trackingNumber,
-      status: data.status || 'pending',
-      location: data.currentLocation || data.origin,
+    const templateData = {
+      trackingNumber: data.trackingNumber,
+      shipperName: data.shipperName,
+      shipperEmail: data.shipperEmail,
+      receiverName: data.receiverName,
+      receiverEmail: data.receiverEmail,
       origin: data.origin,
       destination: data.destination,
-      delivery: data.expectedDeliveryDate || 'Not specified',
-      receiver: data.receiverName,
-      receiver_email: data.receiverEmail,
-      packages: formatPackagesForEmail(data.packages),
-      url: `${DOMAIN}/track/${data.trackingNumber}`,
-      to_email: data.shipperEmail,
-      subject: 'Shipment Created'
+      expectedDeliveryDate: data.expectedDeliveryDate,
+      status: data.status,
+      currentLocation: data.currentLocation,
+      packages: data.packages || []
     };
-    
-    const response = await emailjs.send(
-      process.env[`${prefix}_SERVICE_ID`] || '',
-      process.env[`${prefix}_SHIPPER_TEMPLATE_ID`] || '',
-      templateParams,
-      process.env[`${prefix}_USER_ID`] || ''
-    );
 
-    if (response.status !== 200) {
-      throw new Error('Failed to send shipper email');
+    const response = await fetch('/api/send-email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        to: data.shipperEmail,
+        subject: `Tracking Number: ${data.trackingNumber}`,
+        template: 'shipper',
+        data: templateData
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to send email');
     }
 
-    return response;
+    return await response.json();
   } catch (error) {
-    console.error('Shipper email error:', error);
-    throw new Error('Failed to send shipper email');
+    console.error('Error sending shipper email:', error);
+    throw error;
   }
 };
 
 export const sendReceiverEmail = async (data: EmailData) => {
   try {
-    checkEmailConfig('RECEIVER');
-    const prefix = isTest ? 'TEST_' : 'REACT_APP_EMAILJS';
-    
-    const templateParams = {
-      to_name: data.receiverName,
-      tracking_number: data.trackingNumber,
+    const templateData = {
+      trackingNumber: data.trackingNumber,
+      shipperName: data.shipperName,
+      shipperEmail: data.shipperEmail,
+      receiverName: data.receiverName,
+      receiverEmail: data.receiverEmail,
       origin: data.origin,
       destination: data.destination,
-      expected_delivery_date: data.expectedDeliveryDate || 'Not specified',
-      tracking_url: `${DOMAIN}/track/${data.trackingNumber}`,
-      to_email: data.receiverEmail,
-      subject: 'Package Incoming'
+      expectedDeliveryDate: data.expectedDeliveryDate,
+      status: data.status,
+      currentLocation: data.currentLocation,
+      packages: data.packages || []
     };
-    
-    const response = await emailjs.send(
-      process.env[`${prefix}_SERVICE_ID`] || '',
-      process.env[`${prefix}_RECEIVER_TEMPLATE_ID`] || '',
-      templateParams,
-      process.env[`${prefix}_USER_ID`] || ''
-    );
 
-    if (response.status !== 200) {
-      throw new Error('Failed to send receiver email');
+    const response = await fetch('/api/send-email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        to: data.receiverEmail,
+        subject: `Tracking Number: ${data.trackingNumber}`,
+        template: 'receiver',
+        data: templateData
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to send email');
     }
 
-    return response;
+    return await response.json();
   } catch (error) {
-    console.error('Receiver email error:', error);
-    throw new Error('Failed to send receiver email');
+    console.error('Error sending receiver email:', error);
+    throw error;
   }
 };
 
@@ -119,7 +148,8 @@ export const sendContactFormEmail = async (data: ContactFormData) => {
       from_email: data.email,
       subject: data.subject,
       message: data.message,
-      reply_to: data.email
+      reply_to: data.email,
+      to_email: 'support@navista.ai'
     };
     
     const response = await emailjs.send(
@@ -135,73 +165,7 @@ export const sendContactFormEmail = async (data: ContactFormData) => {
 
     return response;
   } catch (error) {
+    console.error('Error sending contact form email:', error);
     throw new Error('Failed to send contact form email');
   }
 };
-
-export const sendTestEmails = async () => {
-  try {
-    const testData: EmailData = {
-      id: 'test-id',
-      trackingNumber: 'TEST123456',
-      shipperName: 'Test Shipper',
-      shipperEmail: 'test@example.com',
-      shipperAddress: 'Test Shipper Address',
-      shipperPhone: '1234567890',
-      receiverName: 'Test Receiver',
-      receiverEmail: 'test@example.com',
-      receiverAddress: 'Test Receiver Address',
-      receiverPhone: '0987654321',
-      origin: 'Test Origin',
-      destination: 'Test Destination',
-      carrier: 'Test Carrier',
-      typeOfShipment: 'Test Type',
-      shipmentMode: 'Test Mode',
-      packageCount: 1,
-      product: 'Test Product',
-      productQuantity: 1,
-      paymentMode: 'Test Payment',
-      totalFreight: 100,
-      weight: 10,
-      expectedDeliveryDate: new Date().toISOString().split('T')[0],
-      departureTime: '12:00',
-      pickupDate: new Date().toISOString().split('T')[0],
-      pickupTime: '10:00',
-      packages: [{
-        quantity: 1,
-        pieceType: 'Box',
-        description: 'Test Package',
-        length: 10,
-        width: 10,
-        height: 10,
-        weight: 10
-      }],
-      totalVolumetricWeight: 10,
-      totalVolume: 1,
-      totalActualWeight: 10,
-      shipmentHistory: [{
-        date: new Date().toISOString().split('T')[0],
-        time: '12:00',
-        location: 'Test Location',
-        status: 'pending',
-        updatedBy: 'test',
-        remarks: 'Test shipment created'
-      }],
-      status: 'pending',
-      currentLocation: 'Test Location',
-      comments: 'Test Comments',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
-
-    await Promise.all([
-      sendShipperEmail(testData),
-      sendReceiverEmail(testData)
-    ]);
-
-    return true;
-  } catch (error) {
-    console.error('Test emails error:', error);
-    throw new Error('Failed to send test emails');
-  }
-}; 

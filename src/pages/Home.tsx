@@ -1,44 +1,100 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaPlane, FaShip, FaTruck, FaWarehouse, FaUser, FaCheckCircle, FaBox, FaCreditCard, FaShippingFast, FaCheckDouble, FaStar, FaStarHalf, FaGlobe, FaAward, FaCertificate, FaMedal, FaHandshake, FaSearch, FaMapMarker, FaEnvelope, FaCalendar, FaBarcode, FaPhone, FaHome, FaPaw, FaMoneyBillWave, FaArrowRight, FaShieldAlt, FaHeadset, FaChartLine } from 'react-icons/fa';
-import AnimatedCard from '../components/animations/AnimatedCard';
-import Marquee from '../components/animations/Marquee';
+import { FaRocket, FaNetworkWired, FaRobot, FaMicrochip, FaBrain, FaProjectDiagram, FaStar, FaTruck, FaChartLine, FaClock, FaGlobe, FaBolt, FaRoute, FaCog, FaShieldAlt } from 'react-icons/fa';
+import Icon from '../components/icons/Icon';
+import { useTheme } from '../contexts/ThemeContext';
+import AnimatedCard from '../components/AnimatedCard';
+import HeroImage from '../assets/images/truck.png';
+import VisionImage from '../assets/images/Quantum Logistics visualization.jpg';
+import QuantumImage from '../assets/images/AI neural network visualization.jpg';
+import NetworkImage from '../assets/images/Quantum Logistics visualization.png';
+import AutonomousImage from '../assets/images/Autonomous Delivery visualization.jpg';
 
 const Home: React.FC = () => {
+  const { isDarkMode } = useTheme();
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const innovations = [
+    {
+      icon: FaRocket,
+      title: 'Quantum Logistics',
+      description: 'Our proprietary AI-powered system predicts shipping patterns and optimizes routes in real-time, reducing delivery times by up to 40%.',
+      image: QuantumImage,
+      stats: ['40% Faster Delivery', '99.9% Accuracy', 'Real-time Optimization']
+    },
+    {
+      icon: FaNetworkWired,
+      title: 'Smart Network Hub',
+      description: 'A revolutionary approach to logistics that connects every point in your supply chain through our advanced neural network.',
+      image: NetworkImage,
+      stats: ['Global Coverage', 'Instant Connectivity', 'Smart Routing']
+    },
+    {
+      icon: FaRobot,
+      title: 'Autonomous Delivery',
+      description: 'Leading the future of logistics with self-optimizing delivery systems and AI-driven warehouse automation.',
+      image: AutonomousImage,
+      stats: ['24/7 Operation', 'Zero Downtime', 'Smart Automation']
+    }
+  ];
+
+  const technologies = [
+    {
+      icon: FaMicrochip,
+      title: 'Neural Processing',
+      description: 'Our custom-built neural networks process millions of data points to optimize every aspect of your logistics chain.'
+    },
+    {
+      icon: FaBrain,
+      title: 'Predictive Intelligence',
+      description: 'Advanced machine learning algorithms predict and prevent potential delays before they occur.'
+    },
+    {
+      icon: FaProjectDiagram,
+      title: 'Dynamic Routing',
+      description: 'Real-time route optimization that adapts to changing conditions instantly.'
+    }
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-r from-[#351c15] to-[#4a2a1f] dark:from-[#1a0e0a] dark:to-[#2a1610]">
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gray-800 opacity-50 dark:opacity-70"></div>
-          <img
-            src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-            alt="Global logistics"
-            className="h-full w-full object-cover"
-          />
+      <div className="relative bg-[rgb(89,40,177)]">
+        <div className="absolute inset-0 flex">
+          <div className="w-1/5 bg-gradient-to-r from-[rgb(89,40,177)] to-transparent hidden md:block"></div>
+          <div className="w-full relative">
+            <img
+              src={HeroImage}
+              style={{height: '100%'}}
+              alt="Truck on highway during sunset"
+              className="w-full  md:h-full object-cover "
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-[rgb(89,40,177)] via-[rgb(89,40,177)] via-[2%] via-[rgb(89,40,177)]/0 via-[38%] to-transparent"></div>
+          </div>
         </div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-          <div className="text-center">
-            <h1 className="text-4xl font-extrabold text-white sm:text-5xl md:text-6xl">
-              Global Shipping &<br />
-              <span className='text-[#ffbe03]'>Logistics Solutions</span>
+        <div className="relative py-12 md:py-0 md:min-h-screen flex items-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div className="text-left max-w-xl">
+              <h1 className="text-3xl md:text-5xl lg:text-7xl font-extrabold tracking-tight text-white drop-shadow-lg">
+                NAVISTA
             </h1>
-            <p className="mt-3 max-w-md mx-auto text-base text-gray-100 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
-              Comprehensive shipping and logistics services. We handle everything from small packages to large freight, ensuring efficient delivery worldwide.
-            </p>
-            <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
-              <div className="rounded-md shadow">
+              <p className="mt-4 md:mt-6 text-lg md:text-2xl text-white drop-shadow-lg">
+                Redefining Logistics Through Artificial Intelligence
+              </p>
+              <p className="mt-3 md:mt-4 text-base md:text-lg text-white drop-shadow-lg">
+                Experience the future of logistics with our cutting-edge AI solutions. 
+                Faster deliveries, smarter routes, and seamless tracking.
+              </p>
+              <div className="mt-6 md:mt-10 flex flex-col sm:flex-row gap-3 md:gap-4">
                 <Link
                   to="/track"
-                  className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-[#351c15] dark:text-[#1a0e0a] bg-white dark:bg-[#ffbe03] hover:bg-gray-50 dark:hover:bg-[#e6a902] md:py-4 md:text-lg md:px-10"
+                  className="inline-flex items-center justify-center px-4 md:px-8 py-2 md:py-4 border border-transparent text-sm md:text-lg font-medium rounded-md text-[rgb(89,40,177)] bg-white hover:bg-gray-100 shadow-lg"
                 >
                   Track Package
                 </Link>
-              </div>
-              <div className="mt-3 sm:mt-0 sm:ml-3">
                 <Link
-                  to="/contact"
-                  className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#351c15] dark:bg-transparent hover:bg-[#4a2a1f] dark:border-[#e6a902] dark:border-2 dark:hover:bg-[#e6a902] md:py-4 md:text-lg md:px-10"
+                  to="/quote"
+                  className="inline-flex items-center justify-center px-4 md:px-8 py-2 md:py-4 border border-transparent text-sm md:text-lg font-medium rounded-md text-white bg-[rgb(89,40,177)] hover:bg-[rgb(100,50,187)] shadow-lg"
                 >
                   Get a Quote
                 </Link>
@@ -48,595 +104,367 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      {/* Announcement Marquee */}
-      <div className="bg-[#351c15] dark:bg-[#1a0e0a] text-white py-2">
-        <Marquee 
-          text="🌟 Special Offer: 20% off on international shipping! | Fast & Reliable Worldwide Delivery | Track your packages in real-time | 24/7 Customer Support"
-          className="text-lg font-medium"
-        />
-      </div>
-
-      {/* Statistics Section */}
-      <div className="py-12 bg-gradient-to-r from-[#351c15] to-[#4a2a1f] dark:from-[#1a0e0a] dark:to-[#2a1610]">
+      {/* Vision Section */}
+      <div className="py-16 bg-white dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-            <AnimatedCard animation="fade" delay="0ms">
-              <div className="text-center text-white">
-                <div className="text-4xl font-bold mb-2">150+</div>
-                <div className="text-xl">Countries Served</div>
+          <div className="lg:grid lg:grid-cols-2 lg:gap-8 lg:items-center">
+            <div>
+              <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white">The Future of Logistics</h2>
+              <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
+                We're not just moving packages – we're revolutionizing how the world thinks about logistics. Through cutting-edge AI and machine learning, we're creating a future where logistics is predictive, autonomous, and seamlessly integrated.
+              </p>
+              <div className="mt-6 space-y-6">
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white">AI-Powered Evolution</h3>
+                  <p className="mt-2 text-gray-600 dark:text-gray-300">
+                    Our neural networks process billions of data points daily, learning and adapting to create the most efficient logistics solutions possible. This isn't just automation – it's intelligence in motion.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Beyond Traditional Logistics</h3>
+                  <p className="mt-2 text-gray-600 dark:text-gray-300">
+                    We've moved beyond conventional shipping methods to create a truly intelligent logistics ecosystem. Our systems don't just react – they predict, adapt, and optimize in real-time.
+                </p>
               </div>
-            </AnimatedCard>
-            <AnimatedCard animation="fade" delay="200ms">
-              <div className="text-center text-white">
-                <div className="text-4xl font-bold mb-2">19+</div>
-                <div className="text-xl">Years Experience</div>
               </div>
-            </AnimatedCard>
-            <AnimatedCard animation="fade" delay="400ms">
-              <div className="text-center text-white">
-                <div className="text-4xl font-bold mb-2">1M+</div>
-                <div className="text-xl">Packages Delivered</div>
               </div>
-            </AnimatedCard>
-            <AnimatedCard animation="fade" delay="600ms">
-              <div className="text-center text-white">
-                <div className="text-4xl font-bold mb-2">98%</div>
-                <div className="text-xl">Customer Satisfaction</div>
+            <div className="mt-10 lg:mt-0">
+              <img
+                src={VisionImage}
+                alt="AI neural network visualization"
+                className="rounded-lg shadow-lg"
+              />
               </div>
-            </AnimatedCard>
           </div>
         </div>
       </div>
 
-      {/* Features Section */}
-      <div className="py-12 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
+      {/* Innovations Section */}
+      <div id="innovations" className="py-16 bg-gray-50 dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-            <AnimatedCard animation="slide" delay="0ms">
-              <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-shadow duration-300">
-                <img
-                  src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                  alt="Global network"
-                  className="h-48 w-full object-cover rounded-lg mb-4"
-                />
-                <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
-                  <FaGlobe className="h-5 w-5" />
-                </div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white">GLOBAL NETWORK</h3>
-                <p className="mt-2 text-gray-500 dark:text-gray-400">
-                  With over 19 years of experience, we connect businesses and individuals across 150+ countries with reliable shipping solutions.
-                </p>
-              </div>
-            </AnimatedCard>
-
-            <AnimatedCard animation="slide" delay="200ms">
-              <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-shadow duration-300">
-                <img
-                  src="https://images.unsplash.com/photo-1580674285054-bed31e145f59?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                  alt="Quality service"
-                  className="h-48 w-full object-cover rounded-lg mb-4"
-                />
-                <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
-                  <FaCheckCircle className="h-5 w-5" />
-                </div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white">QUALITY ASSURANCE</h3>
-                <p className="mt-2 text-gray-500 dark:text-gray-400">
-                  We prioritize the safe and timely delivery of every shipment, maintaining the highest standards of service quality.
-                </p>
-              </div>
-            </AnimatedCard>
-
-            <AnimatedCard animation="slide" delay="400ms">
-              <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-shadow duration-300">
-                <img
-                  src="https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                  alt="Full service support"
-                  className="h-48 w-full object-cover rounded-lg mb-4"
-                />
-                <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
-                  <FaBox className="h-5 w-5" />
-                </div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white">FULL-SERVICE SUPPORT</h3>
-                <p className="mt-2 text-gray-500 dark:text-gray-400">
-                  From customs clearance to last-mile delivery, we manage every aspect of your shipment with precision and care.
-                </p>
-              </div>
-            </AnimatedCard>
-
-            <AnimatedCard animation="slide" delay="600ms">
-              <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-shadow duration-300">
-                <img
-                  src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                  alt="Expert team"
-                  className="h-48 w-full object-cover rounded-lg mb-4"
-                />
-                <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
-                  <FaCheckDouble className="h-5 w-5" />
-                </div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white">EXPERT TEAM</h3>
-                <p className="mt-2 text-gray-500 dark:text-gray-400">
-                  Our dedicated professionals bring years of logistics expertise to ensure smooth and efficient shipping operations.
-                </p>
-              </div>
-            </AnimatedCard>
-          </div>
-        </div>
-      </div>
-
-      {/* Services Section */}
-      <div className="py-12 bg-gradient-to-t from-white to-gray-50 dark:from-gray-900 dark:bg-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <AnimatedCard animation="fade">
-            <div className="text-center">
-              <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl">
-                Our Services
-              </h2>
-              <p className="mt-4 text-lg text-gray-500 dark:text-gray-400">
-                Comprehensive logistics solutions for all your shipping needs
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white">Revolutionary Solutions</h2>
+            <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
+              Pushing the boundaries of what's possible in logistics
               </p>
             </div>
-          </AnimatedCard>
-
-          <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-            <AnimatedCard animation="hover">
-              <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-all duration-300 transform hover:-translate-y-2">
-                <div className="absolute top-0 left-0 w-full h-1 bg-[#ffbe03] rounded-t-lg"></div>
-                <div className="flex flex-col items-center text-center">
-                  <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] bg-opacity-10 dark:bg-opacity-20 flex items-center justify-center mb-6 transform transition-transform duration-300 group-hover:scale-110">
-                    <FaPlane className="h-10 w-10 text-[#351c15] dark:text-[#ffbe03]" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Air Freight</h3>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    Fast and reliable air freight services for time-sensitive shipments and international deliveries.
-                  </p>
-                  <Link to="/services" className="mt-6 inline-flex items-center text-[#351c15] dark:text-[#ffbe03] font-medium hover:underline">
-                    Learn More <FaArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
+          <div className="space-y-16">
+            {innovations.map((innovation, index) => (
+              <div key={index} className={`lg:grid lg:grid-cols-2 lg:gap-8 lg:items-center ${index % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}>
+                <div className={index % 2 === 1 ? 'lg:order-2' : ''}>
+                  <div className="flex items-center mb-4">
+                    <div className="flex-shrink-0">
+                      <div className="flex items-center justify-center h-12 w-12 rounded-md bg-[rgb(89,40,177)] text-white">
+                        <Icon icon={innovation.icon} size={24} />
                 </div>
               </div>
-            </AnimatedCard>
-
-            <AnimatedCard animation="hover">
-              <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-all duration-300 transform hover:-translate-y-2">
-                <div className="absolute top-0 left-0 w-full h-1 bg-[#ffbe03] rounded-t-lg"></div>
-                <div className="flex flex-col items-center text-center">
-                  <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] bg-opacity-10 dark:bg-opacity-20 flex items-center justify-center mb-6 transform transition-transform duration-300 group-hover:scale-110">
-                    <FaShip className="h-10 w-10 text-[#351c15] dark:text-[#ffbe03]" />
+                    <h3 className="ml-4 text-2xl font-bold text-gray-900 dark:text-white">{innovation.title}</h3>
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Sea Freight</h3>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    Cost-effective ocean shipping solutions for large shipments, with full container and consolidated options.
-                  </p>
-                  <Link to="/services" className="mt-6 inline-flex items-center text-[#351c15] dark:text-[#ffbe03] font-medium hover:underline">
-                    Learn More <FaArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
+                  <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">{innovation.description}</p>
+                  <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {innovation.stats.map((stat, idx) => (
+                      <div key={idx} className="bg-white dark:bg-gray-800 rounded-lg p-4 text-center">
+                        <div className="flex items-center justify-center mb-2">
+                          {index === 0 && idx === 0 && <FaTruck className="text-[rgb(89,40,177)] text-xl" />}
+                          {index === 0 && idx === 1 && <FaChartLine className="text-[rgb(89,40,177)] text-xl" />}
+                          {index === 0 && idx === 2 && <FaClock className="text-[rgb(89,40,177)] text-xl" />}
+                          {index === 1 && idx === 0 && <FaGlobe className="text-[rgb(89,40,177)] text-xl" />}
+                          {index === 1 && idx === 1 && <FaBolt className="text-[rgb(89,40,177)] text-xl" />}
+                          {index === 1 && idx === 2 && <FaRoute className="text-[rgb(89,40,177)] text-xl" />}
+                          {index === 2 && idx === 0 && <FaClock className="text-[rgb(89,40,177)] text-xl" />}
+                          {index === 2 && idx === 1 && <FaShieldAlt className="text-[rgb(89,40,177)] text-xl" />}
+                          {index === 2 && idx === 2 && <FaRobot className="text-[rgb(89,40,177)] text-xl" />}
+                </div>
+                        <p className="dark:text-white font-semibold">{stat}</p>
+              </div>
+                    ))}
+                  </div>
+                </div>
+                <div className={`mt-10 lg:mt-0 ${index % 2 === 1 ? 'lg:order-1' : ''}`}>
+                  <img
+                    src={innovation.image}
+                    alt={innovation.title}
+                    className="rounded-lg shadow-lg"
+                  />
                 </div>
               </div>
-            </AnimatedCard>
-
-            <AnimatedCard animation="hover">
-              <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-all duration-300 transform hover:-translate-y-2">
-                <div className="absolute top-0 left-0 w-full h-1 bg-[#ffbe03] rounded-t-lg"></div>
-                <div className="flex flex-col items-center text-center">
-                  <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] bg-opacity-10 dark:bg-opacity-20 flex items-center justify-center mb-6 transform transition-transform duration-300 group-hover:scale-110">
-                    <FaTruck className="h-10 w-10 text-[#351c15] dark:text-[#ffbe03]" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Ground Transport</h3>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    Efficient ground shipping network with extensive coverage and reliable delivery times.
-                  </p>
-                  <Link to="/services" className="mt-6 inline-flex items-center text-[#351c15] dark:text-[#ffbe03] font-medium hover:underline">
-                    Learn More <FaArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </div>
-              </div>
-            </AnimatedCard>
-
-            <AnimatedCard animation="hover">
-              <div className="relative p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-600 transition-all duration-300 transform hover:-translate-y-2">
-                <div className="absolute top-0 left-0 w-full h-1 bg-[#ffbe03] rounded-t-lg"></div>
-                <div className="flex flex-col items-center text-center">
-                  <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] bg-opacity-10 dark:bg-opacity-20 flex items-center justify-center mb-6 transform transition-transform duration-300 group-hover:scale-110">
-                    <FaWarehouse className="h-10 w-10 text-[#351c15] dark:text-[#ffbe03]" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Warehousing</h3>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    Secure storage solutions with inventory management and distribution services.
-                  </p>
-                  <Link to="/services" className="mt-6 inline-flex items-center text-[#351c15] dark:text-[#ffbe03] font-medium hover:underline">
-                    Learn More <FaArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </div>
-              </div>
-            </AnimatedCard>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Why Choose Us Section */}
-      <div className="py-16 bg-gradient-to-b from-gray-50 to-white dark:from-gray-800 dark:to-gray-900">
+      {/* Technology Section */}
+      <div className="py-16 bg-white dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <AnimatedCard animation="fade">
-            <div className="text-center">
-              <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl">
-                Why Choose Us
-              </h2>
-              <p className="mt-4 text-lg text-gray-500 dark:text-gray-400">
-                We provide exceptional logistics services with a focus on quality and reliability
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white">Powered by Innovation</h2>
+            <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
+              Our proprietary technologies that drive the future of logistics
               </p>
             </div>
-          </AnimatedCard>
-
-          <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-            <AnimatedCard animation="slide" delay="0ms">
-              <div className="flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-700 transition-shadow duration-300">
-                <div className="flex items-center justify-center w-20 h-20 mb-4 rounded-full bg-[#351c15] dark:bg-[#ffbe03] bg-opacity-10 dark:bg-opacity-20">
-                  <FaGlobe className="h-10 w-10 text-[#351c15] dark:text-[#ffbe03]" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white text-center">Global Network</h3>
-                <p className="mt-2 text-gray-500 dark:text-gray-400 text-center">Extensive coverage across 150+ countries worldwide</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {technologies.map((tech, index) => (
+              <div key={index} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 transform transition-transform hover:scale-105">
+                <div className="flex items-center mb-4">
+                  <div className="flex-shrink-0">
+                    <div className="flex items-center justify-center h-12 w-12 rounded-md bg-[rgb(89,40,177)] text-white">
+                      <Icon icon={tech.icon} size={24} />
               </div>
-            </AnimatedCard>
-
-            <AnimatedCard animation="slide" delay="200ms">
-              <div className="flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-700 transition-shadow duration-300">
-                <div className="flex items-center justify-center w-20 h-20 mb-4 rounded-full bg-[#351c15] dark:bg-[#ffbe03] bg-opacity-10 dark:bg-opacity-20">
-                  <FaShieldAlt className="h-10 w-10 text-[#351c15] dark:text-[#ffbe03]" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white text-center">Secure Shipping</h3>
-                <p className="mt-2 text-gray-500 dark:text-gray-400 text-center">Advanced security measures to protect your shipments</p>
-              </div>
-            </AnimatedCard>
-
-            <AnimatedCard animation="slide" delay="400ms">
-              <div className="flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-700 transition-shadow duration-300">
-                <div className="flex items-center justify-center w-20 h-20 mb-4 rounded-full bg-[#351c15] dark:bg-[#ffbe03] bg-opacity-10 dark:bg-opacity-20">
-                  <FaHeadset className="h-10 w-10 text-[#351c15] dark:text-[#ffbe03]" />
+                  <h3 className="ml-4 text-xl font-bold text-gray-900 dark:text-white">{tech.title}</h3>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white text-center">24/7 Support</h3>
-                <p className="mt-2 text-gray-500 dark:text-gray-400 text-center">Round-the-clock customer service for your convenience</p>
+                <p className="text-gray-600 dark:text-gray-300">{tech.description}</p>
               </div>
-            </AnimatedCard>
-
-            <AnimatedCard animation="slide" delay="600ms">
-              <div className="flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-700 transition-shadow duration-300">
-                <div className="flex items-center justify-center w-20 h-20 mb-4 rounded-full bg-[#351c15] dark:bg-[#ffbe03] bg-opacity-10 dark:bg-opacity-20">
-                  <FaChartLine className="h-10 w-10 text-[#351c15] dark:text-[#ffbe03]" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white text-center">Real-time Tracking</h3>
-                <p className="mt-2 text-gray-500 dark:text-gray-400 text-center">Advanced tracking systems to monitor your shipments</p>
-              </div>
-            </AnimatedCard>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* How It Works Section */}
-      <div className="py-16 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-900">
+      {/* Strategic Partnerships Section */}
+      <div className="bg-gray-50 dark:bg-gray-900 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <AnimatedCard animation="fade">
             <div className="text-center">
-              <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl">
-                How It Works
-              </h2>
-              <p className="mt-4 text-lg text-gray-500 dark:text-gray-400">
-                Simple steps to ship your packages worldwide
+            <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 dark:text-white">Our Global Partners</h2>
+            <p className="mt-3 md:mt-4 text-base md:text-lg text-gray-600 dark:text-gray-300">
+              We collaborate with the world's leading logistics and shipping companies to provide comprehensive tracking solutions
               </p>
             </div>
-          </AnimatedCard>
-
-          {/* Mobile View */}
-          <div className="mt-12 lg:hidden">
-            <div className="space-y-8">
-              <AnimatedCard animation="slide" delay="0ms" className="w-full flex-shrink-0">
-                <div className="flex flex-col items-center space-y-4">
-                  <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
-                    <FaUser className="h-8 w-8 text-white dark:text-[#ffbe03]" />
-                  </div>
-                  <div className="text-center">
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Request Quote</h3>
-                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Fill out our simple form to get started</p>
+          <div className="mt-12">
+            <div className="relative overflow-hidden">
+              <div className="flex animate-scroll">
+                {[
+                  { name: 'FedEx', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/fedex.svg' },
+                  { name: 'Aramex', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/aramex.svg' },
+                  { name: 'Japan Post', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/japan-post.jpg' },
+                  { name: 'DTDC', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/Others/dtdc.svg' },
+                  { name: 'USPS', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/usps-usa.svg' },
+                  { name: 'Poste Italiane', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/Others/poste-italiane.svg' },
+                  { name: 'La Poste', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/la-poste-colissimo-france.svg' },
+                  { name: 'UPS', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/ups.svg' },
+                  { name: 'DPD', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/dpd.svg' },
+                  { name: 'GLS', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/gls.svg' },
+                  { name: 'PostNL', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/postnl-parcel-service-tracking.png' },
+                  // Duplicate the array to create continuous loop
+                  { name: 'FedEx', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/fedex.svg' },
+                  { name: 'Aramex', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/aramex.svg' },
+                  { name: 'Japan Post', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/japan-post.jpg' },
+                  { name: 'DTDC', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/Others/dtdc.svg' },
+                  { name: 'USPS', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/usps-usa.svg' },
+                  { name: 'Poste Italiane', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/Others/poste-italiane.svg' },
+                  { name: 'La Poste', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/la-poste-colissimo-france.svg' },
+                  { name: 'UPS', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/ups.svg' },
+                  { name: 'DPD', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/dpd.svg' },
+                  { name: 'GLS', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/gls.svg' },
+                  { name: 'PostNL', logo: 'https://cdn.ship24.com/assets/images/db/couriers/legacy-logo/postnl-parcel-service-tracking.png' },
+                ].map((partner, index) => (
+                  <div key={`duplicate-${index}`} className="flex-shrink-0 mx-8">
+                    <img
+                      src={partner.logo}
+                      alt={partner.name}
+                      className="h-12 w-auto object-contain"
+                    />
+                </div>
+                ))}
                   </div>
                 </div>
-              </AnimatedCard>
-
-              <AnimatedCard animation="slide" delay="200ms" className="w-full flex-shrink-0">
-                <div className="flex flex-col items-center space-y-4">
-                  <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
-                    <FaCreditCard className="h-8 w-8 text-white dark:text-[#ffbe03]" />
-                  </div>
-                  <div className="text-center">
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Book Shipment</h3>
-                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Secure your shipping slot</p>
-                  </div>
-                </div>
-              </AnimatedCard>
-
-              <AnimatedCard animation="slide" delay="400ms" className="w-full flex-shrink-0">
-                <div className="flex flex-col items-center space-y-4">
-                  <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
-                    <FaBox className="h-8 w-8 text-white dark:text-[#ffbe03]" />
-                  </div>
-                  <div className="text-center">
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Package Pickup</h3>
-                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">We collect from your location</p>
-                  </div>
-                </div>
-              </AnimatedCard>
-
-              <AnimatedCard animation="slide" delay="600ms" className="w-full flex-shrink-0">
-                <div className="flex flex-col items-center space-y-4">
-                  <div className="h-20 w-20 rounded-full bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
-                    <FaShippingFast className="h-8 w-8 text-white dark:text-[#ffbe03]" />
-                  </div>
-                  <div className="text-center">
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Fast Delivery</h3>
-                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Track your shipment to destination</p>
-                  </div>
-                </div>
-              </AnimatedCard>
-            </div>
+              </div>
+          <div className="mt-12 text-center">
+            <p className="text-gray-600 dark:text-gray-300">
+              Our partnerships enable us to provide real-time tracking and shipping solutions across the globe
+            </p>
           </div>
+        </div>
+      </div>
+
+      {/* Customer Reviews Section */}
+      <section className="py-16 bg-gray-50 dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
+              What Our Customers Say
+              </h2>
+            <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
+              Trusted by logistics leaders worldwide
+              </p>
+            </div>
 
           {/* Desktop View */}
-          <div className="hidden lg:block mt-12">
-            <div className="relative">
-              {/* Timeline line */}
-              <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-[#351c15] dark:bg-[#ffbe03] opacity-30"></div>
-              
-              <div className="relative flex justify-between">
-                <AnimatedCard animation="slide">
-                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-700 p-6 transform hover:scale-105 transition-transform duration-300">
-                    <div className="h-24 w-24 rounded-full mx-auto mb-4 bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
-                      <FaUser className="h-10 w-10 text-white dark:text-[#ffbe03]" />
-                    </div>
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white text-center">Request Quote</h3>
-                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400 text-center">Fill out our simple form</p>
-                  </div>
-                </AnimatedCard>
-
-                <AnimatedCard animation="slide" delay="0.5s">
-                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-700 p-6 transform hover:scale-105 transition-transform duration-300">
-                    <div className="h-24 w-24 rounded-full mx-auto mb-4 bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
-                      <FaCreditCard className="h-10 w-10 text-white dark:text-[#ffbe03]" />
-                    </div>
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white text-center">Book Shipment</h3>
-                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400 text-center">Secure your slot</p>
-                  </div>
-                </AnimatedCard>
-
-                <AnimatedCard animation="slide" delay="1s">
-                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-700 p-6 transform hover:scale-105 transition-transform duration-300">
-                    <div className="h-24 w-24 rounded-full mx-auto mb-4 bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
-                      <FaBox className="h-10 w-10 text-white dark:text-[#ffbe03]" />
-                    </div>
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white text-center">Package Pickup</h3>
-                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400 text-center">We collect from you</p>
-                  </div>
-                </AnimatedCard>
-
-                <AnimatedCard animation="slide" delay="1.5s">
-                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-700 p-6 transform hover:scale-105 transition-transform duration-300">
-                    <div className="h-24 w-24 rounded-full mx-auto mb-4 bg-[#351c15] dark:bg-[#ffbe03] dark:bg-opacity-20 flex items-center justify-center">
-                      <FaShippingFast className="h-10 w-10 text-white dark:text-[#ffbe03]" />
-                    </div>
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white text-center">Fast Delivery</h3>
-                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400 text-center">Track to destination</p>
-                  </div>
-                </AnimatedCard>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Certifications Section */}
-      <div className="py-12 bg-gradient-to-t from-white to-gray-50 dark:from-gray-800 dark:to-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <AnimatedCard animation="fade">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl">
-                Our Certifications & Achievements
-              </h2>
-              <p className="mt-4 text-lg text-gray-500 dark:text-gray-400">
-                Recognized for excellence in global logistics and shipping
-              </p>
-            </div>
-          </AnimatedCard>
-
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-            <AnimatedCard animation="slide" delay="0ms">
-              <div className="flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-700 transition-shadow duration-300">
-                <div className="flex items-center justify-center w-20 h-20 mb-4 rounded-full bg-[#351c15] dark:bg-[#ffbe03] bg-opacity-10 dark:bg-opacity-20">
-                  <FaAward className="h-5 w-5 text-[#351c15] dark:text-[#ffbe03]" />
-                </div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white text-center">ISO 9001:2015</h3>
-                <p className="mt-2 text-gray-500 dark:text-gray-400 text-center">Quality Management System</p>
-              </div>
-            </AnimatedCard>
-
-            <AnimatedCard animation="slide" delay="200ms">
-              <div className="flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-700 transition-shadow duration-300">
-                <div className="flex items-center justify-center w-20 h-20 mb-4 rounded-full bg-[#351c15] dark:bg-[#ffbe03] bg-opacity-10 dark:bg-opacity-20">
-                  <FaCertificate className="h-5 w-5 text-[#351c15] dark:text-[#ffbe03]" />
-                </div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white text-center">IATA Member</h3>
-                <p className="mt-2 text-gray-500 dark:text-gray-400 text-center">International Air Transport Association</p>
-              </div>
-            </AnimatedCard>
-
-            <AnimatedCard animation="slide" delay="400ms">
-              <div className="flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-700 transition-shadow duration-300">
-                <div className="flex items-center justify-center w-20 h-20 mb-4 rounded-full bg-[#351c15] dark:bg-[#ffbe03] bg-opacity-10 dark:bg-opacity-20">
-                  <FaMedal className="h-5 w-5 text-[#351c15] dark:text-[#ffbe03]" />
-                </div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white text-center">C-TPAT Certified</h3>
-                <p className="mt-2 text-gray-500 dark:text-gray-400 text-center">Customs-Trade Partnership Against Terrorism</p>
-              </div>
-            </AnimatedCard>
-
-            <AnimatedCard animation="slide" delay="600ms">
-              <div className="flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-800 hover:shadow-xl dark:hover:shadow-gray-700 transition-shadow duration-300">
-                <div className="flex items-center justify-center w-20 h-20 mb-4 rounded-full bg-[#351c15] dark:bg-[#ffbe03] bg-opacity-10 dark:bg-opacity-20">
-                  <FaHandshake className="h-5 w-5 text-[#351c15] dark:text-[#ffbe03]" />
-                </div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white text-center">AEO Certified</h3>
-                <p className="mt-2 text-gray-500 dark:text-gray-400 text-center">Authorized Economic Operator</p>
-              </div>
-            </AnimatedCard>
-          </div>
-        </div>
-      </div>
-
-      {/* Testimonials Section */}
-      <div className="py-16 bg-gradient-to-b from-gray-50 to-white dark:from-gray-800 dark:to-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <AnimatedCard animation="fade">
-            <div className="text-center">
-              <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl">
-                What Our Clients Say
-              </h2>
-              <p className="mt-4 text-lg text-gray-500 dark:text-gray-400">
-                Don't just take our word for it - hear from our satisfied customers
-              </p>
-            </div>
-          </AnimatedCard>
-
-          <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            <AnimatedCard animation="slide" delay="0ms">
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-700 p-8 h-full">
+          <div className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-8">
+            <AnimatedCard animation="fade" delay="0ms" className="transform -rotate-2">
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
                 <div className="flex items-center mb-4">
                   <img
-                    className="h-12 w-12 rounded-full object-cover"
+                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                    alt="John Smith"
+                    className="w-12 h-12 rounded-full"
+                  />
+                  <div className="ml-4">
+                    <h4 className="text-lg font-semibold text-gray-900 dark:text-white">John Smith</h4>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Logistics Director</p>
+              </div>
+                </div>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">
+                  "NAVISTA's AI-powered tracking system has revolutionized our supply chain operations. The predictive analytics have helped us reduce delivery times by 30%."
+                </p>
+                <div className="flex text-yellow-400">
+                  {[...Array(5)].map((_, i) => (
+                    <FaStar key={i} />
+                  ))}
+                </div>
+              </div>
+            </AnimatedCard>
+
+            <AnimatedCard animation="fade" delay="200ms" className="transform rotate-2">
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+                <div className="flex items-center mb-4">
+                  <img
                     src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                     alt="Sarah Johnson"
+                    className="w-12 h-12 rounded-full"
                   />
                   <div className="ml-4">
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Sarah Johnson</h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">E-commerce Business Owner</p>
+                    <h4 className="text-lg font-semibold text-gray-900 dark:text-white">Sarah Johnson</h4>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Supply Chain Manager</p>
                   </div>
                 </div>
-                <div className="flex items-center mb-4">
-                  <div className="flex text-yellow-400">
-                    <FaStar className="h-4 w-4" />
-                    <FaStar className="h-4 w-4" />
-                    <FaStar className="h-4 w-4" />
-                    <FaStar className="h-4 w-4" />
-                    <FaStar className="h-4 w-4" />
-                  </div>
-                  <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">5.0</span>
-                </div>
-                <p className="text-gray-600 dark:text-gray-300">
-                  "Their global shipping solutions have transformed my e-commerce business. The tracking system is reliable, and their customer service is exceptional. Highly recommended!"
+                <p className="text-gray-600 dark:text-gray-300 mb-4">
+                  "The neural network integration has given us unprecedented visibility into our global operations. NAVISTA's technology is truly cutting-edge."
                 </p>
+                <div className="flex text-yellow-400">
+                  {[...Array(5)].map((_, i) => (
+                    <FaStar key={i} />
+                  ))}
+                </div>
               </div>
             </AnimatedCard>
 
-            <AnimatedCard animation="slide" delay="200ms">
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-700 p-8 h-full">
+            <AnimatedCard animation="fade" delay="400ms" className="transform -rotate-2">
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
                 <div className="flex items-center mb-4">
                   <img
-                    className="h-12 w-12 rounded-full object-cover"
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    alt="David Chen"
+                    src="https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                    alt="Michael Chen"
+                    className="w-12 h-12 rounded-full"
                   />
                   <div className="ml-4">
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">David Chen</h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Import/Export Manager</p>
+                    <h4 className="text-lg font-semibold text-gray-900 dark:text-white">Michael Chen</h4>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Operations Head</p>
                   </div>
                 </div>
-                <div className="flex items-center mb-4">
-                  <div className="flex text-yellow-400">
-                    <FaStar className="h-4 w-4" />
-                    <FaStar className="h-4 w-4" />
-                    <FaStar className="h-4 w-4" />
-                    <FaStar className="h-4 w-4" />
-                    <FaStarHalf className="h-4 w-4" />
-                  </div>
-                  <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">4.5</span>
-                </div>
-                <p className="text-gray-600 dark:text-gray-300">
-                  "We've been using their services for international shipping for over 3 years. Their real-time tracking and efficient customs handling make them stand out from competitors."
+                <p className="text-gray-600 dark:text-gray-300 mb-4">
+                  "The quantum logistics system has transformed how we handle complex routing. NAVISTA's AI solutions are in a league of their own."
                 </p>
-              </div>
-            </AnimatedCard>
-
-            <AnimatedCard animation="slide" delay="400ms">
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-700 p-8 h-full">
-                <div className="flex items-center mb-4">
-                  <img
-                    className="h-12 w-12 rounded-full object-cover"
-                    src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    alt="Emily Martinez"
-                  />
-                  <div className="ml-4">
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Emily Martinez</h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Retail Chain Director</p>
-                  </div>
+                <div className="flex text-yellow-400">
+                  {[...Array(5)].map((_, i) => (
+                    <FaStar key={i} />
+                  ))}
                 </div>
-                <div className="flex items-center mb-4">
-                  <div className="flex text-yellow-400">
-                    <FaStar className="h-4 w-4" />
-                    <FaStar className="h-4 w-4" />
-                    <FaStar className="h-4 w-4" />
-                    <FaStar className="h-4 w-4" />
-                    <FaStar className="h-4 w-4" />
-                  </div>
-                  <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">5.0</span>
-                </div>
-                <p className="text-gray-600 dark:text-gray-300">
-                  "Their warehousing and distribution services have streamlined our supply chain. The team is professional, responsive, and always goes the extra mile."
-                </p>
               </div>
             </AnimatedCard>
           </div>
 
-          <div className="mt-16 flex justify-center">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-700 px-8 py-6">
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white text-center">Overall Customer Rating</h3>
-              <div className="flex items-center justify-center mt-4">
-                <div className="flex text-yellow-400">
-                  <FaStar className="h-6 w-6" />
-                  <FaStar className="h-6 w-6" />
-                  <FaStar className="h-6 w-6" />
-                  <FaStar className="h-6 w-6" />
-                  <FaStarHalf className="h-6 w-6" />
+          {/* Mobile View */}
+          <div className="md:hidden space-y-6">
+            <AnimatedCard animation="fade" delay="0ms" className="transform -rotate-2">
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+                <div className="flex items-center mb-4">
+                  <img
+                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                    alt="John Smith"
+                    className="w-12 h-12 rounded-full"
+                  />
+                  <div className="ml-4">
+                    <h4 className="text-lg font-semibold text-gray-900 dark:text-white">John Smith</h4>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Logistics Director</p>
+                  </div>
                 </div>
-                <span className="ml-4 text-3xl font-bold text-gray-900 dark:text-white">4.8</span>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">
+                  "NAVISTA's AI-powered tracking system has revolutionized our supply chain operations. The predictive analytics have helped us reduce delivery times by 30%."
+                </p>
+                  <div className="flex text-yellow-400">
+                  {[...Array(5)].map((_, i) => (
+                    <FaStar key={i} />
+                  ))}
+                </div>
               </div>
-              <p className="mt-2 text-gray-500 dark:text-gray-400 text-center">Based on 1,482 reviews</p>
-            </div>
+            </AnimatedCard>
+
+            <AnimatedCard animation="fade" delay="200ms" className="transform rotate-2">
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+                <div className="flex items-center mb-4">
+                  <img
+                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                    alt="Sarah Johnson"
+                    className="w-12 h-12 rounded-full"
+                  />
+                  <div className="ml-4">
+                    <h4 className="text-lg font-semibold text-gray-900 dark:text-white">Sarah Johnson</h4>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Supply Chain Manager</p>
+                  </div>
+                </div>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">
+                  "The neural network integration has given us unprecedented visibility into our global operations. NAVISTA's technology is truly cutting-edge."
+                </p>
+                <div className="flex text-yellow-400">
+                  {[...Array(5)].map((_, i) => (
+                    <FaStar key={i} />
+                  ))}
+                </div>
+              </div>
+            </AnimatedCard>
+
+            <AnimatedCard animation="fade" delay="400ms" className="transform -rotate-2">
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+                <div className="flex items-center mb-4">
+                  <img
+                    src="https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                    alt="Michael Chen"
+                    className="w-12 h-12 rounded-full"
+                  />
+                  <div className="ml-4">
+                    <h4 className="text-lg font-semibold text-gray-900 dark:text-white">Michael Chen</h4>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Operations Head</p>
+                  </div>
+                </div>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">
+                  "The quantum logistics system has transformed how we handle complex routing. NAVISTA's AI solutions are in a league of their own."
+                </p>
+                <div className="flex text-yellow-400">
+                  {[...Array(5)].map((_, i) => (
+                    <FaStar key={i} />
+                  ))}
+                </div>
+              </div>
+            </AnimatedCard>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Call to Action Section */}
-      <div className="bg-gradient-to-r from-[#351c15] to-[#4a2a1f] dark:from-[#1a0e0a] dark:to-[#2a1610] py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <AnimatedCard animation="fade">
+      {/* CTA Section */}
+      <div className="bg-gray-100 dark:bg-gray-800">
+        <div className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
             <div className="text-center">
-              <h2 className="text-3xl font-extrabold text-white sm:text-4xl">
-                Ready to Ship with Us?
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 dark:text-white">
+              Ready to Experience the Future?
               </h2>
-              <p className="mt-4 text-xl text-gray-300">
-                Experience the difference of professional global logistics services
+            <p className="mt-3 md:mt-4 text-base md:text-lg text-gray-600 dark:text-gray-300">
+              Join the logistics revolution. Experience the power of AI-driven logistics that adapts, learns, and evolves with your business.
               </p>
-              <div className="mt-8 flex justify-center space-x-4">
+              <div className="mt-6 md:mt-8 flex flex-col sm:flex-row justify-center gap-3 md:gap-4">
                 <Link
-                  to="/contact"
-                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-[#351c15] dark:text-[#1a0e0a] bg-white dark:bg-[#ffbe03] hover:bg-gray-50 dark:hover:bg-[#e6a902]"
+                  to="/track"
+                  className="inline-flex items-center justify-center px-4 md:px-6 py-2 md:py-3 border border-transparent text-sm md:text-base font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600"
                 >
                   Get Started
                 </Link>
                 <Link
-                  to="/services"
-                  className="inline-flex items-center px-6 py-3 border border-white text-base font-medium rounded-md text-white hover:bg-[#4a2a1f] dark:hover:bg-[#2a1610]"
+                  to="/contact"
+                  className="inline-flex items-center justify-center px-4 md:px-6 py-2 md:py-3 border border-gray-300 text-sm md:text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700"
                 >
                   Learn More
                 </Link>
               </div>
             </div>
-          </AnimatedCard>
         </div>
       </div>
     </div>

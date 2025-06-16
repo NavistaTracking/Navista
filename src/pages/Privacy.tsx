@@ -1,105 +1,93 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
 
 const Privacy: React.FC = () => {
   const { isDarkMode } = useTheme();
 
   return (
-    <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
-      {/* Hero Section */}
-      <div className="relative bg-[#351c15] dark:bg-[#1a0e0a] py-12">
-        <div className="absolute inset-0">
-          <img
-            src="https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-            alt="Privacy"
-            className="w-full h-full object-cover opacity-30 dark:opacity-20"
-          />
-        </div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
-            Privacy Policy
-          </h1>
-          <p className="mt-6 text-xl text-gray-300 dark:text-gray-200 max-w-3xl mx-auto">
-            Your privacy is important to us. Learn how we collect, use, and protect your information.
-          </p>
-        </div>
-      </div>
-
-      {/* Content Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-lg p-6 md:p-8`}>
-          <div className="prose max-w-none">
-            <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-[#ffbe03]' : 'text-gray-900'} mb-4`}>Information We Collect</h2>
-            <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-6`}>
-              We collect information that you provide directly to us, including:
-            </p>
-            <ul className={`list-disc pl-6 mb-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              <li>Name and contact information</li>
-              <li>Shipping and billing addresses</li>
-              <li>Payment information</li>
-              <li>Tracking and delivery preferences</li>
-              <li>Communication history</li>
-            </ul>
-
-            <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-[#ffbe03]' : 'text-gray-900'} mb-4`}>How We Use Your Information</h2>
-            <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-6`}>
-              We use the information we collect to:
-            </p>
-            <ul className={`list-disc pl-6 mb-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              <li>Process and track your shipments</li>
-              <li>Communicate with you about your deliveries</li>
-              <li>Improve our services</li>
-              <li>Send you important updates and notifications</li>
-              <li>Comply with legal obligations</li>
-            </ul>
-
-            <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-[#ffbe03]' : 'text-gray-900'} mb-4`}>Information Sharing</h2>
-            <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-6`}>
-              We may share your information with:
-            </p>
-            <ul className={`list-disc pl-6 mb-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              <li>Shipping partners and carriers</li>
-              <li>Payment processors</li>
-              <li>Service providers who assist our operations</li>
-              <li>Law enforcement when required by law</li>
-            </ul>
-
-            <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-[#ffbe03]' : 'text-gray-900'} mb-4`}>Data Security</h2>
-            <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-6`}>
-              We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.
-            </p>
-
-            <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-[#ffbe03]' : 'text-gray-900'} mb-4`}>Your Rights</h2>
-            <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-6`}>
-              You have the right to:
-            </p>
-            <ul className={`list-disc pl-6 mb-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              <li>Access your personal information</li>
-              <li>Correct inaccurate information</li>
-              <li>Request deletion of your information</li>
-              <li>Opt-out of marketing communications</li>
-              <li>Lodge a complaint with supervisory authorities</li>
-            </ul>
-
-            <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-[#ffbe03]' : 'text-gray-900'} mb-4`}>Cookies and Tracking</h2>
-            <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-6`}>
-              We use cookies and similar tracking technologies to improve your experience on our website. You can control cookie settings through your browser preferences.
-            </p>
-
-            <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-[#ffbe03]' : 'text-gray-900'} mb-4`}>Contact Us</h2>
-            <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-6`}>
-              If you have questions about our Privacy Policy, please{' '}
-              <Link to="/contact" className={`${isDarkMode ? 'text-[#ffbe03] hover:text-[#e6a902]' : 'text-[#351c15] hover:text-[#4a2a1f]'}`}>
-                contact us
-              </Link>
-              .
-            </p>
-
-            <div className="border-t border-gray-200 dark:border-gray-700 pt-6 mt-6">
-              <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                Last updated: {new Date().toLocaleDateString()}
+    <div className={`min-h-screen ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto">
+          <div className={`${isDarkMode ? 'bg-gray-900' : 'bg-white'} rounded-lg shadow-xl p-4 md:p-8`}>
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-[rgb(89,40,177)] dark:text-[rgb(100,50,187)] mb-4 md:mb-8">
+              Privacy Policy
+            </h1>
+            
+            <div className={`prose ${isDarkMode ? 'prose-invert' : ''} max-w-none`}>
+              <p className={`text-base md:text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                At NAVISTA, we take your privacy seriously. This Privacy Policy explains how we collect, use, and protect your personal information when you use our AI-powered tracking services.
               </p>
+
+              <h2 className="text-xl md:text-2xl font-bold mt-6 md:mt-8 mb-3 md:mb-4 text-[rgb(89,40,177)] dark:text-[rgb(100,50,187)]">
+                Information We Collect
+              </h2>
+              <ul className={`list-disc pl-4 md:pl-5 space-y-1 md:space-y-2 text-sm md:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                <li>Tracking numbers and shipment information</li>
+                <li>Contact information (name, email, phone number)</li>
+                <li>Device and browser information</li>
+                <li>Usage data and analytics</li>
+                <li>Location data (when required for tracking)</li>
+              </ul>
+
+              <h2 className="text-xl md:text-2xl font-bold mt-6 md:mt-8 mb-3 md:mb-4 text-[rgb(89,40,177)] dark:text-[rgb(100,50,187)]">
+                How We Use Your Information
+              </h2>
+              <ul className={`list-disc pl-4 md:pl-5 space-y-1 md:space-y-2 text-sm md:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                <li>Process and track your shipments in real-time</li>
+                <li>Provide accurate delivery predictions</li>
+                <li>Enhance our AI algorithms for better tracking accuracy</li>
+                <li>Improve our services and user experience</li>
+                <li>Communicate important updates about your shipments</li>
+              </ul>
+
+              <h2 className="text-xl md:text-2xl font-bold mt-6 md:mt-8 mb-3 md:mb-4 text-[rgb(89,40,177)] dark:text-[rgb(100,50,187)]">
+                Information Sharing
+              </h2>
+              <p className={`text-sm md:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                We may share your information with:
+              </p>
+              <ul className={`list-disc pl-4 md:pl-5 space-y-1 md:space-y-2 text-sm md:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                <li>Our partner carriers and logistics providers</li>
+                <li>Technology integration partners</li>
+                <li>Service providers who assist in our operations</li>
+                <li>Legal authorities when required by law</li>
+              </ul>
+
+              <h2 className="text-xl md:text-2xl font-bold mt-6 md:mt-8 mb-3 md:mb-4 text-[rgb(89,40,177)] dark:text-[rgb(100,50,187)]">
+                Data Security
+              </h2>
+              <p className={`text-sm md:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                We implement robust security measures to protect your information:
+              </p>
+              <ul className={`list-disc pl-4 md:pl-5 space-y-1 md:space-y-2 text-sm md:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                <li>Encryption of sensitive data</li>
+                <li>Secure protocols for data transmission</li>
+                <li>Regular security audits and updates</li>
+                <li>Access controls and authentication</li>
+              </ul>
+
+              <h2 className="text-xl md:text-2xl font-bold mt-6 md:mt-8 mb-3 md:mb-4 text-[rgb(89,40,177)] dark:text-[rgb(100,50,187)]">
+                Your Rights
+              </h2>
+              <ul className={`list-disc pl-4 md:pl-5 space-y-1 md:space-y-2 text-sm md:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                <li>Access your personal information</li>
+                <li>Correct inaccurate data</li>
+                <li>Request deletion of your data</li>
+                <li>Opt-out of marketing communications</li>
+                <li>Export your data in a portable format</li>
+              </ul>
+
+              <h2 className="text-xl md:text-2xl font-bold mt-6 md:mt-8 mb-3 md:mb-4 text-[rgb(89,40,177)] dark:text-[rgb(100,50,187)]">
+                Contact Us
+              </h2>
+              <p className={`text-sm md:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                If you have any questions about this Privacy Policy or our data practices, please contact us at:
+              </p>
+              <p className={`mt-2 text-sm md:text-base ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                Email: <a href="mailto:navistateam@gmail.com" className={`${isDarkMode ? 'text-[rgb(100,50,187)] hover:text-[rgb(120,70,207)]' : 'text-[rgb(89,40,177)] hover:text-[rgb(109,60,197)]'}`}>navistateam@gmail.com</a>
+              </p>
+
+
             </div>
           </div>
         </div>

@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -18,9 +18,37 @@ import AdministrationAndDevelopment from './pages/AdministrationAndDevelopment';
 import NotFound from './pages/NotFound';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import FAQ from './pages/FAQ';
 import { TrackingProvider } from './contexts/TrackingContext';
+import AdminDashboard from './pages/AdminDashboard';
+
+// Protected Route component
+const ProtectedRoute: React.FC<{ children: React.ReactNode; requireAdmin?: boolean }> = ({ 
+  children, 
+  requireAdmin = false 
+}) => {
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate('/login');
+    } else if (!loading && requireAdmin && user?.role !== 'admin') {
+      navigate('/');
+    }
+  }, [user, loading, navigate, requireAdmin]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  return user ? <>{children}</> : null;
+};
 
 const App: React.FC = () => {
   return (
@@ -34,20 +62,10 @@ const App: React.FC = () => {
               <main className="flex-grow">
                 <Routes>
                   <Route path="/" element={<Home />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/services" element={<Services />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/track" element={<Track />} />
                   <Route path="/track/:trackingNumber" element={<Track />} />
-                  <Route path="/administration_and_development/login" element={<Login />} />
-                  <Route
-                    path="/administration_and_development"
-                    element={
-                      <PrivateRoute>
-                        <AdministrationAndDevelopment />
-                      </PrivateRoute>
-                    }
-                  />
+
                   <Route path="/privacy" element={<Privacy />} />
                   <Route path="/terms" element={<Terms />} />
                   <Route path="/faq" element={<FAQ />} />

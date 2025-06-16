@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import { useTheme } from '../contexts/ThemeContext';
-import AnimatedCard from '../components/animations/AnimatedCard';
 
 interface FAQItem {
   question: string;
@@ -9,118 +7,101 @@ interface FAQItem {
 }
 
 const FAQ: React.FC = () => {
-  const { isDarkMode } = useTheme();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  const faqItems: FAQItem[] = [
+  const faqs: FAQItem[] = [
     {
-      question: "How can I track my shipment?",
-      answer: "You can track your shipment by entering your tracking number in our Track Package page. The tracking number is provided to you when you book a shipment. Our real-time tracking system will show you the current status and location of your package."
+      question: "What is NAVISTA?",
+      answer: "NAVISTA is an advanced package tracking platform that uses artificial intelligence to provide real-time tracking information for shipments worldwide. We integrate with major carriers and use cutting-edge technology to deliver accurate tracking updates."
     },
     {
-      question: "What shipping services do you offer?",
-      answer: "We offer a comprehensive range of shipping services including Air Freight, Sea Freight, and Ground Transport. We also provide additional services such as warehousing, customs clearance, and cargo insurance to meet all your logistics needs."
+      question: "How do I track my package?",
+      answer: "Simply enter your tracking number in the search bar on our homepage or tracking page. NAVISTA will automatically detect the carrier and provide you with detailed tracking information."
     },
     {
-      question: "How are shipping rates calculated?",
-      answer: "Shipping rates are calculated based on several factors including: weight and dimensions of the package, shipping distance, delivery speed, and type of service selected. For accurate pricing, please contact our customer service team."
+      question: "Which carriers do you support?",
+      answer: "We support all major carriers including FedEx, UPS, DHL, USPS, and many others. Our system automatically detects the carrier based on the tracking number format."
     },
     {
-      question: "What is the estimated delivery time?",
-      answer: "Delivery times vary depending on the service selected and destination. Generally, air freight takes 1-3 business days, ground transport 2-5 business days, and sea freight 10-30 days. Specific delivery estimates will be provided when booking."
+      question: "Is my tracking information secure?",
+      answer: "Yes, we take security seriously. All tracking information is encrypted and we only share necessary data with authorized carriers. We never store sensitive personal information."
     },
     {
-      question: "Do you offer international shipping?",
-      answer: "Yes, we offer international shipping services to over 150 countries worldwide. Our global network ensures reliable and efficient delivery of your shipments across borders, with full customs clearance support."
+      question: "How accurate is the tracking information?",
+      answer: "Our tracking information is updated in real-time directly from the carriers. We use AI to enhance the accuracy and provide predictive delivery estimates."
     },
     {
-      question: "What items are prohibited for shipping?",
-      answer: "Prohibited items include but are not limited to: dangerous goods, illegal substances, firearms, explosives, and perishable goods without proper packaging. Please contact us for a complete list of restricted items."
+      question: "Do you support international tracking?",
+      answer: "Yes, NAVISTA supports tracking for international shipments. We have partnerships with carriers worldwide to provide comprehensive global tracking coverage."
     },
     {
-      question: "How do I prepare my package for shipping?",
-      answer: "Ensure your package is properly sealed with appropriate packaging materials. Include complete and accurate shipping labels. For fragile items, use bubble wrap or similar protective materials. Contact us for specific packaging guidelines."
+      question: "What if my tracking number isn't recognized?",
+      answer: "If your tracking number isn't recognized, please verify that you've entered it correctly. If the issue persists, it might be too soon after the shipment was created, or the carrier might not have updated their system yet."
     },
     {
-      question: "What if my package is lost or damaged?",
-      answer: "We offer cargo insurance to protect against loss or damage. If an issue occurs, please contact our customer service immediately. We'll investigate the situation and process any claims according to our insurance policy."
+      question: "How can I get notifications about my shipment?",
+      answer: "You can enable notifications by creating an account and adding your tracking numbers. We'll send you updates via email or push notifications when there are status changes."
     }
   ];
 
-  const toggleQuestion = (index: number) => {
+  const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
   return (
-    <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
-      {/* Hero Section */}
-      <div className={`relative ${isDarkMode ? 'bg-[#1a0e0a]' : 'bg-[#351c15]'} py-16`}>
-        <div className="absolute inset-0">
-          <div className={`w-full h-full ${isDarkMode ? 'opacity-20' : 'opacity-30'} bg-pattern`}></div>
-        </div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 dark:text-white text-center">
             Frequently Asked Questions
           </h1>
-          <p className="mt-6 text-xl text-gray-300 max-w-3xl mx-auto">
-            Find answers to common questions about our shipping and logistics services
+          <p className="mt-3 md:mt-4 text-base md:text-lg text-gray-500 dark:text-gray-300 text-center">
+            Find answers to common questions about NAVISTA's tracking services
           </p>
-        </div>
-      </div>
 
-      {/* FAQ Section */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="space-y-6">
-          {faqItems.map((item, index) => (
-            <AnimatedCard key={index} animation="fade" delay={`${index * 100}ms`}>
-              <div 
-                className={`rounded-lg overflow-hidden ${
-                  isDarkMode 
-                    ? 'bg-gray-800 hover:bg-gray-750' 
-                    : 'bg-white hover:bg-gray-50'
-                } shadow-lg transition-colors duration-200`}
+          <div className="mt-8 md:mt-12 space-y-3 md:space-y-4">
+            {faqs.map((faq, index) => (
+              <div
+                key={index}
+                className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
               >
                 <button
-                  className="w-full px-6 py-4 flex justify-between items-center focus:outline-none"
-                  onClick={() => toggleQuestion(index)}
+                  className="w-full px-4 md:px-6 py-3 md:py-4 text-left focus:outline-none"
+                  onClick={() => toggleFAQ(index)}
                 >
-                  <h3 className={`text-left font-semibold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                    {item.question}
-                  </h3>
-                  <span className={`ml-4 flex-shrink-0 ${isDarkMode ? 'text-[#ffbe03]' : 'text-[#351c15]'}`}>
-                    {openIndex === index ? <FaChevronUp /> : <FaChevronDown />}
-                  </span>
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-base md:text-lg font-medium text-gray-900 dark:text-white">
+                      {faq.question}
+                    </h3>
+                    {openIndex === index ? (
+                      <FaChevronUp className="h-4 w-4 md:h-5 md:w-5 text-[rgb(89,40,177)]" />
+                    ) : (
+                      <FaChevronDown className="h-4 w-4 md:h-5 md:w-5 text-[rgb(89,40,177)]" />
+                    )}
+                  </div>
                 </button>
                 {openIndex === index && (
-                  <div className={`px-6 pb-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                    <p>{item.answer}</p>
+                  <div className="px-4 md:px-6 pb-4">
+                    <p className="text-sm md:text-base text-gray-500 dark:text-gray-300">
+                      {faq.answer}
+                    </p>
                   </div>
                 )}
               </div>
-            </AnimatedCard>
-          ))}
-        </div>
-      </div>
+            ))}
+          </div>
 
-      {/* Contact Section */}
-      <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} py-12`}>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className={`text-2xl font-bold mb-4 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-            Still have questions?
-          </h2>
-          <p className={`mb-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-            Our customer service team is here to help you with any questions you may have.
-          </p>
-          <a
-            href="/contact"
-            className={`inline-flex items-center px-6 py-3 rounded-md text-base font-medium ${
-              isDarkMode 
-                ? 'bg-[#ffbe03] text-gray-900 hover:bg-[#e6a902]' 
-                : 'bg-[#351c15] text-white hover:bg-[#4a2a1f]'
-            } transition-colors duration-200`}
-          >
-            Contact Us
-          </a>
+          <div className="mt-8 md:mt-12 text-center">
+            <p className="text-sm md:text-base text-gray-500 dark:text-gray-300">
+              Still have questions? Contact our support team at{' '}
+              <a
+                href="mailto:navistateam@gmail.com"
+                className="text-[rgb(89,40,177)] hover:text-[rgb(100,50,187)]"
+              >
+                navistateam@gmail.com
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </div>

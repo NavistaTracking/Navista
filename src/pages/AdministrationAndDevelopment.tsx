@@ -19,7 +19,7 @@ import {
   updateUserPermissions
 } from '../services/userService';
 import { sendShipperEmail, sendReceiverEmail } from '../services/emailService';
-import { FaPlus, FaEdit, FaTrash, FaMapMarkerAlt, FaSearch, FaFilter, FaSync, FaSpinner, FaEnvelope, FaChartLine, FaUsers, FaCog, FaShieldAlt } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash, FaMapMarkerAlt, FaSearch, FaFilter, FaSync, FaSpinner, FaEnvelope, FaChartLine, FaUsers, FaCog, FaShieldAlt, FaBoxOpen } from 'react-icons/fa';
 import Icon from '../components/icons/Icon';
 import AnimatedCard from '../components/animations/AnimatedCard';
 import { toast } from 'react-toastify';
@@ -392,7 +392,7 @@ const AdministrationAndDevelopment: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Hero Section */}
-      <div className="relative bg-[#351c15] dark:bg-gray-800 py-16">
+      <div className="relative bg-[rgb(89,40,177)] dark:bg-gray-800 py-16">
         <div className="absolute inset-0">
           <img
             src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
@@ -400,12 +400,17 @@ const AdministrationAndDevelopment: React.FC = () => {
             className="w-full h-full object-cover opacity-30 dark:opacity-20"
           />
         </div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
-            Administration & Development
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
+          <div className="mb-6 flex justify-center">
+            <div className="rounded-full bg-white p-4 shadow-lg inline-flex items-center justify-center">
+              <FaBoxOpen className="text-[rgb(89,40,177)]" size={56} />
+            </div>
+          </div>
+          <h1 className="text-4xl font-extrabold tracking-tight text-[#ffbe03] sm:text-5xl lg:text-6xl font-display drop-shadow-lg">
+            Navista Administration & Development
           </h1>
-          <p className="mt-6 text-xl text-gray-300 dark:text-gray-200 max-w-3xl mx-auto">
-            Manage shipments, users, and system settings with our comprehensive admin dashboard.
+          <p className="mt-6 text-xl text-white/90 dark:text-gray-200 max-w-3xl mx-auto">
+            Manage shipments, users, and system settings with the Navista admin dashboard.
           </p>
         </div>
       </div>
