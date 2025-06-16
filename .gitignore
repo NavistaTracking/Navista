@@ -35,3 +35,6 @@ firebase-debug.*.log*
 
 # Vercel
 .vercel 
+
+# Heavy file
+   navista-globalTrackVariant-for-sale.zip
