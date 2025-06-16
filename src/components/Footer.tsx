@@ -32,15 +32,15 @@ const Footer: React.FC = () => {
               Revolutionizing logistics through AI-powered tracking and predictive analytics.
             </p>
             <div className="flex space-x-4 justify-center md:justify-start">
-              <a href="#" className="text-gray-200 hover:text-white transition-colors">
+              <button onClick={() => handleNavigation('/contact')} className="text-gray-200 hover:text-white transition-colors" aria-label="Contact via Facebook">
                 <FaFacebook size={20} />
-              </a>
-              <a href="#" className="text-gray-200 hover:text-white transition-colors">
+              </button>
+              <button onClick={() => handleNavigation('/contact')} className="text-gray-200 hover:text-white transition-colors" aria-label="Contact via Twitter">
                 <FaTwitter size={20} />
-              </a>
-              <a href="#" className="text-gray-200 hover:text-white transition-colors">
+              </button>
+              <button onClick={() => handleNavigation('/contact')} className="text-gray-200 hover:text-white transition-colors" aria-label="Contact via LinkedIn">
                 <FaLinkedin size={20} />
-              </a>
+              </button>
             </div>
           </div>
 
