@@ -1,36 +1,14 @@
-// Location utilities for map functionality
 export interface LocationCoordinates {
   lat: number;
   lng: number;
 }
 
-// Common location coordinates mapping
-const LOCATION_COORDINATES: Record<string, LocationCoordinates> = {
-  // Countries
-  'US': { lat: 39.8283, lng: -98.5795 },
-  'USA': { lat: 39.8283, lng: -98.5795 },
-  'UNITED STATES': { lat: 39.8283, lng: -98.5795 },
-  'UK': { lat: 55.3781, lng: -3.4360 },
-  'UNITED KINGDOM': { lat: 55.3781, lng: -3.4360 },
-  'CAMEROON': { lat: 7.3697, lng: 12.3547 },
-  'NIGERIA': { lat: 9.0820, lng: 8.6753 },
-  'GHANA': { lat: 7.9465, lng: -1.0232 },
-  'KENYA': { lat: -0.0236, lng: 37.9062 },
-  'SOUTH AFRICA': { lat: -30.5595, lng: 22.9375 },
-  'CHINA': { lat: 35.8617, lng: 104.1954 },
-  'INDIA': { lat: 20.5937, lng: 78.9629 },
-  'JAPAN': { lat: 36.2048, lng: 138.2529 },
-  'GERMANY': { lat: 51.1657, lng: 10.4515 },
-  'FRANCE': { lat: 46.2276, lng: 2.2137 },
-  'ITALY': { lat: 41.8719, lng: 12.5674 },
-  'SPAIN': { lat: 40.4637, lng: -3.7492 },
-  'CANADA': { lat: 56.1304, lng: -106.3468 },
-  'MEXICO': { lat: 23.6345, lng: -102.5528 },
-  'BRAZIL': { lat: -14.2350, lng: -51.9253 },
-  'AUSTRALIA': { lat: -25.2744, lng: 133.7751 },
-  
-  // Major cities
-  'LONDON': { lat: 51.5074, lng: -0.1278 },
+/**
+ * Large mapping of location names to their coordinates
+ * This provides a comprehensive database of cities and countries for map display
+ */
+export const LOCATION_COORDINATES: Record<string, LocationCoordinates> = {
+  // Major US cities
   'NEW YORK': { lat: 40.7128, lng: -74.0060 },
   'LOS ANGELES': { lat: 34.0522, lng: -118.2437 },
   'CHICAGO': { lat: 41.8781, lng: -87.6298 },
@@ -66,9 +44,8 @@ const LOCATION_COORDINATES: Record<string, LocationCoordinates> = {
   'TUCSON': { lat: 32.2226, lng: -110.9747 },
   'FRESNO': { lat: 36.7378, lng: -119.7871 },
   'SACRAMENTO': { lat: 38.5816, lng: -121.4944 },
-  'MESA': { lat: 33.4152, lng: -111.8315 },
-  'KANSAS CITY': { lat: 39.0997, lng: -94.5786 },
   'ATLANTA': { lat: 33.7490, lng: -84.3880 },
+  'KANSAS CITY': { lat: 39.0997, lng: -94.5786 },
   'LONG BEACH': { lat: 33.7701, lng: -118.1937 },
   'COLORADO SPRINGS': { lat: 38.8339, lng: -104.8214 },
   'RALEIGH': { lat: 35.7796, lng: -78.6382 },
@@ -94,8 +71,6 @@ const LOCATION_COORDINATES: Record<string, LocationCoordinates> = {
   'STOCKTON': { lat: 37.9577, lng: -121.2908 },
   'HENDERSON': { lat: 36.0395, lng: -114.9817 },
   'SAINT PAUL': { lat: 44.9537, lng: -93.0900 },
-  'ST. PAUL': { lat: 44.9537, lng: -93.0900 },
-  'ST LOUIS': { lat: 38.6270, lng: -90.1994 },
   'ST. LOUIS': { lat: 38.6270, lng: -90.1994 },
   'CINCINNATI': { lat: 39.1031, lng: -84.5120 },
   'PITTSBURGH': { lat: 40.4406, lng: -79.9959 },
@@ -106,7 +81,6 @@ const LOCATION_COORDINATES: Record<string, LocationCoordinates> = {
   'LINCOLN': { lat: 40.8136, lng: -96.7026 },
   'ORLANDO': { lat: 28.5383, lng: -81.3792 },
   'IRVINE': { lat: 33.6846, lng: -117.8265 },
-  'NEWARK': { lat: 40.7357, lng: -74.1724 },
   'DURHAM': { lat: 35.9940, lng: -78.8986 },
   'CHULA VISTA': { lat: 32.6401, lng: -117.0842 },
   'TOLEDO': { lat: 41.6528, lng: -83.5379 },
@@ -183,32 +157,15 @@ const LOCATION_COORDINATES: Record<string, LocationCoordinates> = {
   'DAKAR': { lat: 14.7167, lng: -17.4677 },
   'NOUAKCHOTT': { lat: 18.0799, lng: -15.9653 },
   'RABAT': { lat: 34.0209, lng: -6.8416 },
-  'ALGIERS': { lat: 36.7538, lng: 3.0588 },
-  'TUNIS': { lat: 36.8065, lng: 10.1815 },
-  'TRIPOLI': { lat: 32.8872, lng: 13.1913 },
-  'CAIRO': { lat: 30.0444, lng: 31.2357 },
-  'KHARTOUM': { lat: 15.5007, lng: 32.5599 },
-  'ADDIS ABABA': { lat: 9.0320, lng: 38.7486 },
-  'NAIROBI': { lat: -1.2921, lng: 36.8219 },
-  'DAR ES SALAAM': { lat: -6.8230, lng: 39.2695 },
   'KAMPALA': { lat: 0.3476, lng: 32.5825 },
   'KIGALI': { lat: -1.9441, lng: 30.0619 },
   'BUJUMBURA': { lat: -3.3731, lng: 29.9189 },
   'LILONGWE': { lat: -13.9626, lng: 33.7741 },
-  'LUSAKA': { lat: -15.3875, lng: 28.3228 },
-  'HARARE': { lat: -17.8252, lng: 31.0335 },
-  'GABORONE': { lat: -24.6282, lng: 25.9231 },
-  'WINDHOEK': { lat: -22.5609, lng: 17.0658 },
   'PRETORIA': { lat: -25.7479, lng: 28.2293 },
   'BLOEMFONTEIN': { lat: -29.0852, lng: 26.1596 },
-  'CAPE TOWN': { lat: -33.9249, lng: 18.4241 },
   'DURBAN': { lat: -29.8587, lng: 31.0218 },
   'PORT ELIZABETH': { lat: -33.7139, lng: 25.5207 },
   'EAST LONDON': { lat: -33.0292, lng: 27.8546 },
-  'KIMBERLEY': { lat: -28.7282, lng: 24.7499 },
-  'PIETERMARITZBURG': { lat: -29.6006, lng: 30.3796 },
-  'POLOKWANE': { lat: -23.9045, lng: 29.4698 },
-  'MBOMBELA': { lat: -25.4753, lng: 30.9694 },
   'KIMBERLEY': { lat: -28.7282, lng: 24.7499 },
   'PIETERMARITZBURG': { lat: -29.6006, lng: 30.3796 },
   'POLOKWANE': { lat: -23.9045, lng: 29.4698 },
