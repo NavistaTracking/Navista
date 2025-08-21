@@ -32,20 +32,9 @@ const Login: React.FC = () => {
       setIsLoading(true);
       await login(email, password);
       
-      // Check if the logged-in user has admin role
-      const currentUser = await new Promise(resolve => {
-        // Small timeout to ensure auth state is updated
-        setTimeout(() => resolve(user), 100);
-      });
-      
-      if (currentUser && (currentUser as any).role === 'admin') {
+      // Simple success message and navigation
         toast.success('Login successful', toastConfig);
         navigate('/administration_and_development', { replace: true });
-      } else {
-        toast.error('Access denied. Admin privileges required.', toastConfig);
-        // Logout the user if they don't have admin role
-        await logout();
-      }
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'An error occurred during login', toastConfig);
     } finally {

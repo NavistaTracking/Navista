@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      line-height: 1.6; 
+      margin: 0; 
+      padding: 20px;
+      background-color: #f9fafb;
+    }
+    .container { 
+      max-width: 600px; 
+      margin: 0 auto; 
+      background: #fff; 
+      border-radius: 8px; 
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .header { 
+      background: #5928b1; 
+      color: #fff; 
+      padding: 20px; 
+      text-align: center; 
+      border-bottom: 4px solid #ffbe03; 
+    }
+    .content { padding: 30px; }
+    .footer { 
+      text-align: center; 
+      padding: 20px; 
+      background: #f8f9fa;
+      border-top: 1px solid #e5e7eb;
+    }
+    .tracking-number { 
+      font-size: 24px; 
+      color: #5928b1; 
+      text-align: center; 
+      margin: 20px 0; 
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    .details { 
+      margin: 20px 0; 
+      padding: 20px; 
+      background: #f8f9fa; 
+      border-radius: 8px;
+    }
+    .section-title {
+      color: #5928b1;
+      font-size: 18px;
+      font-weight: bold;
+      margin: 20px 0 10px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #ffbe03;
+    }
+    .highlight { 
+      color: #5928b1; 
+      font-weight: bold; 
+    }
+    .tracking-link { 
+      display: inline-block; 
+      padding: 12px 24px; 
+      background: #5928b1; 
+      color: #fff; 
+      text-decoration: none; 
+      border-radius: 4px;
+      margin-top: 20px;
+    }
+    .tracking-link:hover {
+      background: #4a1f9e;
+    }
+    .packages {
+      white-space: pre-line;
+      margin: 10px 0;
+      padding: 15px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>{{company}}</h1>
+      <p>Shipment Created</p>
+    </div>
+    <div class="content">
+      <p>Dear {{to_name}},</p>
+      <p>Your shipment has been created successfully. Here are the details:</p>
+      
+      <div class="tracking-number">
+        {{tracking}}
+      </div>
+      
+      <div class="details">
+        <div class="section-title">Shipment Status</div>
+        <p><span class="highlight">Status:</span> {{status}}</p>
+        <p><span class="highlight">Current Location:</span> {{location}}</p>
+        
+        <div class="section-title">Shipping Details</div>
+        <p><span class="highlight">Origin:</span> {{origin}}</p>
+        <p><span class="highlight">Destination:</span> {{destination}}</p>
+        <p><span class="highlight">Expected Delivery:</span> {{delivery}}</p>
+        
+        <div class="section-title">Receiver Information</div>
+        <p><span class="highlight">Name:</span> {{receiver}}</p>
+        <p><span class="highlight">Email:</span> {{receiver_email}}</p>
+        
+        <div class="section-title">Package Details</div>
+        <div class="packages">{{packages}}</div>
+      </div>
+      
+      <a href="{{url}}" class="tracking-link">Track Your Shipment</a>
+    </div>
+    <div class="footer">
+      <p>Thank you for choosing {{company}}</p>
+    </div>
+  </div>
+</body>
+</html>

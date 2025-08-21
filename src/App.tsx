@@ -33,9 +33,9 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode; requireAdmin?: boole
 
   useEffect(() => {
     if (!loading && !user) {
-      navigate('/login');
+      navigate('/administration_and_development/login');
     } else if (!loading && requireAdmin && user?.role !== 'admin') {
-      navigate('/');
+      navigate('/administration_and_development/login');
     }
   }, [user, loading, navigate, requireAdmin]);
 
@@ -65,6 +65,17 @@ const App: React.FC = () => {
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/track" element={<Track />} />
                   <Route path="/track/:trackingNumber" element={<Track />} />
+                  
+                  {/* Admin Routes */}
+                  <Route path="/administration_and_development/login" element={<Login />} />
+                                     <Route
+                     path="/administration_and_development"
+                     element={
+                       <ProtectedRoute requireAdmin={true}>
+                         <AdministrationAndDevelopment />
+                       </ProtectedRoute>
+                     }
+                   />
 
                   <Route path="/privacy" element={<Privacy />} />
                   <Route path="/terms" element={<Terms />} />

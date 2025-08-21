@@ -44,6 +44,8 @@ import {
 } from 'react-icons/fa';
 import AnimatedCard from '../components/animations/AnimatedCard';
 import PremiumTrackingForm from '../components/PremiumTrackingForm';
+import LiveMap from '../components/LiveMap';
+import { getLocationCoordinates, getMapCenter, getMapZoom } from '../utils/locationUtils';
 import Cookies from 'js-cookie';
 
 const Track: React.FC = () => {
@@ -192,30 +194,38 @@ const Track: React.FC = () => {
       
       if (!shipmentData) {
         setError('Tracking number not found. Please check the number and try again.');
-        toast.error('Tracking number not found. Please check the number and try again.', {
-          position: "top-right",
-          style: {
-            background: isDarkMode ? '#1f2937' : '#ffffff',
-            color: isDarkMode ? '#ffffff' : '#000000',
-            borderLeft: '4px solid rgb(89,40,177)',
-          },
-        });
         // Remove the payment cookie since the tracking number is invalid
         Cookies.remove(`premium_${trackingNumber}`);
         setHasPaid(false);
         return;
       }
 
-      setShipment(shipmentData);
+              setShipment(shipmentData);
       setShowTrackingForm(false);
-    } catch (err) {
-      setError('Failed to fetch shipment data. Please try again.');
-      toast.error('Failed to fetch shipment data. Please try again.', {
+      
+      // Show success message
+      toast.success('Payment successful! Tracking data loaded.', {
         position: "top-right",
         style: {
           background: isDarkMode ? '#1f2937' : '#ffffff',
           color: isDarkMode ? '#ffffff' : '#000000',
-          borderLeft: '4px solid rgb(89,40,177)',
+          borderLeft: '4px solid #10B981',
+        },
+      });
+      
+      // Scroll to results
+      if (resultsRef.current) {
+        resultsRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    } catch (err) {
+      console.error('Error fetching shipment data:', err);
+      setError('Failed to fetch shipment data. Please try again.');
+      toast.error('Failed to fetch tracking data. Please try again.', {
+        position: "top-right",
+        style: {
+          background: isDarkMode ? '#1f2937' : '#ffffff',
+          color: isDarkMode ? '#ffffff' : '#000000',
+          borderLeft: '4px solid #ef4444',
         },
       });
       // Remove the payment cookie on error
@@ -437,7 +447,7 @@ const Track: React.FC = () => {
                   One-Time Payment
                 </h3>
                 <p className={`text-sm md:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                  Make a secure £0.99 payment to unlock detailed tracking
+                  Make a secure $0.99 payment to unlock detailed tracking
                 </p>
               </div>
 
@@ -495,11 +505,31 @@ const Track: React.FC = () => {
               </div>
             </div>
           </div>
+
+          {/* Global Network Map */}
+          <div className={`p-6 md:p-8 rounded-lg ${isDarkMode ? 'bg-gray-800' : 'bg-white shadow-md'}`}>
+            <h2 className={`text-2xl md:text-3xl font-bold mb-4 md:mb-6 ${isDarkMode ? 'text-[rgb(100,50,187)]' : 'text-[rgb(89,40,177)]'}`}>
+              Our Global Network
+            </h2>
+            <p className={`text-base md:text-lg mb-6 md:mb-8 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+              NAVISTA operates across the globe with strategic hubs and real-time tracking capabilities. 
+              Experience seamless logistics from anywhere in the world.
+            </p>
+            <LiveMap
+              center={{ lat: 20, lng: 0 }} // Center of the world
+              zoom={2}
+              height="400px"
+              showMarker={true}
+              markerTitle="NAVISTA Global Network"
+              showResetButton={true}
+              className="rounded-lg"
+            />
+          </div>
         </div>
       )}
 
       {shipment && (
-        <div className="max-w-7xl mx-auto p-6">
+        <div ref={resultsRef} className="max-w-7xl mx-auto p-6">
           {/* Shipment Status */}
           <div className={`rounded-lg p-6 mb-6 ${
             isDarkMode 
@@ -587,6 +617,40 @@ const Track: React.FC = () => {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Shipment Route Map */}
+          <div className={`rounded-lg p-6 mb-6 ${isDarkMode ? 'bg-gray-800' : 'bg-white shadow-md'}`}>
+            <h2 className={`text-xl font-bold mb-4 ${isDarkMode ? 'text-[rgb(100,50,187)]' : 'text-[rgb(89,40,177)]'}`}>SHIPMENT ROUTE</h2>
+            <p className={`text-sm mb-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+              Visualize your shipment's journey from origin to destination
+            </p>
+            <LiveMap
+              center={getMapCenter(shipment.origin, shipment.destination)}
+              zoom={getMapZoom(shipment.origin, shipment.destination)}
+              height="400px"
+              showMarker={false}
+              showResetButton={true}
+              origin={{
+                lat: getLocationCoordinates(shipment.origin).lat,
+                lng: getLocationCoordinates(shipment.origin).lng,
+                title: shipment.origin
+              }}
+              destination={{
+                lat: getLocationCoordinates(shipment.destination).lat,
+                lng: getLocationCoordinates(shipment.destination).lng,
+                title: shipment.destination
+              }}
+              currentLocation={{
+                lat: getLocationCoordinates(shipment.currentLocation).lat,
+                lng: getLocationCoordinates(shipment.currentLocation).lng,
+                title: shipment.currentLocation
+              }}
+              showRoute={true}
+              routeColor={isDarkMode ? '#8b5cf6' : '#5928b1'}
+              completedRouteColor={isDarkMode ? '#10b981' : '#059669'}
+              className="rounded-lg"
+            />
           </div>
 
           {/* Shipment Details */}

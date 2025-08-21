@@ -12,8 +12,8 @@ import {
 } from 'react-icons/fa';
 import Icon from '../components/icons/Icon';
 import AnimatedCard from '../components/animations/AnimatedCard';
+import LiveMap from '../components/LiveMap';
 import { sendContactFormEmail } from '../services/emailService';
-import contactImage from '../assets/images/navistaLogo1.PNG'
 
 const Contact: React.FC = () => {
   const { isDarkMode } = useTheme();
@@ -222,17 +222,29 @@ const Contact: React.FC = () => {
               </div>
             </div>
 
-            {/* Contact Image */}
-            <div className="relative rounded-xl overflow-hidden shadow-lg">
-              <img
-                src={contactImage}
-                alt="NAVISTA Logistics"
-                className="w-full h-[400px] object-cover"
+            {/* Interactive Map */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Find Us</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">
+                Visit our headquarters or explore our global network of logistics centers. 
+                Our team is ready to assist you with all your shipping and tracking needs.
+              </p>
+              <LiveMap
+                center={{ lat: 51.5074, lng: -0.1278 }} // London coordinates
+                zoom={15}
+                height="400px"
+                showMarker={true}
+                markerTitle="NAVISTA Headquarters - London"
+                className="rounded-lg"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[rgb(89,40,177)]/80 to-transparent flex items-end">
-                <div className="p-6 text-white">
-                  <h3 className="text-xl font-bold mb-2">Global Logistics</h3>
-                  <p className="text-sm">Delivering excellence in shipping and tracking worldwide</p>
+              <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div className="flex items-center">
+                  <FaMapMarkerAlt className="text-[rgb(89,40,177)] mr-2" />
+                  <span className="text-gray-700 dark:text-gray-300">London, United Kingdom</span>
+                </div>
+                <div className="flex items-center">
+                  <FaPhone className="text-[rgb(89,40,177)] mr-2" />
+                  <span className="text-gray-700 dark:text-gray-300">+44 20 7123 4567</span>
                 </div>
               </div>
             </div>

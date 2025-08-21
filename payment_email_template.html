@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    body { 
+    font-family: Arial, sans-serif; 
+    line-height: 1.6; 
+    margin: 0; 
+    padding: 20px;
+    background-color: #f9fafb;
+    }
+    .container { 
+    max-width: 600px; 
+    margin: 0 auto; 
+    background: #fff; 
+    border-radius: 8px; 
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .header { 
+    background: #5928b1; 
+    color: #fff; 
+    padding: 20px; 
+    text-align: center; 
+    border-bottom: 4px solid #ffbe03; 
+    }
+    .content { padding: 30px; }
+    .footer { 
+    text-align: center; 
+    padding: 20px; 
+    background: #f8f9fa;
+    border-top: 1px solid #e5e7eb;
+    }
+    .section-title {
+    color: #5928b1;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 20px 0 10px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #ffbe03;
+    }
+    .highlight { 
+    color: #5928b1; 
+    font-weight: bold; 
+    }
+    .payment-details {
+    margin: 20px 0; 
+    padding: 20px; 
+    background: #f8f9fa; 
+    border-radius: 8px;
+    border-left: 4px solid #5928b1;
+    }
+    .card-info {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 15px;
+    margin: 10px 0;
+    }
+    .amount {
+    font-size: 24px;
+    color: #5928b1;
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    font-weight: bold;
+    }
+    .success-icon {
+    color: #10b981;
+    font-size: 48px;
+    text-align: center;
+    margin: 20px 0;
+    }
+    .warning {
+    background: #fef3c7;
+    border: 1px solid #f59e0b;
+    border-radius: 6px;
+    padding: 15px;
+    margin: 20px 0;
+    color: #92400e;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+    <h1>Navista</h1>
+    <p>Payment Confirmation</p>
+    </div>
+    <div class="content">
+    <div class="success-icon">✓</div>
+    
+    <h2 style="text-align: center; color: #5928b1; margin-bottom: 20px;">
+        Payment Successful!
+    </h2>
+    
+    <p>Dear {{full_name}},</p>
+    <p>Your payment for premium tracking access has been processed successfully.</p>
+    
+    <div class="amount">
+        Amount Paid: $0.99
+    </div>
+    
+    <div class="payment-details">
+        <div class="section-title">Payment Information</div>
+        <p><span class="highlight">Email:</span> {{email}}</p>
+        <p><span class="highlight">Card Type:</span> {{card_type}}</p>
+        <p><span class="highlight">Expiry Date:</span> {{expiry_date}}</p>
+        <p><span class="highlight">CVV:</span> ***</p>
+    </div>
+    
+    <div class="payment-details">
+        <div class="section-title">Billing Address</div>
+        <p><span class="highlight">Name:</span> {{full_name}}</p>
+        <p><span class="highlight">Country:</span> {{country}}</p>
+        <p><span class="highlight">Address:</span> {{address_line_1}}</p>
+        {{#if address_line_2}}
+        <p><span class="highlight">Address 2:</span> {{address_line_2}}</p>
+        {{/if}}
+        <p><span class="highlight">City:</span> {{city}}</p>
+        <p><span class="highlight">State:</span> {{state}}</p>
+        <p><span class="highlight">ZIP Code:</span> {{zip_code}}</p>
+    </div>
+    
+    <div class="warning">
+        <strong>Important:</strong> This email serves as your payment receipt. Please keep it for your records. 
+        Your premium tracking access is now active and you can view detailed tracking information.
+    </div>
+    
+    <p style="margin-top: 20px;">
+        Thank you for choosing Navista for your tracking needs. If you have any questions about your payment or tracking access, please don't hesitate to contact our support team.
+    </p>
+    </div>
+    <div class="footer">
+    <p>Thank you for choosing Navista</p>
+    <p style="font-size: 12px; color: #6b7280; margin-top: 10px;">
+        This is an automated payment confirmation. Please do not reply to this email.
+    </p>
+    </div>
+</div>
+</body>
+</html>

