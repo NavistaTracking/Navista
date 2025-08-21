@@ -12,7 +12,6 @@ import {
 } from 'react-icons/fa';
 import Icon from '../components/icons/Icon';
 import AnimatedCard from '../components/animations/AnimatedCard';
-import LiveMap from '../components/LiveMap';
 import { sendContactFormEmail } from '../services/emailService';
 
 const Contact: React.FC = () => {
@@ -222,32 +221,7 @@ const Contact: React.FC = () => {
               </div>
             </div>
 
-            {/* Interactive Map */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Find Us</h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-6">
-                Visit our headquarters or explore our global network of logistics centers. 
-                Our team is ready to assist you with all your shipping and tracking needs.
-              </p>
-              <LiveMap
-                center={{ lat: 51.5074, lng: -0.1278 }} // London coordinates
-                zoom={15}
-                height="400px"
-                showMarker={true}
-                markerTitle="NAVISTA Headquarters - London"
-                className="rounded-lg"
-              />
-              <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                <div className="flex items-center">
-                  <FaMapMarkerAlt className="text-[rgb(89,40,177)] mr-2" />
-                  <span className="text-gray-700 dark:text-gray-300">London, United Kingdom</span>
-                </div>
-                <div className="flex items-center">
-                  <FaPhone className="text-[rgb(89,40,177)] mr-2" />
-                  <span className="text-gray-700 dark:text-gray-300">+44 20 7123 4567</span>
-                </div>
-              </div>
-            </div>
+
           </div>
         </div>
       </div>

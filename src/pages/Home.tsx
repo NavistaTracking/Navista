@@ -4,7 +4,6 @@ import { FaRocket, FaNetworkWired, FaRobot, FaMicrochip, FaBrain, FaProjectDiagr
 import Icon from '../components/icons/Icon';
 import { useTheme } from '../contexts/ThemeContext';
 import AnimatedCard from '../components/AnimatedCard';
-import LiveMap from '../components/LiveMap';
 import HeroImage from '../assets/images/truck.png';
 import VisionImage from '../assets/images/Quantum Logistics visualization.jpg';
 import QuantumImage from '../assets/images/AI neural network visualization.jpg';
@@ -441,70 +440,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Global Network Map Section */}
-      <section className="py-16 bg-white dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white mb-4">
-              Our Global Network
-            </h2>
-            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              NAVISTA operates across the globe with strategic hubs and real-time tracking capabilities. 
-              Experience seamless logistics from anywhere in the world.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-            <div className="text-center">
-              <div className="bg-[rgb(89,40,177)] text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <FaGlobe className="text-2xl" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Global Coverage</h3>
-              <p className="text-gray-600 dark:text-gray-300">Operating in 150+ countries with local expertise</p>
-            </div>
-            
-            <div className="text-center">
-              <div className="bg-[rgb(89,40,177)] text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <FaRoute className="text-2xl" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Smart Routing</h3>
-              <p className="text-gray-600 dark:text-gray-300">AI-powered route optimization for maximum efficiency</p>
-            </div>
-            
-            <div className="text-center">
-              <div className="bg-[rgb(89,40,177)] text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <FaClock className="text-2xl" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">24/7 Monitoring</h3>
-              <p className="text-gray-600 dark:text-gray-300">Real-time tracking and updates around the clock</p>
-            </div>
-          </div>
-          
-                      <div className="relative">
-              <LiveMap
-                center={{ lat: 51.5074, lng: -0.1278 }} // London coordinates
-                zoom={15}
-                height="500px"
-                showMarker={true}
-                markerTitle="NAVISTA Headquarters - London"
-                className="rounded-xl shadow-2xl"
-              />
-                          <div className="absolute top-4 left-4 bg-white dark:bg-gray-800 rounded-lg shadow-xl p-4 border border-gray-200 dark:border-gray-600">
-                <h4 className="font-semibold text-gray-900 dark:text-white mb-2 text-base">NAVISTA Headquarters</h4>
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 bg-[rgb(89,40,177)] rounded-full mr-2 flex-shrink-0"></div>
-                    <span className="text-gray-700 dark:text-gray-300 font-medium">London, United Kingdom</span>
-                  </div>
-                  <div className="flex items-center">
-                    <FaMapMarkerAlt className="text-[rgb(89,40,177)] mr-2" />
-                    <span className="text-gray-700 dark:text-gray-300 font-medium">+44 20 7123 4567</span>
-                  </div>
-                </div>
-              </div>
-          </div>
-        </div>
-      </section>
+
 
       {/* CTA Section */}
       <div className="bg-gray-100 dark:bg-gray-800">

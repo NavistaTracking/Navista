@@ -44,8 +44,6 @@ import {
 } from 'react-icons/fa';
 import AnimatedCard from '../components/animations/AnimatedCard';
 import PremiumTrackingForm from '../components/PremiumTrackingForm';
-import LiveMap from '../components/LiveMap';
-import { getLocationCoordinates, getMapCenter, getMapZoom } from '../utils/locationUtils';
 import Cookies from 'js-cookie';
 
 const Track: React.FC = () => {
@@ -506,25 +504,7 @@ const Track: React.FC = () => {
             </div>
           </div>
 
-          {/* Global Network Map */}
-          <div className={`p-6 md:p-8 rounded-lg ${isDarkMode ? 'bg-gray-800' : 'bg-white shadow-md'}`}>
-            <h2 className={`text-2xl md:text-3xl font-bold mb-4 md:mb-6 ${isDarkMode ? 'text-[rgb(100,50,187)]' : 'text-[rgb(89,40,177)]'}`}>
-              Our Global Network
-            </h2>
-            <p className={`text-base md:text-lg mb-6 md:mb-8 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              NAVISTA operates across the globe with strategic hubs and real-time tracking capabilities. 
-              Experience seamless logistics from anywhere in the world.
-            </p>
-            <LiveMap
-              center={{ lat: 20, lng: 0 }} // Center of the world
-              zoom={2}
-              height="400px"
-              showMarker={true}
-              markerTitle="NAVISTA Global Network"
-              showResetButton={true}
-              className="rounded-lg"
-            />
-          </div>
+
         </div>
       )}
 
