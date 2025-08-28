@@ -4,7 +4,8 @@ import { checkPaymentStatus, savePaymentRecord } from '../services/paymentServic
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { toast } from 'react-toastify';
-import LiveMap from '../components/LiveMap';
+import ShipmentMap from '../components/ShipmentMap';
+import { getLocationCoordinates, getMapCenter, getMapZoom } from '../utils/locationUtils';
 import {
   FaSearch,
   FaBox,
@@ -115,61 +116,58 @@ const Track: React.FC = () => {
     e.preventDefault();
     if (!trackingNumber) return;
 
-    // If already paid, fetch data directly
-    if (hasPaid) {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const shipmentData = await getShipmentByTracking(trackingNumber);
-        setShipment(shipmentData);
-        setShowTrackingForm(false);
-      } catch (err) {
-        setError('Failed to fetch shipment data. Please try again.');
-        toast.error('Failed to fetch shipment data. Please try again.', {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      // First, check if tracking number exists
+      const shipmentData = await getShipmentByTracking(trackingNumber);
+      
+      if (!shipmentData) {
+        setError('Tracking number not found. Please check the number and try again.');
+        toast.error('Tracking number not found. Please check the number and try again.', {
           position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
           style: {
             background: isDarkMode ? '#1f2937' : '#ffffff',
             color: isDarkMode ? '#ffffff' : '#000000',
-            borderLeft: '4px solid rgb(89,40,177)',
+            borderLeft: '4px solid #ef4444',
           },
         });
-      } finally {
-        setIsLoading(false);
+        return;
       }
-      return;
-    }
 
-    // If not paid, show payment form
-    setShowPaymentForm(true);
-  };
-
-  const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!trackingNumber.trim()) {
-      toast.error('Please enter a tracking number');
-      return;
-    }
-    setIsLoading(true);
-    setError(null);
-    setShipment(null);
-
-    try {
-      const shipmentData = await getShipmentByTracking(trackingNumber);
-      setShipment(shipmentData);
-      setShowTrackingForm(false);
-      setShowPremiumForm(true);
+      // If already paid, show the data directly
+      if (hasPaid) {
+        setShipment(shipmentData);
+        setShowTrackingForm(false);
+        toast.success('Tracking data loaded successfully!', {
+          position: "top-right",
+          style: {
+            background: isDarkMode ? '#1f2937' : '#ffffff',
+            color: isDarkMode ? '#ffffff' : '#000000',
+            borderLeft: '4px solid #10B981',
+          },
+        });
+      } else {
+        // If not paid, show payment form
+        setShowPaymentForm(true);
+      }
     } catch (err) {
-      setError('Shipment not found. Please check your tracking number and try again.');
+      setError('Failed to fetch shipment data. Please try again.');
+      toast.error('Failed to fetch shipment data. Please try again.', {
+        position: "top-right",
+        style: {
+          background: isDarkMode ? '#1f2937' : '#ffffff',
+          color: isDarkMode ? '#ffffff' : '#000000',
+          borderLeft: '4px solid #ef4444',
+        },
+      });
     } finally {
       setIsLoading(false);
     }
   };
+
+
 
   const handlePremiumSuccess = () => {
     setShowPremiumForm(false);
@@ -601,41 +599,10 @@ const Track: React.FC = () => {
           </div>
 
           {/* Shipment Route Map */}
-          <div className={`rounded-lg p-6 mb-6 ${isDarkMode ? 'bg-gray-800' : 'bg-white shadow-md'}`}>
-            <h2 className={`text-xl font-bold mb-4 ${isDarkMode ? 'text-[rgb(100,50,187)]' : 'text-[rgb(89,40,177)]'}`}>SHIPMENT ROUTE</h2>
-            <p className={`text-sm mb-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              Visualize your shipment's journey from origin to destination
-            </p>
-            <LiveMap
-              center={getMapCenter(shipment.origin, shipment.destination)}
-              zoom={getMapZoom(shipment.origin, shipment.destination)}
-              height="400px"
-              showMarker={false}
-              showResetButton={true}
-              origin={{
-                lat: getLocationCoordinates(shipment.origin).lat,
-                lng: getLocationCoordinates(shipment.origin).lng,
-                title: shipment.origin
-              }}
-              destination={{
-                lat: getLocationCoordinates(shipment.destination).lat,
-                lng: getLocationCoordinates(shipment.destination).lng,
-                title: shipment.destination
-              }}
-              currentLocation={{
-                lat: getLocationCoordinates(shipment.currentLocation).lat,
-                lng: getLocationCoordinates(shipment.currentLocation).lng,
-                title: shipment.currentLocation
-              }}
-              showRoute={true}
-              routeColor={isDarkMode ? '#8b5cf6' : '#5928b1'}
-              completedRouteColor={isDarkMode ? '#10b981' : '#059669'}
-              className="rounded-lg"
-            />
-          </div>
+          <ShipmentMap shipment={shipment} isDarkMode={isDarkMode} />
 
           {/* Shipment Details */}
-          <div className={`rounded-lg p-6 mb-6 ${isDarkMode ? 'bg-gray-800' : 'bg-white shadow-md'}`}>
+          <div className={`rounded-lg p-6 my-6 ${isDarkMode ? 'bg-gray-800' : 'bg-white shadow-md'}`}>
             <h2 className={`text-xl font-bold mb-4 ${isDarkMode ? 'text-[rgb(100,50,187)]' : 'text-[rgb(89,40,177)]'}`}>SHIPMENT DETAILS</h2>
             <div className={`grid grid-cols-1 md:grid-cols-4 gap-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
               <div className="flex items-center gap-2">
@@ -705,7 +672,7 @@ const Track: React.FC = () => {
               <h2 className={`text-xl font-bold ${isDarkMode ? 'text-[rgb(100,50,187)]' : 'text-[rgb(89,40,177)]'}`}>PACKAGE DETAILS</h2>
               <div className="flex items-center gap-2">
                 <FaWeightHanging size={18} className="text-[rgb(100,50,187)]" />
-                <span className="font-semibold">{shipment.packages[0]?.weight} KG</span>
+                <span className={`font-semibold ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{shipment.packages[0]?.weight} KG</span>
               </div>
             </div>
             <div className={`flex items-center gap-3 mb-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>

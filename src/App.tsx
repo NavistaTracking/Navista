@@ -8,6 +8,7 @@ import PrivateRoute from './components/PrivateRoute';
 import ThemeToggle from './components/ThemeToggle';
 import Navbar from './components/Navigation';
 import Footer from './components/Footer';
+import LiveChat from './components/LiveChat';
 import Home from './pages/Home';
 import About from './pages/About';
 import Services from './pages/Services';
@@ -84,6 +85,7 @@ const App: React.FC = () => {
                 </Routes>
               </main>
               <ThemeToggle />
+              <LiveChat />
               <Footer />
             </div>
           </Router>
