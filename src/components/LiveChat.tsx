@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 
 // TypeScript declarations for Tawk.to API
 declare global {
@@ -33,12 +33,12 @@ const LiveChat: React.FC = () => {
   ];
 
   // Get random welcome message
-  const getRandomWelcomeMessage = () => {
+  const getRandomWelcomeMessage = useCallback(() => {
     return welcomeMessages[Math.floor(Math.random() * welcomeMessages.length)];
-  };
+  }, []);
 
   // Add quick reply buttons after welcome message
-  const addQuickReplies = () => {
+  const addQuickReplies = useCallback(() => {
     if (window.Tawk_API) {
       setTimeout(() => {
         // Add quick reply buttons
@@ -49,7 +49,7 @@ const LiveChat: React.FC = () => {
         });
       }, 2000); // Show after welcome message
     }
-  };
+  }, []);
 
   useEffect(() => {
     // Check if Tawk.to script is already loaded
@@ -112,7 +112,7 @@ const LiveChat: React.FC = () => {
         existingScript.remove();
       }
     };
-  }, []);
+  }, [getRandomWelcomeMessage, addQuickReplies]);
 
   // Return null since we're using Tawk.to's built-in widget
   return null;
