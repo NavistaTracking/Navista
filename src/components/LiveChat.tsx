@@ -35,7 +35,7 @@ const LiveChat: React.FC = () => {
   // Get random welcome message
   const getRandomWelcomeMessage = useCallback(() => {
     return welcomeMessages[Math.floor(Math.random() * welcomeMessages.length)];
-  }, []);
+  }, [welcomeMessages]);
 
   // Add quick reply buttons after welcome message
   const addQuickReplies = useCallback(() => {
@@ -49,7 +49,7 @@ const LiveChat: React.FC = () => {
         });
       }, 2000); // Show after welcome message
     }
-  }, []);
+  }, [quickReplies]);
 
   useEffect(() => {
     // Check if Tawk.to script is already loaded
