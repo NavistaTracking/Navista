@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
 
 // TypeScript declarations for Tawk.to API
 declare global {
@@ -16,21 +16,21 @@ declare global {
 
 const LiveChat: React.FC = () => {
   // Welcome message options
-  const welcomeMessages = [
+  const welcomeMessages = useMemo(() => [
     "Hello! 👋 Welcome to PetXpress! I'm here to help you with your shipment tracking, delivery questions, or any other inquiries. How can I assist you today?",
     "Hi there! 🚚 Welcome to PetXpress! Need help tracking your shipment or have questions about delivery? I'm here to help!",
     "Welcome to PetXpress! 📦 I'm your shipping assistant. I can help you track packages, check delivery status, or answer any shipping questions. What can I help you with?",
     "Hello! 🎉 Thanks for visiting PetXpress! I'm here to make your shipping experience smooth and easy. How can I assist you today?"
-  ];
+  ], []);
 
   // Suggested quick reply buttons
-  const quickReplies = [
+  const quickReplies = useMemo(() => [
     "Track My Package",
     "Check Delivery Status", 
     "Shipping Rates",
     "File a Claim",
     "Contact Support"
-  ];
+  ], []);
 
   // Get random welcome message
   const getRandomWelcomeMessage = useCallback(() => {
