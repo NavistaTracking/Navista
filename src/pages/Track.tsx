@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { getShipmentByTracking, Shipment } from '../services/shipmentService';
-import { checkPaymentStatus, savePaymentRecord } from '../services/paymentService';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { toast } from 'react-toastify';
@@ -45,8 +44,6 @@ import {
   FaArrowRight,
 } from 'react-icons/fa';
 import AnimatedCard from '../components/animations/AnimatedCard';
-import PremiumTrackingForm from '../components/PremiumTrackingForm';
-import Cookies from 'js-cookie';
 
 const Track: React.FC = () => {
   const { isDarkMode } = useTheme();
@@ -55,48 +52,10 @@ const Track: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showTrackingForm, setShowTrackingForm] = useState(true);
-  const [showPremiumForm, setShowPremiumForm] = useState(false);
-  const [hasPremiumAccess, setHasPremiumAccess] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [showPaymentForm, setShowPaymentForm] = useState(false);
-  const [hasPaid, setHasPaid] = useState(false);
   const resultsRef = useRef<HTMLDivElement>(null);
 
-  // Check payment status on component mount and when tracking number changes
-  useEffect(() => {
-    const checkPayment = async () => {
-      if (trackingNumber) {
-        try {
-          // Check database first
-          const isPaid = await checkPaymentStatus(trackingNumber);
-          if (isPaid) {
-            setHasPaid(true);
-            return;
-          }
 
-          // Fallback to cookie check
-          const cookieStatus = Cookies.get(`premium_${trackingNumber}`);
-          setHasPaid(cookieStatus === 'true');
-          
-          // If cookie exists but no database record, create one
-          if (cookieStatus === 'true' && !isPaid) {
-            try {
-              await savePaymentRecord(trackingNumber);
-            } catch (error) {
-              console.error('Error syncing payment record:', error);
-            }
-          }
-        } catch (error) {
-          console.error('Error checking payment status:', error);
-          // Fallback to cookie check on error
-          const cookieStatus = Cookies.get(`premium_${trackingNumber}`);
-          setHasPaid(cookieStatus === 'true');
-        }
-      }
-    };
-
-    checkPayment();
-  }, [trackingNumber]);
 
   const formatText = (text: string) => {
     return text
@@ -136,21 +95,20 @@ const Track: React.FC = () => {
         return;
       }
 
-      // If already paid, show the data directly
-      if (hasPaid) {
-        setShipment(shipmentData);
-        setShowTrackingForm(false);
-        toast.success('Tracking data loaded successfully!', {
-          position: "top-right",
-          style: {
-            background: isDarkMode ? '#1f2937' : '#ffffff',
-            color: isDarkMode ? '#ffffff' : '#000000',
-            borderLeft: '4px solid #10B981',
-          },
-        });
-      } else {
-        // If not paid, show payment form
-        setShowPaymentForm(true);
+      setShipment(shipmentData);
+      setShowTrackingForm(false);
+      toast.success('Tracking data loaded successfully!', {
+        position: "top-right",
+        style: {
+          background: isDarkMode ? '#1f2937' : '#ffffff',
+          color: isDarkMode ? '#ffffff' : '#000000',
+          borderLeft: '4px solid #10B981',
+        },
+      });
+
+      // Scroll to results
+      if (resultsRef.current) {
+        resultsRef.current.scrollIntoView({ behavior: 'smooth' });
       }
     } catch (err) {
       setError('Failed to fetch shipment data. Please try again.');
@@ -169,74 +127,7 @@ const Track: React.FC = () => {
 
 
 
-  const handlePremiumSuccess = () => {
-    setShowPremiumForm(false);
-    setHasPremiumAccess(true);
-    toast.success('Premium access granted!');
-  };
 
-  const handlePremiumCancel = () => {
-    setShowPremiumForm(false);
-    toast.info('You can still view basic tracking information');
-  };
-
-  const handlePaymentSuccess = async () => {
-    setShowPaymentForm(false);
-    setHasPaid(true);
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const shipmentData = await getShipmentByTracking(trackingNumber);
-      
-      if (!shipmentData) {
-        setError('Tracking number not found. Please check the number and try again.');
-        // Remove the payment cookie since the tracking number is invalid
-        Cookies.remove(`premium_${trackingNumber}`);
-        setHasPaid(false);
-        return;
-      }
-
-              setShipment(shipmentData);
-      setShowTrackingForm(false);
-      
-      // Show success message
-      toast.success('Payment successful! Tracking data loaded.', {
-        position: "top-right",
-        style: {
-          background: isDarkMode ? '#1f2937' : '#ffffff',
-          color: isDarkMode ? '#ffffff' : '#000000',
-          borderLeft: '4px solid #10B981',
-        },
-      });
-      
-      // Scroll to results
-      if (resultsRef.current) {
-        resultsRef.current.scrollIntoView({ behavior: 'smooth' });
-      }
-    } catch (err) {
-      console.error('Error fetching shipment data:', err);
-      setError('Failed to fetch shipment data. Please try again.');
-      toast.error('Failed to fetch tracking data. Please try again.', {
-        position: "top-right",
-        style: {
-          background: isDarkMode ? '#1f2937' : '#ffffff',
-          color: isDarkMode ? '#ffffff' : '#000000',
-          borderLeft: '4px solid #ef4444',
-        },
-      });
-      // Remove the payment cookie on error
-      Cookies.remove(`premium_${trackingNumber}`);
-      setHasPaid(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handlePaymentCancel = () => {
-    setShowPaymentForm(false);
-    setHasPaid(false);
-  };
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -420,10 +311,10 @@ const Track: React.FC = () => {
               How It Works
             </h2>
             <p className={`text-base md:text-lg text-center mb-8 md:mb-12 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              Track your shipment in four simple steps
+              Track your shipment in three simple steps
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
               <div className={`p-4 md:p-6 rounded-lg text-center ${isDarkMode ? 'bg-gray-800' : 'bg-white shadow-md'}`}>
                 <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[rgb(100,50,187)] text-white flex items-center justify-center text-lg md:text-xl font-bold mx-auto mb-3 md:mb-4">
                   1
@@ -436,21 +327,11 @@ const Track: React.FC = () => {
                 </p>
               </div>
 
-              <div className={`p-4 md:p-6 rounded-lg text-center ${isDarkMode ? 'bg-gray-800' : 'bg-white shadow-md'}`}>
-                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[rgb(100,50,187)] text-white flex items-center justify-center text-lg md:text-xl font-bold mx-auto mb-3 md:mb-4">
-                  2
-                </div>
-                <h3 className={`text-lg md:text-xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                  One-Time Payment
-                </h3>
-                <p className={`text-sm md:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                  Make a secure $0.99 payment to unlock detailed tracking
-                </p>
-              </div>
+
 
               <div className={`p-4 md:p-6 rounded-lg text-center ${isDarkMode ? 'bg-gray-800' : 'bg-white shadow-md'}`}>
                 <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[rgb(100,50,187)] text-white flex items-center justify-center text-lg md:text-xl font-bold mx-auto mb-3 md:mb-4">
-                  3
+                  2
                 </div>
                 <h3 className={`text-lg md:text-xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                   Get Real-time Updates
@@ -462,7 +343,7 @@ const Track: React.FC = () => {
 
               <div className={`p-4 md:p-6 rounded-lg text-center ${isDarkMode ? 'bg-gray-800' : 'bg-white shadow-md'}`}>
                 <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[rgb(100,50,187)] text-white flex items-center justify-center text-lg md:text-xl font-bold mx-auto mb-3 md:mb-4">
-                  4
+                  3
                 </div>
                 <h3 className={`text-lg md:text-xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                   Track Delivery Progress
@@ -767,22 +648,6 @@ const Track: React.FC = () => {
         </div>
       )}
 
-      {showPremiumForm && (
-        <PremiumTrackingForm
-          onSuccess={handlePremiumSuccess}
-          onCancel={handlePremiumCancel}
-          trackingNumber={trackingNumber}
-        />
-      )}
-
-      {/* Payment Form */}
-      {showPaymentForm && (
-        <PremiumTrackingForm
-          onSuccess={handlePaymentSuccess}
-          onCancel={handlePaymentCancel}
-          trackingNumber={trackingNumber}
-        />
-      )}
     </div>
   );
 };
