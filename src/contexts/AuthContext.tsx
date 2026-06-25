@@ -1,14 +1,17 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { 
   getAuth, 
   signInWithEmailAndPassword, 
   signOut, 
   onAuthStateChanged,
+  updatePassword,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
   User as FirebaseUser,
   AuthError,
   createUserWithEmailAndPassword
 } from 'firebase/auth';
-import { doc, getDoc, setDoc, getDocs, collection } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, getDocs, collection } from 'firebase/firestore';
 import { app, db } from '../config/firebase';
 
 export interface User {
@@ -25,14 +28,31 @@ interface AuthContextType {
   logout: () => Promise<void>;
   loading: boolean;
   error: string | null;
+  changeAdminPassword: (currentPassword: string, newPassword: string) => Promise<void>;
 }
+
+const SESSION_START_KEY = 'navista_session_start';
+
+const getSessionStart = (): number => {
+  const stored = localStorage.getItem(SESSION_START_KEY);
+  return stored ? parseInt(stored, 10) : 0;
+};
+
+const setSessionStart = () => {
+  localStorage.setItem(SESSION_START_KEY, String(Date.now()));
+};
+
+const clearSessionStart = () => {
+  localStorage.removeItem(SESSION_START_KEY);
+};
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   login: async () => {},
   logout: async () => {},
   loading: false,
-  error: null
+  error: null,
+  changeAdminPassword: async () => {}
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -43,24 +63,60 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [error, setError] = useState<string | null>(null);
   const auth = getAuth(app);
 
+  const checkSessionValidity = useCallback(async (currentUser: User | null) => {
+    if (!currentUser || currentUser.role !== 'admin') return;
+
+    try {
+      const settingsDoc = await getDoc(doc(db, '_adminSettings_', 'config'));
+      if (settingsDoc.exists()) {
+        const passwordChangedAt = settingsDoc.data().passwordChangedAt;
+        const sessionStart = getSessionStart();
+        if (passwordChangedAt && sessionStart && passwordChangedAt > sessionStart) {
+          clearSessionStart();
+          await signOut(auth);
+          setUser(null);
+        }
+      }
+    } catch (error) {
+      console.error('Error checking session validity:', error);
+    }
+  }, [auth]);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         try {
-          // Fetch user data from Firestore
           const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
           
           if (userDoc.exists()) {
             const userData = userDoc.data();
-            setUser({
+            const userObj: User = {
               id: firebaseUser.uid,
               email: firebaseUser.email,
               name: userData.username || firebaseUser.displayName || '',
               role: userData.role as 'admin' | 'user' | 'manager' || 'user',
               permissions: userData.permissions || []
-            });
+            };
+
+            // Check if password was changed after this session started
+            if (userObj.role === 'admin') {
+              const settingsDoc = await getDoc(doc(db, '_adminSettings_', 'config'));
+              if (settingsDoc.exists()) {
+                const passwordChangedAt = settingsDoc.data().passwordChangedAt;
+                const sessionStart = getSessionStart();
+                if (passwordChangedAt && sessionStart && passwordChangedAt > sessionStart) {
+                  clearSessionStart();
+                  await signOut(auth);
+                  setUser(null);
+                  setLoading(false);
+                  return;
+                }
+              }
+            }
+
+            setSessionStart();
+            setUser(userObj);
           } else {
-            // If user document doesn't exist, create a default user
             const defaultUser: User = {
               id: firebaseUser.uid,
               email: firebaseUser.email,
@@ -74,6 +130,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString()
             });
+            setSessionStart();
             setUser(defaultUser);
           }
         } catch (error) {
@@ -88,6 +145,58 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     return unsubscribe;
   }, [auth]);
+
+  // Periodic check for password changes on admin sessions
+  useEffect(() => {
+    const interval = setInterval(() => checkSessionValidity(user), 30000);
+    return () => clearInterval(interval);
+  }, [user, checkSessionValidity]);
+
+  const changeAdminPassword = async (currentPassword: string, newPassword: string) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const currentUser = auth.currentUser;
+      if (!currentUser || !currentUser.email) {
+        throw new Error('No authenticated user');
+      }
+
+      const credential = EmailAuthProvider.credential(currentUser.email, currentPassword);
+      await reauthenticateWithCredential(currentUser, credential);
+      await updatePassword(currentUser, newPassword);
+
+      const settingsRef = doc(db, '_adminSettings_', 'config');
+      const now = Date.now();
+
+      try {
+        const existingDoc = await getDoc(settingsRef);
+        if (existingDoc.exists()) {
+          await updateDoc(settingsRef, { passwordChangedAt: now });
+        } else {
+          await setDoc(settingsRef, { passwordChangedAt: now });
+        }
+      } catch {
+        await setDoc(settingsRef, { passwordChangedAt: now });
+      }
+
+      clearSessionStart();
+      await signOut(auth);
+      setUser(null);
+    } catch (err) {
+      const error = err as AuthError | Error;
+      const message = 'code' in error && error.code === 'auth/wrong-password'
+        ? 'Current password is incorrect'
+        : 'code' in error && error.code === 'auth/too-many-requests'
+        ? 'Too many attempts. Please try again later'
+        : error.message || 'Failed to change password';
+
+      setError(message);
+      throw new Error(message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const getErrorMessage = (error: AuthError): string => {
     switch (error.code) {
@@ -193,7 +302,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading, error }}>
+    <AuthContext.Provider value={{ user, login, logout, loading, error, changeAdminPassword }}>
       {children}
     </AuthContext.Provider>
   );

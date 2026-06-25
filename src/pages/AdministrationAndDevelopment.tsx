@@ -19,7 +19,7 @@ import {
   updateUserPermissions
 } from '../services/userService';
 import { sendShipperEmail, sendReceiverEmail } from '../services/emailService';
-import { FaPlus, FaEdit, FaTrash, FaMapMarkerAlt, FaSearch, FaFilter, FaSync, FaSpinner, FaEnvelope, FaChartLine, FaUsers, FaCog, FaShieldAlt, FaBoxOpen } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash, FaMapMarkerAlt, FaSearch, FaFilter, FaSync, FaSpinner, FaEnvelope, FaChartLine, FaUsers, FaCog, FaShieldAlt, FaBoxOpen, FaLock } from 'react-icons/fa';
 import Icon from '../components/icons/Icon';
 import AnimatedCard from '../components/animations/AnimatedCard';
 import { toast } from 'react-toastify';
@@ -139,7 +139,7 @@ const formatShipmentMode = (mode: string) => {
 };
 
 const AdministrationAndDevelopment: React.FC = () => {
-  const { logout, user } = useAuth();
+  const { logout, user, changeAdminPassword } = useAuth();
   const { isDarkMode } = useTheme();
   const navigate = useNavigate();
 
@@ -160,6 +160,14 @@ const AdministrationAndDevelopment: React.FC = () => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
+  // Password change state
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+
   const loadData = async () => {
     try {
       setLoading(true);
@@ -179,6 +187,52 @@ const AdministrationAndDevelopment: React.FC = () => {
   useEffect(() => {
     loadData();
   }, []); // Empty dependency array means this effect runs once on mount
+
+  const handleChangePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPasswordError('');
+
+    if (newPassword !== confirmPassword) {
+      setPasswordError('New passwords do not match');
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      setPasswordError('New password must be at least 6 characters');
+      return;
+    }
+
+    try {
+      setIsChangingPassword(true);
+      await changeAdminPassword(currentPassword, newPassword);
+      toast.success('Password changed successfully. Please log in again.');
+      setShowPasswordModal(false);
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+      navigate('/administration_and_development/login');
+    } catch (error) {
+      setPasswordError(error instanceof Error ? error.message : 'Failed to change password');
+    } finally {
+      setIsChangingPassword(false);
+    }
+  };
+
+  const openPasswordModal = () => {
+    setCurrentPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
+    setPasswordError('');
+    setShowPasswordModal(true);
+  };
+
+  const closePasswordModal = () => {
+    setShowPasswordModal(false);
+    setCurrentPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
+    setPasswordError('');
+  };
 
   const handleLogout = async () => {
     try {
@@ -440,18 +494,26 @@ const AdministrationAndDevelopment: React.FC = () => {
           <AnimatedCard animation="slide" delay="200ms">
             <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg">
               <div className="text-[#351c15] dark:text-[#ffbe03] mb-4">
-                <Icon icon={FaShieldAlt} size={32} />
+                <Icon icon={FaLock} size={32} />
               </div>
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white">System Status</h3>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white">Security</h3>
               <p className="mt-2 text-base text-gray-500 dark:text-gray-400">
-                View and manage system security settings.
+                Change your password or manage security settings.
               </p>
-              <button
-                onClick={handleLogout}
-                className="mt-4 px-4 py-2 bg-[#351c15] dark:bg-[#ffbe03] text-white dark:text-gray-900 rounded-md hover:bg-[#4a2a1f] dark:hover:bg-[#e6a902]"
-              >
-                Logout
-              </button>
+              <div className="mt-4 flex gap-2">
+                <button
+                  onClick={openPasswordModal}
+                  className="px-4 py-2 bg-[#351c15] dark:bg-[#ffbe03] text-white dark:text-gray-900 rounded-md hover:bg-[#4a2a1f] dark:hover:bg-[#e6a902] flex-1"
+                >
+                  Change Password
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="px-4 py-2 border border-[#351c15] dark:border-[#ffbe03] text-[#351c15] dark:text-[#ffbe03] rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  Logout
+                </button>
+              </div>
             </div>
           </AnimatedCard>
         </div>
@@ -1109,6 +1171,89 @@ const AdministrationAndDevelopment: React.FC = () => {
       )}
 
       {/* Tracking Form Modal */}
+      {/* Password Change Modal */}
+      {showPasswordModal && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg w-full max-w-md my-8">
+            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Change Password</h2>
+            </div>
+            <div className="p-6">
+              <form onSubmit={handleChangePassword} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Current Password
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    placeholder="Enter current password"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    New Password
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    placeholder="Enter new password (min 6 characters)"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Confirm New Password
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    placeholder="Confirm new password"
+                  />
+                </div>
+
+                {passwordError && (
+                  <div className="text-red-600 dark:text-red-400 text-sm">{passwordError}</div>
+                )}
+
+                <div className="flex justify-end space-x-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={closePasswordModal}
+                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                    disabled={isChangingPassword}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isChangingPassword}
+                    className="px-4 py-2 bg-[#351c15] dark:bg-[#ffbe03] text-white dark:text-gray-900 rounded-md hover:bg-[#4a2a1f] dark:hover:bg-[#e6a902] inline-flex items-center disabled:opacity-50"
+                  >
+                    {isChangingPassword ? (
+                      <>
+                        <FaSpinner className="animate-spin -ml-1 mr-2 h-5 w-5" />
+                        Changing...
+                      </>
+                    ) : (
+                      'Change Password'
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showTrackingForm && selectedShipment && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 overflow-y-auto">
           <div className="bg-white rounded-lg w-full max-w-4xl my-8">
